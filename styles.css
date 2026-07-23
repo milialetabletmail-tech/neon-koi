@@ -546,7 +546,7 @@ body.theme-gold .ambient-backdrop {
   flex-wrap: wrap;
   margin-bottom: 30px;
 }
-.footer-col h4 { font-size: 0.85rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); }
+.footer-col h4 { font-size: 0.85rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-dim); }
 .footer-col p, .footer-col a { color: var(--ink-dim); font-size: 0.9rem; display: block; margin-bottom: 6px; }
 .footer-col a:hover { color: var(--cyan); }
 .footer-bottom {
@@ -657,7 +657,7 @@ body.theme-gold .ambient-backdrop {
   transform: translateX(-50%);
 }
 .neon-mini-icon.icon-btn-sushi {
-  left: calc(50% + 16px);
+  left: calc(50% + 10px);
   bottom: calc(100% - 6px);
   transform: translateX(-50%);
 }
