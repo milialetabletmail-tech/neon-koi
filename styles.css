@@ -301,13 +301,7 @@ h1, h2 {
   color: var(--ink-dim);
   font-size: 1.1rem;
 }
-.hero-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; align-items: flex-end; }
-
-.hero-action {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
+.hero-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
 
 /* ---------- Sections ---------- */
 section { padding: clamp(60px, 9vw, 110px) 0; }
@@ -336,12 +330,6 @@ section { padding: clamp(60px, 9vw, 110px) 0; }
 }
 .feature-card:hover { transform: translateY(-6px); box-shadow: var(--glow-purple); }
 .feature-card .icon { margin-bottom: 16px; }
-
-/* ---------- Neon micro-icons (hero buttons + feature cards) ---------- */
-.neon-icon {
-  display: block;
-  margin: 0 auto 5px auto;
-}
 .feature-card h3 { font-size: 1.3rem; }
 .feature-card p { color: var(--ink-dim); font-size: 0.95rem; margin: 0; }
 
@@ -639,3 +627,13 @@ body.theme-gold .ambient-backdrop {
 }
 
 ::selection { background: rgba(177, 76, 255, 0.4); color: #fff; }
+
+.neon-mini-icon {
+    display: block !important;
+    margin: 0 auto 8px auto !important;
+    height: 30px !important; /* Жёсткая высота микро-размера! */
+    width: 30px !important;  /* Жёсткая ширина! */
+    max-height: 30px !important;
+    max-width: 30px !important;
+    object-fit: contain !important;
+}
