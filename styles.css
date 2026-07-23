@@ -51,6 +51,16 @@ body {
   background-color: var(--void);
 }
 
+/* Menu page: swap the skyline photo for a moody charcoal-grill shot,
+   same dark wash and neon glows so the rest of the theme stays intact. */
+body.page-menu {
+  background-image:
+    linear-gradient(180deg, rgba(5, 3, 10, 0.9) 0%, rgba(8, 6, 20, 0.78) 45%, rgba(5, 3, 10, 0.95) 100%),
+    radial-gradient(ellipse at 20% -10%, rgba(177, 76, 255, 0.16), transparent 55%),
+    radial-gradient(ellipse at 85% 0%, rgba(0, 212, 255, 0.14), transparent 50%),
+    url("images/menu-bg.jpg");
+}
+
 img, svg { max-width: 100%; display: block; }
 a { color: inherit; text-decoration: none; }
 ul { list-style: none; margin: 0; padding: 0; }
