@@ -40,7 +40,7 @@ body {
      while the page scrolls, with a dark gradient wash over it so white
      text keeps full contrast at every scroll position. */
   background-image:
-    linear-gradient(180deg, rgba(5, 3, 10, 0.86) 0%, rgba(8, 6, 20, 0.68) 45%, rgba(5, 3, 10, 0.92) 100%),
+    linear-gradient(180deg, rgba(5, 3, 10, 0.9) 0%, rgba(8, 6, 20, 0.78) 45%, rgba(5, 3, 10, 0.95) 100%),
     radial-gradient(ellipse at 20% -10%, rgba(177, 76, 255, 0.16), transparent 55%),
     radial-gradient(ellipse at 85% 0%, rgba(0, 212, 255, 0.14), transparent 50%),
     url("https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=1920&q=80");
