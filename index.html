@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Neon Koi — Luxury Rooftop Lounge</title>
+<meta name="description" content="Neon Koi is a premium neon-lit rooftop lounge serving fusion robata, signature sushi, and inventive cocktails above the city skyline.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="ambient-backdrop"></div>
+
+<header class="site-header">
+  <a href="index.html" class="logo">
+    <svg class="koi-mark" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="koiGradLogo" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#B14CFF"/>
+          <stop offset="100%" stop-color="#00D4FF"/>
+        </linearGradient>
+      </defs>
+      <path d="M10,50 C40,10 90,10 120,35 C140,15 170,20 190,10 C180,30 165,40 165,40 C180,45 190,60 190,60 C170,55 145,55 125,65 C95,90 40,90 10,50 Z" fill="none" stroke="url(#koiGradLogo)" stroke-width="6"/>
+      <circle cx="35" cy="45" r="6" fill="url(#koiGradLogo)"/>
+    </svg>
+    Neon Koi
+  </a>
+  <nav class="main-nav" data-main-nav>
+    <a href="index.html" class="active">Home</a>
+    <a href="menu.html">Menu</a>
+    <a href="cocktails.html">Cocktail Map</a>
+    <a href="reservations.html">Reservations</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+  <div class="header-tools">
+    <button class="sound-toggle" data-sound-toggle aria-pressed="false">
+      <span class="wave-icon"><span class="bar"></span><span class="bar"></span><span class="bar"></span></span>
+      <span class="sound-label">Sound On</span>
+    </button>
+    <button class="nav-toggle" data-nav-toggle aria-label="Toggle navigation" aria-expanded="false">☰</button>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <svg class="hero-koi" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="koiGradHero" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#B14CFF"/>
+          <stop offset="100%" stop-color="#00D4FF"/>
+        </linearGradient>
+      </defs>
+      <path d="M10,50 C40,10 90,10 120,35 C140,15 170,20 190,10 C180,30 165,40 165,40 C180,45 190,60 190,60 C170,55 145,55 125,65 C95,90 40,90 10,50 Z" fill="none" stroke="url(#koiGradHero)" stroke-width="2"/>
+    </svg>
+    <div class="container">
+      <span class="eyebrow">Rooftop · Neon · Fusion</span>
+      <h1>Where the city glows,<br><span class="neon-text">the koi swim.</span></h1>
+      <p class="hero-sub">Neon Koi is a premium rooftop lounge suspended above the skyline — fusion robata, signature sushi, and inventive neon-lit mixology in a glasshouse of light.</p>
+      <div class="hero-actions">
+        <a href="reservations.html" class="btn btn-primary">Reserve a Table</a>
+        <a href="menu.html" class="btn btn-ghost glass">Explore the Menu</a>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="section-head center">
+        <span class="eyebrow">The Concept</span>
+        <h2 class="section-title">A rooftop built on light</h2>
+        <p class="section-lede">Every detail of Neon Koi is tuned to a single idea: transformation under neon. The koi — a symbol of fortune and perseverance — glides through every surface, every pour, every plate.</p>
+      </div>
+      <div class="grid grid-3">
+        <div class="feature-card glass">
+          <div class="icon">🏙️</div>
+          <h3>Skyline Views</h3>
+          <p>Floor-to-ceiling glass framed in neon, open to the city after dark from a private rooftop level.</p>
+        </div>
+        <div class="feature-card glass">
+          <div class="icon">🍢</div>
+          <h3>Fusion Robata &amp; Sushi</h3>
+          <p>A tight, precise menu built around live-fire robata and hand-pressed sushi, reimagined with global technique.</p>
+        </div>
+        <div class="feature-card glass">
+          <div class="icon">🍸</div>
+          <h3>Neon Mixology</h3>
+          <p>An interactive cocktail map guides you through smoked, floral, and citrus pours — some of them glowing.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="section-head center">
+        <span class="eyebrow">Discover</span>
+        <h2 class="section-title">Find your evening</h2>
+      </div>
+      <div class="grid grid-3">
+        <a href="menu.html" class="feature-card glass">
+          <h3>The Menu</h3>
+          <p>Small plates, robata, signature sushi, and desserts built for sharing.</p>
+        </a>
+        <a href="cocktails.html" class="feature-card glass">
+          <h3>Cocktail Map</h3>
+          <p>An interactive map of the bar — tap a pin, discover a pour.</p>
+        </a>
+        <a href="reservations.html" class="feature-card glass">
+          <h3>Reservations</h3>
+          <p>Secure your table on the rooftop, under the neon koi.</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="glass" style="padding: clamp(40px, 6vw, 70px); text-align:center;">
+        <span class="eyebrow">Tonight</span>
+        <h2 class="section-title">Reserve your evening under the neon koi</h2>
+        <p class="section-lede" style="margin: 0 auto 30px;">Tables are limited on the rooftop. Book ahead to secure your view of the skyline.</p>
+        <a href="reservations.html" class="btn btn-primary">Reserve a Table</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h4>Neon Koi</h4>
+        <p>88 Skyline Avenue<br>Rooftop Level 42, Neo Harbor District</p>
+      </div>
+      <div class="footer-col">
+        <h4>Hours</h4>
+        <p>Tue – Sun · 6 PM – 2 AM<br>Closed Mondays</p>
+      </div>
+      <div class="footer-col">
+        <h4>Explore</h4>
+        <a href="menu.html">Menu</a>
+        <a href="cocktails.html">Cocktail Map</a>
+        <a href="reservations.html">Reservations</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <div class="footer-col">
+        <h4>Connect</h4>
+        <a href="#">Instagram</a>
+        <a href="#">Reservations Line</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; <span data-year></span> Neon Koi Rooftop Lounge. All rights reserved.</span>
+      <a class="hieroglyph-trigger" href="speakeasy.html" aria-label="Enter the hidden room">
+        秘
+        <span class="tooltip">The hidden room awaits...</span>
+      </a>
+    </div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

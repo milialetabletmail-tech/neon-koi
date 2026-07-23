@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact — Neon Koi</title>
+<meta name="description" content="Get in touch with Neon Koi rooftop lounge.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="ambient-backdrop"></div>
+
+<header class="site-header">
+  <a href="index.html" class="logo">
+    <svg class="koi-mark" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="koiGradLogo6" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#B14CFF"/>
+          <stop offset="100%" stop-color="#00D4FF"/>
+        </linearGradient>
+      </defs>
+      <path d="M10,50 C40,10 90,10 120,35 C140,15 170,20 190,10 C180,30 165,40 165,40 C180,45 190,60 190,60 C170,55 145,55 125,65 C95,90 40,90 10,50 Z" fill="none" stroke="url(#koiGradLogo6)" stroke-width="6"/>
+      <circle cx="35" cy="45" r="6" fill="url(#koiGradLogo6)"/>
+    </svg>
+    Neon Koi
+  </a>
+  <nav class="main-nav" data-main-nav>
+    <a href="index.html">Home</a>
+    <a href="menu.html">Menu</a>
+    <a href="cocktails.html">Cocktail Map</a>
+    <a href="reservations.html">Reservations</a>
+    <a href="contact.html" class="active">Contact</a>
+  </nav>
+  <div class="header-tools">
+    <button class="sound-toggle" data-sound-toggle aria-pressed="false">
+      <span class="wave-icon"><span class="bar"></span><span class="bar"></span><span class="bar"></span></span>
+      <span class="sound-label">Sound On</span>
+    </button>
+    <button class="nav-toggle" data-nav-toggle aria-label="Toggle navigation" aria-expanded="false">☰</button>
+  </div>
+</header>
+
+<main>
+  <section style="padding-top: clamp(50px, 8vw, 90px);">
+    <div class="container">
+      <div class="section-head center">
+        <span class="eyebrow">Contact</span>
+        <h1 class="section-title">Find us on the rooftop</h1>
+        <p class="section-lede">Questions about private events, press, or the menu? Reach out below, or come find the glow yourself.</p>
+      </div>
+
+      <div class="grid grid-2">
+        <div>
+          <div class="glass" style="padding: 34px; margin-bottom: 24px;">
+            <h3>Location</h3>
+            <p style="color:var(--ink-dim);">88 Skyline Avenue<br>Rooftop Level 42<br>Neo Harbor District</p>
+          </div>
+          <div class="glass" style="padding: 34px; margin-bottom: 24px;">
+            <h3>Hours</h3>
+            <p style="color:var(--ink-dim);">Tuesday – Sunday · 6 PM – 2 AM<br>Closed Mondays</p>
+          </div>
+          <div class="glass" style="padding: 34px;">
+            <h3>Reach Us</h3>
+            <p style="color:var(--ink-dim);">reservations@neonkoi.example<br>+1 (555) 010-2042</p>
+          </div>
+        </div>
+
+        <div class="glass" style="position:relative; min-height: 340px; overflow:hidden; padding: 0;">
+          <div style="position:absolute; inset:0; background:
+              radial-gradient(circle at 30% 30%, rgba(177,76,255,.3), transparent 45%),
+              radial-gradient(circle at 70% 60%, rgba(0,212,255,.28), transparent 45%),
+              linear-gradient(160deg, rgba(255,255,255,.05), rgba(255,255,255,.01));
+              background-image:
+                linear-gradient(rgba(255,255,255,.06) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,.06) 1px, transparent 1px);
+              background-size: 32px 32px;">
+          </div>
+          <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); text-align:center;">
+            <div style="font-size:2.4rem;" class="neon-text">📍</div>
+            <p style="color:var(--ink-dim); font-size:0.85rem; letter-spacing:0.1em; text-transform:uppercase;">Rooftop Level 42</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass form-card" style="margin-top: 40px;">
+        <div class="section-head">
+          <span class="eyebrow">Send a Message</span>
+          <h2 class="section-title">Say hello</h2>
+        </div>
+        <form data-contact-form novalidate>
+          <div class="form-grid">
+            <div class="field">
+              <label for="c-name">Full Name</label>
+              <input id="c-name" name="name" type="text" required placeholder="Your name">
+            </div>
+            <div class="field">
+              <label for="c-email">Email</label>
+              <input id="c-email" name="email" type="email" required placeholder="you@email.com">
+            </div>
+            <div class="field full">
+              <label for="c-subject">Subject</label>
+              <input id="c-subject" name="subject" type="text" placeholder="Private events, press, feedback...">
+            </div>
+            <div class="field full">
+              <label for="c-message">Message</label>
+              <textarea id="c-message" name="message" required placeholder="How can we help?"></textarea>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">Send Message</button>
+        </form>
+
+        <div class="confirmation" data-contact-confirmation>
+          <span class="eyebrow">Message Sent</span>
+          <h3>Thank you for reaching out.</h3>
+          <p style="color:var(--ink-dim);">Reference code</p>
+          <div class="code" data-code>NK-MSG-0000</div>
+          <p style="color:var(--ink-dim);">We'll get back to you shortly.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h4>Neon Koi</h4>
+        <p>88 Skyline Avenue<br>Rooftop Level 42, Neo Harbor District</p>
+      </div>
+      <div class="footer-col">
+        <h4>Hours</h4>
+        <p>Tue – Sun · 6 PM – 2 AM<br>Closed Mondays</p>
+      </div>
+      <div class="footer-col">
+        <h4>Explore</h4>
+        <a href="menu.html">Menu</a>
+        <a href="cocktails.html">Cocktail Map</a>
+        <a href="reservations.html">Reservations</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <div class="footer-col">
+        <h4>Connect</h4>
+        <a href="#">Instagram</a>
+        <a href="#">Reservations Line</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; <span data-year></span> Neon Koi Rooftop Lounge. All rights reserved.</span>
+      <a class="hieroglyph-trigger" href="speakeasy.html" aria-label="Enter the hidden room">
+        秘
+        <span class="tooltip">The hidden room awaits...</span>
+      </a>
+    </div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
