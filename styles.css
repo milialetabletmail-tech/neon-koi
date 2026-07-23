@@ -290,25 +290,6 @@ h1, h2 {
   50% { transform: translateX(-48%) translateY(14px) rotate(1.5deg); }
 }
 
-/* Hi-tech cocktail + sushi glyph — a quiet neon hint of the menu, tucked
-   into the left margin just above the Reserve a Table button. */
-.hero-bar-glyph {
-  position: absolute;
-  left: clamp(12px, 3vw, 48px);
-  bottom: clamp(150px, 20vw, 225px);
-  width: clamp(120px, 13vw, 190px);
-  opacity: 0.85;
-  z-index: 0;
-  filter: drop-shadow(0 0 12px rgba(0, 212, 255, 0.45)) drop-shadow(0 0 22px rgba(177, 76, 255, 0.3));
-  animation: barGlyphFloat 11s ease-in-out infinite;
-}
-@keyframes barGlyphFloat {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  50% { transform: translateY(-10px) rotate(-1deg); }
-}
-@media (max-width: 980px) {
-  .hero-bar-glyph { display: none; }
-}
 .hero h1 {
   font-size: clamp(2.6rem, 7vw, 5.4rem);
   line-height: 1.05;
@@ -320,7 +301,23 @@ h1, h2 {
   color: var(--ink-dim);
   font-size: 1.1rem;
 }
-.hero-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+.hero-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; align-items: flex-end; }
+
+.hero-action {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Tiny neon glyphs sitting directly above each hero button, sized to the
+   button itself so they read as part of the button, not separate art. */
+.btn-glyph {
+  height: 36px;
+  width: auto;
+  opacity: 0.8;
+  filter: drop-shadow(0 0 6px rgba(0, 212, 255, 0.45)) drop-shadow(0 0 10px rgba(177, 76, 255, 0.3));
+}
 
 /* ---------- Sections ---------- */
 section { padding: clamp(60px, 9vw, 110px) 0; }
@@ -350,9 +347,10 @@ section { padding: clamp(60px, 9vw, 110px) 0; }
 .feature-card:hover { transform: translateY(-6px); box-shadow: var(--glow-purple); }
 .feature-card .icon { margin-bottom: 16px; }
 .feature-card .icon svg {
-  width: 40px;
-  height: 34px;
+  height: 35px;
+  width: auto;
   display: block;
+  opacity: 0.85;
   filter: drop-shadow(0 0 7px rgba(0, 212, 255, 0.5)) drop-shadow(0 0 14px rgba(177, 76, 255, 0.35));
 }
 .feature-card h3 { font-size: 1.3rem; }
