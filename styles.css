@@ -3,6 +3,8 @@
    Shared design system for all pages
    ========================================================================== */
 
+@import url("https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&display=swap");
+
 :root {
   --void: #08060F;
   --void-soft: #0f0b1c;
@@ -18,6 +20,7 @@
   --glow-cyan: 0 0 18px rgba(0, 212, 255, 0.55), 0 0 42px rgba(0, 212, 255, 0.25);
   --glow-gold: 0 0 18px rgba(212, 175, 55, 0.55), 0 0 42px rgba(212, 175, 55, 0.25);
   --font-display: "Cormorant Garamond", "Playfair Display", serif;
+  --font-heading: "Syne", "Manrope", sans-serif;
   --font-body: "Manrope", "Segoe UI", sans-serif;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -27,14 +30,25 @@ html { scroll-behavior: smooth; }
 
 body {
   margin: 0;
-  background: radial-gradient(ellipse at 20% -10%, rgba(177, 76, 255, 0.16), transparent 55%),
-              radial-gradient(ellipse at 85% 0%, rgba(0, 212, 255, 0.14), transparent 50%),
-              var(--void);
+  min-height: 100vh;
   color: var(--ink);
   font-family: var(--font-body);
   line-height: 1.6;
-  min-height: 100vh;
   overflow-x: hidden;
+
+  /* Night-Tokyo neon skyline behind everything: fixed so it stays put
+     while the page scrolls, with a dark gradient wash over it so white
+     text keeps full contrast at every scroll position. */
+  background-image:
+    linear-gradient(180deg, rgba(5, 3, 10, 0.86) 0%, rgba(8, 6, 20, 0.68) 45%, rgba(5, 3, 10, 0.92) 100%),
+    radial-gradient(ellipse at 20% -10%, rgba(177, 76, 255, 0.16), transparent 55%),
+    radial-gradient(ellipse at 85% 0%, rgba(0, 212, 255, 0.14), transparent 50%),
+    url("https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=1920&q=80");
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-color: var(--void);
 }
 
 img, svg { max-width: 100%; display: block; }
@@ -63,10 +77,20 @@ button { font-family: inherit; cursor: pointer; }
 
 /* ---------- Typography ---------- */
 h1, h2, h3, h4 {
-  font-family: var(--font-display);
   font-weight: 600;
   letter-spacing: 0.02em;
   margin: 0 0 0.4em;
+}
+
+h3, h4 {
+  font-family: var(--font-display);
+}
+
+/* Wide, unconventional display font for the biggest statements on the page. */
+h1, h2 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  letter-spacing: 0;
 }
 
 .eyebrow {

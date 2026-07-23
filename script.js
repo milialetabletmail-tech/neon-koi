@@ -87,23 +87,126 @@
         setTimeout(pulseShimmer, 7000 + Math.random() * 6000);
       }
       pulseShimmer();
+
+      startArpeggio();
+    }
+
+    /* ---------------------------------------------------------------------
+       Synthwave arpeggio — a slow, evolving neon melody layered on top of
+       the deep bass drone. A gently filtered triangle lead cycles through
+       a four-chord progression (Am9 – F(add9) – Cadd9 – G(add9)), run
+       through a feedback delay for that classic synthwave shimmer/echo.
+    --------------------------------------------------------------------- */
+    function startArpeggio() {
+      const arpGain = ctx.createGain();
+      arpGain.gain.value = 0.15;
+      arpGain.connect(ambientGain);
+
+      const filter = ctx.createBiquadFilter();
+      filter.type = "lowpass";
+      filter.frequency.value = 1100;
+      filter.Q.value = 0.4;
+      filter.connect(arpGain);
+
+      // Slow "breathing" filter movement so the arp never feels static.
+      const filterLfo = ctx.createOscillator();
+      filterLfo.frequency.value = 0.035;
+      const filterLfoGain = ctx.createGain();
+      filterLfoGain.gain.value = 480;
+      filterLfo.connect(filterLfoGain);
+      filterLfoGain.connect(filter.frequency);
+      filterLfo.start();
+
+      // Feedback delay for a spacious, glowing echo trail.
+      const delay = ctx.createDelay(1.0);
+      delay.delayTime.value = 0.42;
+      const feedback = ctx.createGain();
+      feedback.gain.value = 0.32;
+      const delayFilter = ctx.createBiquadFilter();
+      delayFilter.type = "lowpass";
+      delayFilter.frequency.value = 2200;
+      filter.connect(delay);
+      delay.connect(delayFilter);
+      delayFilter.connect(feedback);
+      feedback.connect(delay);
+      delay.connect(arpGain);
+
+      const progression = [
+        [220.0, 261.63, 329.63, 440.0], // Am9
+        [174.61, 220.0, 261.63, 349.23], // F(add9)
+        [261.63, 329.63, 392.0, 523.25], // Cadd9
+        [196.0, 246.94, 293.66, 392.0], // G(add9)
+      ];
+
+      const noteLength = 0.85;
+      const noteSpacing = noteLength * 0.55; // slight overlap = smooth legato feel
+      let chordIndex = 0;
+      let noteIndex = 0;
+      let nextNoteTime = ctx.currentTime + 1.0;
+      const lookahead = 250; // ms between scheduler ticks
+      const scheduleAheadTime = 1.2; // seconds of notes queued ahead
+
+      function playNote(freq, time) {
+        const osc = ctx.createOscillator();
+        osc.type = "triangle";
+        osc.frequency.value = freq;
+        const noteGain = ctx.createGain();
+        noteGain.gain.setValueAtTime(0, time);
+        noteGain.gain.linearRampToValueAtTime(0.5, time + 0.09);
+        noteGain.gain.exponentialRampToValueAtTime(0.001, time + noteLength);
+        osc.connect(noteGain);
+        noteGain.connect(filter);
+        osc.start(time);
+        osc.stop(time + noteLength + 0.05);
+      }
+
+      function scheduler() {
+        while (nextNoteTime < ctx.currentTime + scheduleAheadTime) {
+          const chord = progression[chordIndex];
+          playNote(chord[noteIndex], nextNoteTime);
+          nextNoteTime += noteSpacing;
+          noteIndex++;
+          if (noteIndex >= chord.length) {
+            noteIndex = 0;
+            chordIndex = (chordIndex + 1) % progression.length;
+          }
+        }
+        setTimeout(scheduler, lookahead);
+      }
+      scheduler();
     }
 
     function playClick() {
       ensureContext();
       if (ctx.state === "suspended") ctx.resume();
       const now = ctx.currentTime;
+
+      // Soft, high-tech digital UI click: a short filtered tick with a
+      // quiet echo tail, instead of the previous sharp "gunshot" sweep.
+      const echo = ctx.createDelay(0.3);
+      echo.delayTime.value = 0.085;
+      const echoFeedback = ctx.createGain();
+      echoFeedback.gain.value = 0.16;
+      echo.connect(echoFeedback);
+      echoFeedback.connect(echo);
+
       const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
       osc.type = "sine";
-      osc.frequency.setValueAtTime(920, now);
-      osc.frequency.exponentialRampToValueAtTime(240, now + 0.16);
-      gain.gain.setValueAtTime(0.22, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+      osc.frequency.setValueAtTime(1800, now);
+      osc.frequency.exponentialRampToValueAtTime(1300, now + 0.045);
+
+      const gain = ctx.createGain();
+      gain.gain.setValueAtTime(0.0001, now);
+      gain.gain.linearRampToValueAtTime(0.08, now + 0.006);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.07);
+
       osc.connect(gain);
       gain.connect(sfxGain);
+      gain.connect(echo);
+      echo.connect(sfxGain);
+
       osc.start(now);
-      osc.stop(now + 0.2);
+      osc.stop(now + 0.08);
     }
 
     function playConfirm() {
