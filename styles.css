@@ -307,6 +307,9 @@ h1, h2 {
   0%, 100% { transform: translateX(-50%) translateY(0) rotate(0deg); }
   50% { transform: translateX(-48%) translateY(14px) rotate(1.5deg); }
 }
+@media (max-width: 640px) {
+  .hero-koi { width: min(480px, 84vw); top: 9%; }
+}
 
 .hero h1 {
   font-size: clamp(2.6rem, 7vw, 5.4rem);
@@ -320,6 +323,10 @@ h1, h2 {
   font-size: 1.1rem;
 }
 .hero-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+.hero-actions .btn { min-width: 226px; justify-content: center; }
+@media (max-width: 640px) {
+  .hero-actions { row-gap: 34px; }
+}
 
 /* ---------- Sections ---------- */
 section { padding: clamp(60px, 9vw, 110px) 0; }
