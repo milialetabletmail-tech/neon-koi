@@ -334,9 +334,9 @@ section { padding: clamp(60px, 9vw, 110px) 0; }
 
 /* Discover cards glow gently at rest in their own accent color, and bloom
    brighter on hover — same color, just turned up. */
-.discover-gold { box-shadow: 0 0 22px rgba(212, 175, 55, 0.16); }
-.discover-purple { box-shadow: 0 0 22px rgba(177, 76, 255, 0.16); }
-.discover-cyan { box-shadow: 0 0 22px rgba(0, 212, 255, 0.16); }
+.discover-gold { box-shadow: 0 0 20px rgba(212, 175, 55, 0.4), 0 0 46px rgba(212, 175, 55, 0.2); }
+.discover-purple { box-shadow: 0 0 20px rgba(177, 76, 255, 0.4), 0 0 46px rgba(177, 76, 255, 0.2); }
+.discover-cyan { box-shadow: 0 0 20px rgba(0, 212, 255, 0.4), 0 0 46px rgba(0, 212, 255, 0.2); }
 .discover-gold:hover { box-shadow: var(--glow-gold); }
 .discover-purple:hover { box-shadow: var(--glow-purple); }
 .discover-cyan:hover { box-shadow: var(--glow-cyan); }
