@@ -164,6 +164,7 @@ h1, h2 {
 .btn-gold:hover { box-shadow: var(--glow-gold); }
 
 .btn-ghost:hover { box-shadow: var(--glow-cyan); }
+.btn-ghost.glass { border: 1px solid rgba(255, 255, 255, 0.55); }
 
 /* ---------- Navigation ---------- */
 .site-header {
@@ -331,6 +332,11 @@ section { padding: clamp(60px, 9vw, 110px) 0; }
 }
 .feature-card:hover { transform: translateY(-6px); box-shadow: var(--glow-purple); }
 .feature-card .icon { margin-bottom: 16px; }
+.feature-card .icon .neon-mini-icon,
+.feature-card .icon svg.neon-mini-icon {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
 .feature-card h3 { font-size: 1.3rem; }
 .feature-card p { color: var(--ink-dim); font-size: 0.95rem; margin: 0; }
 
@@ -646,12 +652,12 @@ body.theme-gold .ambient-backdrop {
   pointer-events: none;
 }
 .neon-mini-icon.icon-btn-cocktail {
-  left: 42%;
+  left: calc(50% - 16px);
   bottom: 100%;
   transform: translateX(-50%);
 }
 .neon-mini-icon.icon-btn-sushi {
-  left: 58%;
-  bottom: calc(100% - 16px);
+  left: calc(50% + 16px);
+  bottom: calc(100% - 6px);
   transform: translateX(-50%);
 }
