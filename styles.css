@@ -289,6 +289,26 @@ h1, h2 {
   0%, 100% { transform: translateX(-50%) translateY(0) rotate(0deg); }
   50% { transform: translateX(-48%) translateY(14px) rotate(1.5deg); }
 }
+
+/* Hi-tech cocktail + sushi glyph — a quiet neon hint of the menu, tucked
+   into the left margin just above the Reserve a Table button. */
+.hero-bar-glyph {
+  position: absolute;
+  left: clamp(12px, 3vw, 48px);
+  bottom: clamp(150px, 20vw, 225px);
+  width: clamp(120px, 13vw, 190px);
+  opacity: 0.85;
+  z-index: 0;
+  filter: drop-shadow(0 0 12px rgba(0, 212, 255, 0.45)) drop-shadow(0 0 22px rgba(177, 76, 255, 0.3));
+  animation: barGlyphFloat 11s ease-in-out infinite;
+}
+@keyframes barGlyphFloat {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(-1deg); }
+}
+@media (max-width: 980px) {
+  .hero-bar-glyph { display: none; }
+}
 .hero h1 {
   font-size: clamp(2.6rem, 7vw, 5.4rem);
   line-height: 1.05;
@@ -328,7 +348,13 @@ section { padding: clamp(60px, 9vw, 110px) 0; }
   transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease);
 }
 .feature-card:hover { transform: translateY(-6px); box-shadow: var(--glow-purple); }
-.feature-card .icon { font-size: 1.8rem; margin-bottom: 14px; }
+.feature-card .icon { margin-bottom: 16px; }
+.feature-card .icon svg {
+  width: 40px;
+  height: 34px;
+  display: block;
+  filter: drop-shadow(0 0 7px rgba(0, 212, 255, 0.5)) drop-shadow(0 0 14px rgba(177, 76, 255, 0.35));
+}
 .feature-card h3 { font-size: 1.3rem; }
 .feature-card p { color: var(--ink-dim); font-size: 0.95rem; margin: 0; }
 
