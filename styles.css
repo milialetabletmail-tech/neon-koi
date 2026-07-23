@@ -331,6 +331,15 @@ section { padding: clamp(60px, 9vw, 110px) 0; }
   transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease);
 }
 .feature-card:hover { transform: translateY(-6px); box-shadow: var(--glow-purple); }
+
+/* Discover cards glow gently at rest in their own accent color, and bloom
+   brighter on hover — same color, just turned up. */
+.discover-gold { box-shadow: 0 0 22px rgba(212, 175, 55, 0.16); }
+.discover-purple { box-shadow: 0 0 22px rgba(177, 76, 255, 0.16); }
+.discover-cyan { box-shadow: 0 0 22px rgba(0, 212, 255, 0.16); }
+.discover-gold:hover { box-shadow: var(--glow-gold); }
+.discover-purple:hover { box-shadow: var(--glow-purple); }
+.discover-cyan:hover { box-shadow: var(--glow-cyan); }
 .feature-card .icon { margin-bottom: 16px; }
 .feature-card .icon .neon-mini-icon,
 .feature-card .icon svg.neon-mini-icon {
@@ -657,7 +666,7 @@ body.theme-gold .ambient-backdrop {
   transform: translateX(-50%);
 }
 .neon-mini-icon.icon-btn-sushi {
-  left: calc(50% + 15px);
+  left: calc(50% + 25px);
   bottom: calc(100% - 8px);
   transform: translateX(-50%);
 }
