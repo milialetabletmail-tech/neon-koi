@@ -120,12 +120,12 @@
       ];
 
       const noteLength = 0.85;
-      const noteSpacing = noteLength * 0.55; // slight overlap = smooth legato feel
+      const noteSpacing = noteLength * 0.66; // more overlap = smoother, less "stepped" legato
       let chordIndex = 0;
       let noteIndex = 0;
       let nextNoteTime = ctx.currentTime + 1.0;
-      const lookahead = 250; // ms between scheduler ticks
-      const scheduleAheadTime = 1.2; // seconds of notes queued ahead
+      const lookahead = 60; // ms between scheduler ticks — tight enough to avoid audible gaps
+      const scheduleAheadTime = 0.5; // seconds of notes queued ahead
 
       function playNote(freq, time) {
         const osc = ctx.createOscillator();
@@ -133,7 +133,7 @@
         osc.frequency.value = freq;
         const noteGain = ctx.createGain();
         noteGain.gain.setValueAtTime(0, time);
-        noteGain.gain.linearRampToValueAtTime(0.5, time + 0.09);
+        noteGain.gain.linearRampToValueAtTime(0.5, time + 0.16);
         noteGain.gain.exponentialRampToValueAtTime(0.001, time + noteLength);
         osc.connect(noteGain);
         noteGain.connect(filter);
