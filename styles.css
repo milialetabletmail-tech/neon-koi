@@ -334,12 +334,28 @@ section { padding: clamp(60px, 9vw, 110px) 0; }
 
 /* Discover cards glow gently at rest in their own accent color, and bloom
    brighter on hover — same color, just turned up. */
-.discover-gold { box-shadow: 0 0 20px rgba(212, 175, 55, 0.4), 0 0 46px rgba(212, 175, 55, 0.2); }
-.discover-purple { box-shadow: 0 0 20px rgba(177, 76, 255, 0.4), 0 0 46px rgba(177, 76, 255, 0.2); }
-.discover-cyan { box-shadow: 0 0 20px rgba(0, 212, 255, 0.4), 0 0 46px rgba(0, 212, 255, 0.2); }
-.discover-gold:hover { box-shadow: var(--glow-gold); }
-.discover-purple:hover { box-shadow: var(--glow-purple); }
-.discover-cyan:hover { box-shadow: var(--glow-cyan); }
+.discover-grid .feature-card { position: relative; overflow: hidden; }
+.discover-grid .feature-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+}
+.discover-gold {
+  box-shadow: 0 0 26px rgba(212, 175, 55, 0.55), 0 0 60px rgba(212, 175, 55, 0.3);
+}
+.discover-purple {
+  box-shadow: 0 0 26px rgba(177, 76, 255, 0.55), 0 0 60px rgba(177, 76, 255, 0.3);
+}
+.discover-cyan {
+  box-shadow: 0 0 26px rgba(0, 212, 255, 0.55), 0 0 60px rgba(0, 212, 255, 0.3);
+}
+.discover-gold::before { background: linear-gradient(90deg, transparent, var(--gold), transparent); box-shadow: 0 0 12px rgba(212, 175, 55, 0.8); }
+.discover-purple::before { background: linear-gradient(90deg, transparent, var(--purple), transparent); box-shadow: 0 0 12px rgba(177, 76, 255, 0.8); }
+.discover-cyan::before { background: linear-gradient(90deg, transparent, var(--cyan), transparent); box-shadow: 0 0 12px rgba(0, 212, 255, 0.8); }
+.discover-gold:hover { box-shadow: 0 0 30px rgba(212, 175, 55, 0.75), 0 0 70px rgba(212, 175, 55, 0.4); }
+.discover-purple:hover { box-shadow: 0 0 30px rgba(177, 76, 255, 0.75), 0 0 70px rgba(177, 76, 255, 0.4); }
+.discover-cyan:hover { box-shadow: 0 0 30px rgba(0, 212, 255, 0.75), 0 0 70px rgba(0, 212, 255, 0.4); }
 .feature-card .icon { margin-bottom: 16px; }
 .feature-card .icon .neon-mini-icon,
 .feature-card .icon svg.neon-mini-icon {
