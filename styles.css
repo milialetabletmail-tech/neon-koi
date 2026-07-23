@@ -307,16 +307,6 @@ h1, h2 {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
-}
-
-/* Tiny neon glyphs sitting directly above each hero button, sized to the
-   button itself so they read as part of the button, not separate art. */
-.btn-glyph {
-  height: 36px;
-  width: auto;
-  opacity: 0.8;
-  filter: drop-shadow(0 0 6px rgba(0, 212, 255, 0.45)) drop-shadow(0 0 10px rgba(177, 76, 255, 0.3));
 }
 
 /* ---------- Sections ---------- */
@@ -346,12 +336,11 @@ section { padding: clamp(60px, 9vw, 110px) 0; }
 }
 .feature-card:hover { transform: translateY(-6px); box-shadow: var(--glow-purple); }
 .feature-card .icon { margin-bottom: 16px; }
-.feature-card .icon svg {
-  height: 35px;
-  width: auto;
+
+/* ---------- Neon micro-icons (hero buttons + feature cards) ---------- */
+.neon-icon {
   display: block;
-  opacity: 0.85;
-  filter: drop-shadow(0 0 7px rgba(0, 212, 255, 0.5)) drop-shadow(0 0 14px rgba(177, 76, 255, 0.35));
+  margin: 0 auto 5px auto;
 }
 .feature-card h3 { font-size: 1.3rem; }
 .feature-card p { color: var(--ink-dim); font-size: 0.95rem; margin: 0; }
