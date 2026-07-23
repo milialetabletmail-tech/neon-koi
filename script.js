@@ -41,52 +41,33 @@
       ensureContext();
       ambientStarted = true;
 
-      // Slow-moving detuned pad, filtered for a warm rooftop-lounge drone.
-      const baseFreqs = [55, 55.6, 82.4]; // A1, slightly detuned A1, E2
+      // Warm, clean sub-bass pad — sine waves only (no sawtooth grit,
+      // no close detuning) so the low end stays smooth instead of buzzing.
+      const baseFreqs = [55, 82.4]; // A1 root, E2 fifth
       const filter = ctx.createBiquadFilter();
       filter.type = "lowpass";
-      filter.frequency.value = 420;
-      filter.Q.value = 0.7;
+      filter.frequency.value = 320;
+      filter.Q.value = 0.4;
       filter.connect(ambientGain);
 
       const lfo = ctx.createOscillator();
       lfo.frequency.value = 0.05;
       const lfoGain = ctx.createGain();
-      lfoGain.gain.value = 180;
+      lfoGain.gain.value = 100;
       lfo.connect(lfoGain);
       lfoGain.connect(filter.frequency);
       lfo.start();
 
       baseFreqs.forEach((freq, i) => {
         const osc = ctx.createOscillator();
-        osc.type = i === 2 ? "sine" : "sawtooth";
+        osc.type = "sine";
         osc.frequency.value = freq;
         const oscGain = ctx.createGain();
-        oscGain.gain.value = i === 2 ? 0.5 : 0.18;
+        oscGain.gain.value = i === 0 ? 0.42 : 0.4;
         osc.connect(oscGain);
         oscGain.connect(filter);
         osc.start();
       });
-
-      // Occasional shimmering high tone, like distant neon hum.
-      const shimmer = ctx.createOscillator();
-      shimmer.type = "sine";
-      shimmer.frequency.value = 1760;
-      const shimmerGain = ctx.createGain();
-      shimmerGain.gain.value = 0;
-      shimmer.connect(shimmerGain);
-      shimmerGain.connect(ambientGain);
-      shimmer.start();
-
-      function pulseShimmer() {
-        const now = ctx.currentTime;
-        shimmerGain.gain.cancelScheduledValues(now);
-        shimmerGain.gain.setValueAtTime(0, now);
-        shimmerGain.gain.linearRampToValueAtTime(0.035, now + 2);
-        shimmerGain.gain.linearRampToValueAtTime(0, now + 5);
-        setTimeout(pulseShimmer, 7000 + Math.random() * 6000);
-      }
-      pulseShimmer();
 
       startArpeggio();
     }
@@ -181,32 +162,43 @@
       if (ctx.state === "suspended") ctx.resume();
       const now = ctx.currentTime;
 
-      // Soft, high-tech digital UI click: a short filtered tick with a
-      // quiet echo tail, instead of the previous sharp "gunshot" sweep.
+      // Soft digital UI tick: two fixed-pitch tones (no frequency sweep,
+      // so it never reads as a laser/gunshot "pew") with a quiet echo tail.
       const echo = ctx.createDelay(0.3);
       echo.delayTime.value = 0.085;
       const echoFeedback = ctx.createGain();
-      echoFeedback.gain.value = 0.16;
+      echoFeedback.gain.value = 0.14;
       echo.connect(echoFeedback);
       echoFeedback.connect(echo);
 
       const osc = ctx.createOscillator();
       osc.type = "sine";
-      osc.frequency.setValueAtTime(1800, now);
-      osc.frequency.exponentialRampToValueAtTime(1300, now + 0.045);
+      osc.frequency.value = 1600;
 
       const gain = ctx.createGain();
       gain.gain.setValueAtTime(0.0001, now);
-      gain.gain.linearRampToValueAtTime(0.08, now + 0.006);
-      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.07);
+      gain.gain.linearRampToValueAtTime(0.065, now + 0.004);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.05);
 
       osc.connect(gain);
       gain.connect(sfxGain);
       gain.connect(echo);
       echo.connect(sfxGain);
-
       osc.start(now);
-      osc.stop(now + 0.08);
+      osc.stop(now + 0.06);
+
+      // A faint upper-octave sparkle so it still feels "digital", not dull.
+      const osc2 = ctx.createOscillator();
+      osc2.type = "sine";
+      osc2.frequency.value = 3200;
+      const gain2 = ctx.createGain();
+      gain2.gain.setValueAtTime(0.0001, now);
+      gain2.gain.linearRampToValueAtTime(0.02, now + 0.003);
+      gain2.gain.exponentialRampToValueAtTime(0.0001, now + 0.03);
+      osc2.connect(gain2);
+      gain2.connect(sfxGain);
+      osc2.start(now);
+      osc2.stop(now + 0.04);
     }
 
     function playConfirm() {
