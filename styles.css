@@ -132,6 +132,7 @@ h1, h2 {
 
 /* ---------- Buttons ---------- */
 .btn {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 0.6em;
@@ -636,4 +637,21 @@ body.theme-gold .ambient-backdrop {
     max-height: 30px !important;
     max-width: 30px !important;
     object-fit: contain !important;
+}
+
+/* Icons perched on top of a button, growing out of it like a sprout. */
+.neon-mini-icon.icon-btn-top {
+  position: absolute;
+  margin: 0 !important;
+  pointer-events: none;
+}
+.neon-mini-icon.icon-btn-cocktail {
+  left: 42%;
+  bottom: 100%;
+  transform: translateX(-50%);
+}
+.neon-mini-icon.icon-btn-sushi {
+  left: 58%;
+  bottom: calc(100% - 16px);
+  transform: translateX(-50%);
 }
