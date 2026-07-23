@@ -35,10 +35,18 @@ body {
   font-family: var(--font-body);
   line-height: 1.6;
   overflow-x: hidden;
+  background-color: var(--void);
+}
 
-  /* Night-Tokyo neon skyline behind everything: fixed so it stays put
-     while the page scrolls, with a dark gradient wash over it so white
-     text keeps full contrast at every scroll position. */
+/* Night-Tokyo neon skyline behind everything, on its own fixed layer
+   (rather than `background-attachment: fixed` on body) so it stays
+   perfectly still while scrolling instead of jumping/repainting —
+   background-attachment: fixed recalculates against the viewport on
+   every scroll frame and stutters badly on mobile browsers. */
+.bg-photo {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
   background-image:
     linear-gradient(180deg, rgba(5, 3, 10, 0.9) 0%, rgba(8, 6, 20, 0.78) 45%, rgba(5, 3, 10, 0.95) 100%),
     radial-gradient(ellipse at 20% -10%, rgba(177, 76, 255, 0.16), transparent 55%),
@@ -47,13 +55,11 @@ body {
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-color: var(--void);
 }
 
 /* Menu page: swap the skyline photo for a moody charcoal-grill shot,
    same dark wash and neon glows so the rest of the theme stays intact. */
-body.page-menu {
+body.page-menu .bg-photo {
   background-image:
     linear-gradient(180deg, rgba(5, 3, 10, 0.9) 0%, rgba(8, 6, 20, 0.78) 45%, rgba(5, 3, 10, 0.95) 100%),
     radial-gradient(ellipse at 20% -10%, rgba(177, 76, 255, 0.16), transparent 55%),
