@@ -657,7 +657,7 @@ body.theme-gold .ambient-backdrop {
   transform: translateX(-50%);
 }
 .neon-mini-icon.icon-btn-sushi {
-  left: calc(50% + 10px);
-  bottom: calc(100% - 6px);
+  left: calc(50% + 15px);
+  bottom: calc(100% - 8px);
   transform: translateX(-50%);
 }
