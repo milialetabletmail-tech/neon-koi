@@ -400,12 +400,28 @@ section { padding: clamp(60px, 9vw, 110px) 0; }
 
 .menu-item {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  gap: 24px;
+  gap: 20px;
   padding: 22px 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.07);
 }
 .menu-item:last-child { border-bottom: none; }
+.menu-item-thumb {
+  flex: none;
+  width: 64px;
+  height: 64px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: linear-gradient(160deg, rgba(177, 76, 255, 0.22), rgba(0, 212, 255, 0.14));
+  border: 1px solid var(--border-glass);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.menu-item-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.menu-item-thumb svg { width: 30px; height: 30px; opacity: 0.75; }
+.menu-item-info { flex: 1; min-width: 0; }
 .menu-item-info h4 { font-size: 1.2rem; margin-bottom: 6px; display: flex; align-items: baseline; gap: 10px; }
 .menu-item-info p { color: var(--ink-dim); font-size: 0.92rem; max-width: 480px; margin: 0; }
 .menu-item-price {
