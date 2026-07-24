@@ -15,6 +15,7 @@
     let ctx = null;
     let masterGain, ambientGain, sfxGain;
     let ambientStarted = false;
+    let ambientStartedAt = 0;
     let muted = localStorage.getItem("neonkoi-muted") === "true";
     const VOLUME = 0.5;
 
@@ -40,6 +41,7 @@
       if (ambientStarted) return;
       ensureContext();
       ambientStarted = true;
+      ambientStartedAt = Date.now();
 
       // Warm, clean sub-bass pad — sine waves only (no sawtooth grit,
       // no close detuning) so the low end stays smooth instead of buzzing.
@@ -125,7 +127,7 @@
       let noteIndex = 0;
       let nextNoteTime = ctx.currentTime + 1.0;
       const lookahead = 60; // ms between scheduler ticks — tight enough to avoid audible gaps
-      const scheduleAheadTime = 0.5; // seconds of notes queued ahead
+      const scheduleAheadTime = 0.8; // seconds of notes queued ahead — extra slack absorbs brief main-thread stalls
 
       function playNote(freq, time) {
         const osc = ctx.createOscillator();
@@ -142,6 +144,14 @@
       }
 
       function scheduler() {
+        // If the tab was backgrounded/throttled and a tick lands very late,
+        // nextNoteTime can fall far behind ctx.currentTime. Scheduling the
+        // whole overdue backlog at once would fire a burst of overlapping
+        // notes all bunched together — audible as a sudden crackle/glitch.
+        // Resyncing instead just picks the beat back up cleanly.
+        if (nextNoteTime < ctx.currentTime - 0.5) {
+          nextNoteTime = ctx.currentTime + 0.05;
+        }
         while (nextNoteTime < ctx.currentTime + scheduleAheadTime) {
           const chord = progression[chordIndex];
           playNote(chord[noteIndex], nextNoteTime);
@@ -234,13 +244,20 @@
       return muted;
     }
 
+    // True if ambient playback began within the last moment — used to tell
+    // "this click's pointerdown just woke the audio up" apart from a normal
+    // later click on the mute button.
+    function justStarted() {
+      return ambientStarted && Date.now() - ambientStartedAt < 400;
+    }
+
     function firstInteraction() {
       ensureContext();
       if (ctx.state === "suspended") ctx.resume();
       startAmbient();
     }
 
-    return { firstInteraction, playClick, playConfirm, toggleMute, isMuted };
+    return { firstInteraction, playClick, playConfirm, toggleMute, isMuted, justStarted };
   })();
 
   /* ---------------------------------------------------------------------
@@ -266,6 +283,16 @@
       };
       setState(AudioEngine.isMuted());
       soundToggle.addEventListener("click", () => {
+        AudioEngine.firstInteraction();
+        // The pointerdown just ahead of this click may have been the very
+        // first interaction on the page, which starts the ambient track.
+        // If that's what just happened, this click's job is done — don't
+        // also toggle it straight to muted, or the music would start and
+        // silence itself within the same tap.
+        if (AudioEngine.justStarted()) {
+          setState(false);
+          return;
+        }
         const muted = AudioEngine.toggleMute();
         setState(muted);
       });
