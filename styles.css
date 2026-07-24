@@ -508,23 +508,35 @@ section { padding: clamp(60px, 9vw, 110px) 0; }
   text-transform: uppercase;
   color: var(--ink-faint);
 }
+/* Each pin is a traced neon-sign contour of the actual drink, in its
+   own accent color (--pin-color, set inline per icon), anchored by
+   its base so the glass "stands" on the marked spot. */
 .map-pin {
   position: absolute;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: radial-gradient(circle, var(--cyan), var(--purple));
-  box-shadow: 0 0 0 4px rgba(0, 212, 255, 0.12), var(--glow-cyan);
+  display: block;
+  background: none;
   border: none;
-  transform: translate(-50%, -50%);
+  padding: 10px;
+  margin: -10px;
+  transform: translate(-50%, -100%);
+  cursor: pointer;
+}
+.map-pin-icon {
+  display: block;
+  filter: drop-shadow(0 0 4px var(--pin-color));
   animation: pinPulse 2.4s ease-in-out infinite;
+  transition: filter 0.25s ease, transform 0.25s ease;
 }
-.map-pin.pin-secret { background: radial-gradient(circle, var(--gold), #6b4e00); box-shadow: 0 0 0 4px rgba(212,175,55,.15), var(--glow-gold); }
 @keyframes pinPulse {
-  0%, 100% { box-shadow: 0 0 0 4px rgba(0, 212, 255, 0.12), var(--glow-cyan); }
-  50% { box-shadow: 0 0 0 9px rgba(0, 212, 255, 0.05), var(--glow-cyan); }
+  0%, 100% { filter: drop-shadow(0 0 4px var(--pin-color)); }
+  50% { filter: drop-shadow(0 0 9px var(--pin-color)); }
 }
-.map-pin[aria-pressed="true"] { outline: 2px solid var(--ink); outline-offset: 3px; }
+.map-pin:hover .map-pin-icon,
+.map-pin[aria-pressed="true"] .map-pin-icon {
+  animation-play-state: paused;
+  transform: scale(1.15);
+  filter: drop-shadow(0 0 8px var(--pin-color)) drop-shadow(0 0 18px var(--pin-color));
+}
 
 .cocktail-detail {
   position: relative;
