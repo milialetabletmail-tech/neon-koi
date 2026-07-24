@@ -642,55 +642,50 @@ body.theme-gold .ambient-backdrop {
   color: var(--ink-faint);
 }
 
-/* Hidden VIP hieroglyph trigger */
-.hieroglyph-trigger {
-  position: relative;
+/* VIP Access — nav trigger for the hidden speakeasy page. A quiet,
+   expensive-looking gold pill that breathes with a slow neon glow,
+   sized generously for a confident tap on a tablet screen. */
+.vip-access-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 30px;
-  height: 30px;
-  font-family: var(--font-display);
-  font-size: 1.1rem;
-  color: rgba(212, 175, 55, 0.28);
-  opacity: 0.55;
-  border-radius: 50%;
-  transition: color 0.5s var(--ease), opacity 0.5s var(--ease), text-shadow 0.5s var(--ease);
-  animation: hieroglyphPulse 3.6s ease-in-out infinite;
-  cursor: pointer;
-}
-@keyframes hieroglyphPulse {
-  0%, 100% { text-shadow: 0 0 4px rgba(212, 175, 55, 0.3); }
-  50% { text-shadow: 0 0 14px rgba(212, 175, 55, 0.75), 0 0 26px rgba(212, 175, 55, 0.35); }
-}
-.hieroglyph-trigger:hover {
-  color: var(--gold);
-  opacity: 1;
-  text-shadow: var(--glow-gold);
-}
-.hieroglyph-trigger .tooltip {
-  position: absolute;
-  bottom: calc(100% + 10px);
-  left: 50%;
-  transform: translateX(-50%) translateY(6px);
-  background: rgba(8, 6, 15, 0.92);
-  border: 1px solid rgba(212, 175, 55, 0.4);
-  color: var(--gold);
-  font-family: var(--font-body);
-  font-size: 0.68rem;
-  letter-spacing: 0.08em;
+  min-height: 44px;
+  padding: 0.7em 1.35em;
+  border-radius: 999px;
+  border: 1px solid rgba(212, 175, 55, 0.5);
+  background: rgba(212, 175, 55, 0.07);
+  font-family: var(--font-heading);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
+  color: var(--gold);
   white-space: nowrap;
-  padding: 8px 14px;
-  border-radius: 8px;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s var(--ease), transform 0.3s var(--ease);
+  cursor: pointer;
+  animation: vipAccessPulse 3.8s ease-in-out infinite;
+  transition: transform 0.3s var(--ease), background 0.3s var(--ease), border-color 0.3s var(--ease), box-shadow 0.15s var(--ease);
 }
-.hieroglyph-trigger:hover .tooltip,
-.hieroglyph-trigger:focus-visible .tooltip {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
+@keyframes vipAccessPulse {
+  0%, 100% {
+    box-shadow: 0 0 6px rgba(212, 175, 55, 0.22), 0 0 14px rgba(212, 175, 55, 0.1);
+    border-color: rgba(212, 175, 55, 0.45);
+  }
+  50% {
+    box-shadow: 0 0 16px rgba(212, 175, 55, 0.65), 0 0 36px rgba(212, 175, 55, 0.32);
+    border-color: rgba(212, 175, 55, 0.9);
+  }
+}
+.vip-access-btn:hover {
+  transform: translateY(-1px);
+  background: rgba(212, 175, 55, 0.14);
+  border-color: var(--gold);
+}
+.vip-access-btn:active {
+  animation-play-state: paused;
+  transform: translateY(0);
+  background: rgba(212, 175, 55, 0.3);
+  border-color: var(--gold);
+  box-shadow: 0 0 24px rgba(212, 175, 55, 0.95), 0 0 52px rgba(212, 175, 55, 0.55);
 }
 
 /* Mobile nav */
@@ -712,6 +707,7 @@ body.theme-gold .ambient-backdrop {
   }
   .main-nav.open { transform: translateY(0); }
   .main-nav a { padding: 10px 0; width: 100%; }
+  .main-nav a.vip-access-btn { width: fit-content; padding: 0.7em 1.35em; margin-bottom: 10px; }
 }
 
 ::selection { background: rgba(177, 76, 255, 0.4); color: #fff; }
