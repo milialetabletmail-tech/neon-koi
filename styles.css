@@ -388,25 +388,6 @@ section { padding: clamp(60px, 9vw, 110px) 0; }
 .feature-card h3 { font-size: 1.3rem; }
 .feature-card p { color: var(--ink-dim); font-size: 0.95rem; margin: 0; }
 
-/* Reserve CTA panel: the colorful skyline icon reused as a faint,
-   oversized background watermark rather than a foreground accent. */
-.reserve-cta { position: relative; overflow: hidden; }
-.reserve-cta .skyline-watermark {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: min(520px, 80%);
-  height: auto;
-  opacity: 0.16;
-  z-index: 0;
-  pointer-events: none;
-}
-.reserve-cta > *:not(.skyline-watermark) {
-  position: relative;
-  z-index: 1;
-}
-
 /* ---------- Menu ---------- */
 .menu-tabs {
   display: flex;
