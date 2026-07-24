@@ -642,25 +642,23 @@ body.theme-gold .ambient-backdrop {
   color: var(--ink-faint);
 }
 
-/* VIP Access — nav trigger for the hidden speakeasy page. A quiet,
-   expensive-looking gold pill that breathes with a slow neon glow,
-   sized generously for a confident tap on a tablet screen. */
+/* VIP Access — nav trigger for the hidden speakeasy page. A single
+   gold kanji badge (貴 — "noble/distinguished", as in 貴賓 "VIP guest")
+   that breathes with a slow neon glow, sized generously for a
+   confident tap on a tablet screen. */
 .vip-access-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 44px;
-  padding: 0.7em 1.35em;
-  border-radius: 999px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
   border: 1px solid rgba(212, 175, 55, 0.5);
   background: rgba(212, 175, 55, 0.07);
   font-family: var(--font-heading);
-  font-size: 0.78rem;
+  font-size: 1.3rem;
   font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
   color: var(--gold);
-  white-space: nowrap;
   cursor: pointer;
   animation: vipAccessPulse 3.8s ease-in-out infinite;
   transition: transform 0.3s var(--ease), background 0.3s var(--ease), border-color 0.3s var(--ease), box-shadow 0.15s var(--ease);
@@ -707,7 +705,7 @@ body.theme-gold .ambient-backdrop {
   }
   .main-nav.open { transform: translateY(0); }
   .main-nav a { padding: 10px 0; width: 100%; }
-  .main-nav a.vip-access-btn { width: fit-content; padding: 0.7em 1.35em; margin-bottom: 10px; }
+  .main-nav a.vip-access-btn { width: 44px; padding: 0; margin-bottom: 10px; }
 }
 
 ::selection { background: rgba(177, 76, 255, 0.4); color: #fff; }
