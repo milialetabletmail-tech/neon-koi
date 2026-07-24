@@ -210,7 +210,7 @@ h1, h2 {
 
 .main-nav {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: clamp(14px, 2.5vw, 34px);
 }
 .main-nav a {
@@ -642,25 +642,41 @@ body.theme-gold .ambient-backdrop {
   color: var(--ink-faint);
 }
 
-/* VIP Access — nav trigger for the hidden speakeasy page. Just the
-   bare gold kanji (貴 — "noble/distinguished", as in 貴賓 "VIP guest"),
-   no badge or border, shimmering and breathing with neon glow. The
-   padding keeps a comfortable tablet-sized tap target without adding
-   any visible shape. */
+/* VIP Access — nav trigger for the hidden speakeasy page: the bare
+   gold "秘" kanji with a small VIP caption underneath, no badge or
+   border, shimmering and breathing with neon glow. The padding keeps
+   a comfortable tablet-sized tap target without adding a visible
+   shape; top edge lines up with the other nav links (see .main-nav
+   align-items), left edge lines up with them in the mobile dropdown. */
 .vip-access-btn {
   display: inline-flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 8px 10px;
-  margin: -8px -10px;
+  padding: 6px 8px;
+  margin: -6px -8px;
+  cursor: pointer;
+  transition: transform 0.3s var(--ease);
+}
+.vip-glyph {
   font-family: var(--font-heading);
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   font-weight: 700;
   line-height: 1;
   color: var(--gold);
-  cursor: pointer;
   animation: vipAccessPulse 3.6s ease-in-out infinite;
-  transition: transform 0.3s var(--ease), text-shadow 0.15s var(--ease), color 0.15s var(--ease);
+  transition: text-shadow 0.15s var(--ease), color 0.15s var(--ease);
+}
+.vip-label {
+  display: block;
+  margin-top: 2px;
+  text-align: center;
+  font-family: var(--font-heading);
+  font-size: 0.42rem;
+  font-weight: 700;
+  letter-spacing: 0.68em;
+  line-height: 1;
+  color: var(--gold);
+  opacity: 0.8;
 }
 @keyframes vipAccessPulse {
   0%, 100% {
@@ -674,12 +690,16 @@ body.theme-gold .ambient-backdrop {
 }
 .vip-access-btn:hover {
   transform: translateY(-1px);
+}
+.vip-access-btn:hover .vip-glyph {
   color: #f4dd8b;
   text-shadow: 0 0 14px rgba(212, 175, 55, 0.9), 0 0 30px rgba(212, 175, 55, 0.55);
 }
 .vip-access-btn:active {
-  animation-play-state: paused;
   transform: translateY(0);
+}
+.vip-access-btn:active .vip-glyph {
+  animation-play-state: paused;
   color: #fff3d6;
   text-shadow: 0 0 18px rgba(212, 175, 55, 1), 0 0 40px rgba(212, 175, 55, 0.8), 0 0 70px rgba(212, 175, 55, 0.5);
 }
@@ -703,7 +723,7 @@ body.theme-gold .ambient-backdrop {
   }
   .main-nav.open { transform: translateY(0); }
   .main-nav a { padding: 10px 0; width: 100%; }
-  .main-nav a.vip-access-btn { width: fit-content; margin-bottom: 6px; }
+  .main-nav a.vip-access-btn { width: fit-content; padding: 6px 8px; margin: -6px -8px 0; }
 }
 
 ::selection { background: rgba(177, 76, 255, 0.4); color: #fff; }
