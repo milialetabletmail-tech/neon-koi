@@ -733,7 +733,7 @@ body.theme-gold .ambient-backdrop {
   pointer-events: none;
 }
 .neon-mini-icon.icon-btn-cocktail {
-  left: calc(50% - 16px);
+  left: 50%;
   bottom: 100%;
   transform: translateX(-50%);
 }
@@ -741,8 +741,10 @@ body.theme-gold .ambient-backdrop {
 .neon-mini-icon.icon-btn-cocktail.icon-btn-center {
   left: 50%;
 }
+/* Positioned so the chopsticks' crossing point sits exactly on the
+   button's top border (measured from the traced icon's geometry). */
 .neon-mini-icon.icon-btn-sushi {
-  left: calc(50% + 25px);
+  left: calc(50% + 1.7px);
   bottom: calc(100% - 8px);
   transform: translateX(-50%);
 }
