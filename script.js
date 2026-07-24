@@ -351,6 +351,7 @@
       description: "Our house signature: vodka washed with yuzu, a whisper of blue curaçao, and a saline mist that makes the citrus glow.",
       ingredients: ["Yuzu-washed vodka", "Blue curaçao", "Saline mist", "Shiso leaf"],
       price: "$26",
+      image: "images/cocktails/electric-koi.jpg",
     },
     "ronins-ember": {
       name: "Ronin's Ember",
@@ -358,6 +359,7 @@
       description: "Mezcal meets smoked plum and a chili tincture that lingers like the last light over the skyline.",
       ingredients: ["Mezcal", "Smoked plum", "Shiso", "Chili tincture"],
       price: "$24",
+      image: "images/cocktails/ronins-ember.jpg",
     },
     "sakura-static": {
       name: "Sakura Static",
@@ -365,6 +367,7 @@
       description: "Gin softened with cherry blossom cordial and lychee, finished with a crackle of sparkling sake.",
       ingredients: ["Gin", "Cherry blossom cordial", "Lychee", "Sparkling sake"],
       price: "$25",
+      image: "images/cocktails/sakura-static.jpg",
     },
     "wasabi-volt": {
       name: "Wasabi Volt",
@@ -372,6 +375,7 @@
       description: "Tequila charged with wasabi honey, lime, and cucumber for a jolt that wakes up the whole table.",
       ingredients: ["Tequila", "Wasabi honey", "Lime", "Cucumber"],
       price: "$23",
+      image: "images/cocktails/wasabi-volt.jpg",
     },
     "neon-nashi": {
       name: "Neon Nashi",
@@ -379,6 +383,7 @@
       description: "Shochu, Asian pear, and ginger lifted with soda — clean, glowing, dangerously easy to drink.",
       ingredients: ["Shochu", "Asian pear", "Ginger", "Soda"],
       price: "$22",
+      image: "images/cocktails/neon-nashi.jpg",
     },
     "obsidian-koi": {
       name: "Obsidian Koi",
@@ -386,6 +391,7 @@
       description: "Japanese whisky, activated charcoal, and black sesame, shadowed with bitters — the color of the rooftop at midnight.",
       ingredients: ["Japanese whisky", "Activated charcoal", "Black sesame", "Bitters"],
       price: "$27",
+      image: "images/cocktails/obsidian-koi.jpg",
     },
     glasswing: {
       name: "Glasswing",
@@ -393,6 +399,7 @@
       description: "Rum, passionfruit, and coconut swirl with butterfly pea, shifting hue as it settles in the glass.",
       ingredients: ["Rum", "Passionfruit", "Coconut", "Butterfly pea"],
       price: "$24",
+      image: "images/cocktails/glasswing.jpg",
     },
     "voltage-yuzu": {
       name: "Voltage Yuzu",
@@ -400,6 +407,7 @@
       description: "Vodka and yuzu kosho whipped with egg white into a silken, citrus-forward finish.",
       ingredients: ["Vodka", "Yuzu kosho", "Egg white", "Citrus oils"],
       price: "$23",
+      image: "images/cocktails/voltage-yuzu.jpg",
     },
     "hidden-pour": {
       name: "???",
@@ -407,6 +415,7 @@
       description: "Some pours never make the public map. Find the hidden room to taste what isn't listed anywhere else.",
       ingredients: ["Classified"],
       price: "Members Only",
+      image: "images/cocktails/hidden-pour.jpg",
     },
   };
 
@@ -419,11 +428,16 @@
       const item = cocktailData[id];
       if (!item) return;
       detail.innerHTML = `
-        <span class="subtitle">${item.subtitle}</span>
-        <h3>${item.name}</h3>
-        <p>${item.description}</p>
-        <div class="ingredients">${item.ingredients.map((ing) => `<span>${ing}</span>`).join("")}</div>
-        <div class="price">${item.price}</div>
+        <div class="cocktail-detail-body">
+          <span class="subtitle">${item.subtitle}</span>
+          <h3>${item.name}</h3>
+          <p>${item.description}</p>
+          <div class="ingredients">${item.ingredients.map((ing) => `<span>${ing}</span>`).join("")}</div>
+          <div class="price">${item.price}</div>
+        </div>
+        <div class="cocktail-detail-media">
+          <img src="${item.image}" alt="${item.name}" loading="lazy">
+        </div>
       `;
     }
 
