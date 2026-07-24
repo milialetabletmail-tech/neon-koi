@@ -307,6 +307,73 @@
   }
 
   /* ---------------------------------------------------------------------
+     Scroll reveal — fades/slides [data-reveal] elements in once as they
+     enter the viewport. No-ops on pages that don't have any.
+  --------------------------------------------------------------------- */
+  function initScrollReveal() {
+    const targets = document.querySelectorAll("[data-reveal]");
+    if (!targets.length) return;
+
+    if (!("IntersectionObserver" in window)) {
+      targets.forEach((el) => el.classList.add("is-visible"));
+      return;
+    }
+
+    targets.forEach((el) => {
+      const delay = Number(el.getAttribute("data-reveal-delay")) || 0;
+      el.style.transitionDelay = `${delay * 110}ms`;
+    });
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.15, rootMargin: "0px 0px -60px 0px" }
+    );
+    targets.forEach((el) => observer.observe(el));
+  }
+
+  /* ---------------------------------------------------------------------
+     Cursor neon glow (home page) — a soft blob that trails the pointer
+     with a little lag. No-ops on touch devices or where the element
+     isn't present.
+  --------------------------------------------------------------------- */
+  function initCursorGlow() {
+    const glow = document.querySelector("[data-cursor-glow]");
+    if (!glow || window.matchMedia("(hover: none)").matches) return;
+
+    let targetX = window.innerWidth / 2;
+    let targetY = window.innerHeight / 2;
+    let x = targetX;
+    let y = targetY;
+    let active = false;
+    let rafId = null;
+
+    function tick() {
+      x += (targetX - x) * 0.12;
+      y += (targetY - y) * 0.12;
+      glow.style.transform = `translate(${x}px, ${y}px)`;
+      rafId = requestAnimationFrame(tick);
+    }
+
+    window.addEventListener("pointermove", (e) => {
+      targetX = e.clientX;
+      targetY = e.clientY;
+      if (!active) {
+        active = true;
+        glow.classList.add("is-active");
+        if (!rafId) tick();
+      }
+    });
+    window.addEventListener("pointerleave", () => glow.classList.remove("is-active"));
+  }
+
+  /* ---------------------------------------------------------------------
      Mobile nav toggle
   --------------------------------------------------------------------- */
   function initNavToggle() {
@@ -488,6 +555,8 @@
   document.addEventListener("DOMContentLoaded", () => {
     initAudioUI();
     initNavToggle();
+    initScrollReveal();
+    initCursorGlow();
     initMenuTabs();
     initCocktailMap();
     initForm("[data-reservation-form]", "[data-reservation-confirmation]", "NK-RES");

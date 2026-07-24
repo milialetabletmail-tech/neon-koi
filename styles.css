@@ -806,3 +806,71 @@ body.theme-gold .ambient-backdrop {
   bottom: calc(100% - 7.5px);
   transform: translateX(-50%);
 }
+
+/* ---------- Film grain (home page) ---------- */
+/* A faint animated noise layer over everything, so the dark
+   background reads as textured film rather than flat/plastic. Pure
+   CSS/SVG, no image file. */
+.grain-layer {
+  position: fixed;
+  inset: -50%;
+  width: 200%;
+  height: 200%;
+  z-index: 40;
+  pointer-events: none;
+  opacity: 0.035;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  background-size: 180px 180px;
+  animation: grainShift 8s steps(8) infinite;
+}
+@keyframes grainShift {
+  0% { transform: translate(0, 0); }
+  12.5% { transform: translate(-4%, 3%); }
+  25% { transform: translate(3%, -5%); }
+  37.5% { transform: translate(-5%, -2%); }
+  50% { transform: translate(4%, 4%); }
+  62.5% { transform: translate(-3%, 5%); }
+  75% { transform: translate(5%, -3%); }
+  87.5% { transform: translate(-2%, -4%); }
+  100% { transform: translate(0, 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .grain-layer { animation: none; }
+}
+
+/* ---------- Scroll reveal ---------- */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
+}
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] { opacity: 1; transform: none; transition: none; }
+}
+
+/* ---------- Cursor neon glow (home page) ---------- */
+.cursor-glow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 560px;
+  height: 560px;
+  margin: -280px 0 0 -280px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(177, 76, 255, 0.16), rgba(0, 212, 255, 0.1) 45%, transparent 72%);
+  z-index: 1;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  opacity: 0;
+  transition: opacity 0.4s var(--ease);
+  will-change: transform;
+}
+.cursor-glow.is-active { opacity: 1; }
+@media (hover: none), (prefers-reduced-motion: reduce) {
+  .cursor-glow { display: none; }
+}
