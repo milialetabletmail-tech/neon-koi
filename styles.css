@@ -737,6 +737,10 @@ body.theme-gold .ambient-backdrop {
   bottom: 100%;
   transform: translateX(-50%);
 }
+/* Standalone button (no neighbor to balance against) — true center. */
+.neon-mini-icon.icon-btn-cocktail.icon-btn-center {
+  left: 50%;
+}
 .neon-mini-icon.icon-btn-sushi {
   left: calc(50% + 25px);
   bottom: calc(100% - 8px);
