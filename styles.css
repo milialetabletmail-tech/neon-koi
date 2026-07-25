@@ -531,6 +531,7 @@ section { padding: clamp(60px, 9vw, 110px) 0; }
   stroke: rgba(244, 240, 255, 0.22);
   stroke-width: 0.35;
   stroke-linecap: round;
+  stroke-linejoin: round;
   stroke-dasharray: 0.6 2.2;
   animation: mapPathFlow 7s linear infinite;
 }
