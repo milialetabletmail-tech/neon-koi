@@ -508,9 +508,11 @@ section { padding: clamp(60px, 9vw, 110px) 0; }
   text-transform: uppercase;
   color: var(--ink-faint);
 }
-/* Each pin is a traced neon-sign contour of the actual drink, in its
-   own accent color (--pin-color, set inline per icon), anchored by
-   its base so the glass "stands" on the marked spot. */
+/* Each pin is a traced neon-sign contour of the actual drink: a white-hot
+   tube core (the path fill) wrapped in its own colored glow. Icons with a
+   distinct garnish color (e.g. a green leaf on a blue glass) split into
+   multiple .map-pin-icon-part groups, each with its own --pin-color, so
+   the glow reads as two-tone instead of one flat tint. */
 .map-pin {
   position: absolute;
   display: block;
@@ -523,9 +525,12 @@ section { padding: clamp(60px, 9vw, 110px) 0; }
 }
 .map-pin-icon {
   display: block;
+  transition: transform 0.25s ease;
+}
+.map-pin-icon-part {
   filter: drop-shadow(0 0 4px var(--pin-color));
   animation: pinPulse 2.4s ease-in-out infinite;
-  transition: filter 0.25s ease, transform 0.25s ease;
+  transition: filter 0.25s ease;
 }
 @keyframes pinPulse {
   0%, 100% { filter: drop-shadow(0 0 4px var(--pin-color)); }
@@ -533,8 +538,11 @@ section { padding: clamp(60px, 9vw, 110px) 0; }
 }
 .map-pin:hover .map-pin-icon,
 .map-pin[aria-pressed="true"] .map-pin-icon {
-  animation-play-state: paused;
   transform: scale(1.15);
+}
+.map-pin:hover .map-pin-icon-part,
+.map-pin[aria-pressed="true"] .map-pin-icon-part {
+  animation-play-state: paused;
   filter: drop-shadow(0 0 8px var(--pin-color)) drop-shadow(0 0 18px var(--pin-color));
 }
 
