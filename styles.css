@@ -517,6 +517,17 @@ section { padding: clamp(60px, 9vw, 110px) 0; }
   color: var(--ink-faint);
 }
 .map-zone-label[style*="right"] { text-align: right; }
+@media (max-width: 400px) {
+  /* At very small map sizes the two-line label sits close enough to
+     Electric Koi / Ronin's Ember that it can touch their glow; shrink
+     it a notch instead of moving the pins, since the pin math is
+     tuned to their current top/left. */
+  .map-zone-label {
+    font-size: 0.48rem;
+    line-height: 1.25;
+    max-width: 24%;
+  }
+}
 /* Faint dotted footpaths between each zone's two pins, like the walking
    routes on a venue map. Purely decorative, sits behind the pins. */
 .map-paths {
@@ -535,8 +546,16 @@ section { padding: clamp(60px, 9vw, 110px) 0; }
   stroke-dasharray: 0.6 2.2;
   animation: mapPathFlow 7s linear infinite;
 }
+/* Each segment's dash pattern is solved so a full dash always lands
+   exactly at both endpoints (see stroke-dasharray inline per path).
+   The scroll distance has to be an exact multiple of that same
+   segment's own dash+gap period too, or the pattern snaps out of
+   alignment every time the animation loops -- so --dash-cycle is set
+   per path to its own period's nearest multiple to -28, instead of
+   every segment sharing one fixed distance that only some periods
+   divide evenly. */
 @keyframes mapPathFlow {
-  to { stroke-dashoffset: -28; }
+  to { stroke-dashoffset: var(--dash-cycle, -28); }
 }
 @media (prefers-reduced-motion: reduce) {
   .map-path { animation: none; }
@@ -561,25 +580,26 @@ section { padding: clamp(60px, 9vw, 110px) 0; }
 }
 .map-pin-icon {
   display: block;
+  transform-origin: bottom center;
   transition: transform 0.25s ease;
 }
 .map-pin-icon-part {
-  filter: drop-shadow(0 0 6px var(--pin-color)) drop-shadow(0 0 17px var(--pin-color));
+  filter: drop-shadow(0 0 9px var(--pin-color)) drop-shadow(0 0 24px var(--pin-color));
   animation: pinPulse 2.4s ease-in-out infinite;
   transition: filter 0.25s ease;
 }
 @keyframes pinPulse {
-  0%, 100% { filter: drop-shadow(0 0 6px var(--pin-color)) drop-shadow(0 0 17px var(--pin-color)); }
-  50% { filter: drop-shadow(0 0 9px var(--pin-color)) drop-shadow(0 0 25px var(--pin-color)); }
+  0%, 100% { filter: drop-shadow(0 0 9px var(--pin-color)) drop-shadow(0 0 24px var(--pin-color)); }
+  50% { filter: drop-shadow(0 0 13px var(--pin-color)) drop-shadow(0 0 34px var(--pin-color)); }
 }
 .map-pin:hover .map-pin-icon,
 .map-pin[aria-pressed="true"] .map-pin-icon {
-  transform: scale(1.15);
+  transform: scale(1.4);
 }
 .map-pin:hover .map-pin-icon-part,
 .map-pin[aria-pressed="true"] .map-pin-icon-part {
-  animation-play-state: paused;
-  filter: drop-shadow(0 0 9px var(--pin-color)) drop-shadow(0 0 21px var(--pin-color)) drop-shadow(0 0 38px var(--pin-color));
+  animation: none;
+  filter: drop-shadow(0 0 13px var(--pin-color)) drop-shadow(0 0 30px var(--pin-color)) drop-shadow(0 0 54px var(--pin-color));
 }
 
 .cocktail-detail {
