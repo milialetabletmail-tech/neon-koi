@@ -563,13 +563,13 @@ section { padding: clamp(60px, 9vw, 110px) 0; }
   transition: transform 0.25s ease;
 }
 .map-pin-icon-part {
-  filter: drop-shadow(0 0 5px var(--pin-color)) drop-shadow(0 0 14px var(--pin-color));
+  filter: drop-shadow(0 0 6px var(--pin-color)) drop-shadow(0 0 17px var(--pin-color));
   animation: pinPulse 2.4s ease-in-out infinite;
   transition: filter 0.25s ease;
 }
 @keyframes pinPulse {
-  0%, 100% { filter: drop-shadow(0 0 5px var(--pin-color)) drop-shadow(0 0 14px var(--pin-color)); }
-  50% { filter: drop-shadow(0 0 7px var(--pin-color)) drop-shadow(0 0 21px var(--pin-color)); }
+  0%, 100% { filter: drop-shadow(0 0 6px var(--pin-color)) drop-shadow(0 0 17px var(--pin-color)); }
+  50% { filter: drop-shadow(0 0 9px var(--pin-color)) drop-shadow(0 0 25px var(--pin-color)); }
 }
 .map-pin:hover .map-pin-icon,
 .map-pin[aria-pressed="true"] .map-pin-icon {
@@ -578,7 +578,7 @@ section { padding: clamp(60px, 9vw, 110px) 0; }
 .map-pin:hover .map-pin-icon-part,
 .map-pin[aria-pressed="true"] .map-pin-icon-part {
   animation-play-state: paused;
-  filter: drop-shadow(0 0 7px var(--pin-color)) drop-shadow(0 0 17px var(--pin-color)) drop-shadow(0 0 32px var(--pin-color));
+  filter: drop-shadow(0 0 9px var(--pin-color)) drop-shadow(0 0 21px var(--pin-color)) drop-shadow(0 0 38px var(--pin-color));
 }
 
 .cocktail-detail {
