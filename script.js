@@ -516,8 +516,8 @@
       });
     });
 
-    // Reveal the first cocktail by default for a populated first impression.
-    const first = pins[0];
+    // Reveal Neon Nashi by default for a populated first impression.
+    const first = document.querySelector('[data-cocktail="neon-nashi"]');
     if (first) {
       first.setAttribute("aria-pressed", "true");
       render(first.getAttribute("data-cocktail"));
