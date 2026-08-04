@@ -522,6 +522,98 @@
       first.setAttribute("aria-pressed", "true");
       render(first.getAttribute("data-cocktail"));
     }
+
+    alignMapPaths();
+    if (window.ResizeObserver) {
+      const map = document.querySelector(".cocktail-map");
+      if (map) new ResizeObserver(alignMapPaths).observe(map);
+    } else {
+      window.addEventListener("resize", alignMapPaths);
+    }
+  }
+
+  /* The pin icons are a fixed pixel size while the map itself is a fluid
+     percentage-based square, so a footpath's endpoints hand-tuned to touch
+     an icon's contour at one viewport width drift off it at another. Instead
+     of baking per-breakpoint coordinates, each path's `data-from`/`data-to`
+     name the two pins it connects, and this recomputes the endpoints from
+     the pins' actual rendered contours -- so the dashes reach every icon
+     edge-to-edge at any screen size. */
+  function iconContourBox(pinEl) {
+    const parts = pinEl.querySelectorAll(".map-pin-icon path");
+    let left = Infinity, top = Infinity, right = -Infinity, bottom = -Infinity;
+    parts.forEach((p) => {
+      const r = p.getBoundingClientRect();
+      left = Math.min(left, r.left);
+      top = Math.min(top, r.top);
+      right = Math.max(right, r.right);
+      bottom = Math.max(bottom, r.bottom);
+    });
+    return { left, top, right, bottom, cx: (left + right) / 2, cy: (top + bottom) / 2 };
+  }
+
+  // Where a ray from a box's center (ux,uy unit direction) exits the box,
+  // nudged out by marginPx so the dash touches the contour without overlapping it.
+  function rayExitPoint(cx, cy, ux, uy, box, marginPx) {
+    const tx = ux > 0 ? (box.right - cx) / ux : ux < 0 ? (box.left - cx) / ux : Infinity;
+    const ty = uy > 0 ? (box.bottom - cy) / uy : uy < 0 ? (box.top - cy) / uy : Infinity;
+    const t = Math.min(tx, ty) + marginPx;
+    return { x: cx + ux * t, y: cy + uy * t };
+  }
+
+  function alignMapPaths() {
+    const svg = document.querySelector(".map-paths");
+    if (!svg) return;
+    const svgRect = svg.getBoundingClientRect();
+    if (!svgRect.width || !svgRect.height) return;
+    const scale = svgRect.width / 100; // viewBox is 0 0 100 100 on a square map
+    const TOUCH_MARGIN = 1.2; // px left between the dash tip and the contour
+
+    svg.querySelectorAll(".map-path[data-from][data-to]").forEach((path) => {
+      const fromPin = document.querySelector(`[data-cocktail="${path.dataset.from}"]`);
+      const toPin = document.querySelector(`[data-cocktail="${path.dataset.to}"]`);
+      if (!fromPin || !toPin) return;
+
+      const fromBox = iconContourBox(fromPin);
+      const toBox = iconContourBox(toPin);
+      let dx = toBox.cx - fromBox.cx;
+      let dy = toBox.cy - fromBox.cy;
+      const centerDist = Math.hypot(dx, dy);
+      if (!centerDist) return;
+      dx /= centerDist;
+      dy /= centerDist;
+
+      const start = rayExitPoint(fromBox.cx, fromBox.cy, dx, dy, fromBox, TOUCH_MARGIN);
+      const end = rayExitPoint(toBox.cx, toBox.cy, -dx, -dy, toBox, TOUCH_MARGIN);
+
+      const x1 = (start.x - svgRect.left) / scale;
+      const y1 = (start.y - svgRect.top) / scale;
+      const x2 = (end.x - svgRect.left) / scale;
+      const y2 = (end.y - svgRect.top) / scale;
+
+      const length = Math.hypot(x2 - x1, y2 - y1);
+      if (length < 1) return; // icons overlapping at this size -- leave the last-known path alone
+
+      // Solve the dash pattern so a full dash always lands exactly on both
+      // endpoints (matching the original hand-tuned paths' look), instead
+      // of letting the dash rhythm cut off mid-dash at an arbitrary length.
+      const dash = 0.6;
+      const targetPeriod = 2.8;
+      let n = Math.max(1, Math.round((length - dash) / targetPeriod));
+      let period = (length - dash) / n;
+      if (period - dash < 0.3 && n > 1) {
+        n -= 1;
+        period = (length - dash) / n;
+      }
+      const gap = Math.max(0.3, period - dash);
+      period = dash + gap;
+      const cycleN = Math.max(1, Math.round(28 / period));
+      const dashCycle = -Math.round(cycleN * period * 100) / 100;
+
+      path.setAttribute("d", `M${x1.toFixed(2)} ${y1.toFixed(2)} L${x2.toFixed(2)} ${y2.toFixed(2)}`);
+      path.style.strokeDasharray = `${dash} ${gap.toFixed(3)}`;
+      path.style.setProperty("--dash-cycle", dashCycle.toFixed(2));
+    });
   }
 
   /* ---------------------------------------------------------------------
