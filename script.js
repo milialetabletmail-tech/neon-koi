@@ -29,7 +29,7 @@
       masterGain.connect(ctx.destination);
 
       ambientGain = ctx.createGain();
-      ambientGain.gain.value = 0.16;
+      ambientGain.gain.value = 0;
       ambientGain.connect(masterGain);
 
       sfxGain = ctx.createGain();
@@ -42,6 +42,16 @@
       ensureContext();
       ambientStarted = true;
       ambientStartedAt = Date.now();
+
+      // Ease the whole ambient bed in from silence instead of snapping
+      // straight to full level. Oscillators are phase-continuous at
+      // start, but jumping an already-"hot" gain node onto the output the
+      // instant the audio hardware stream spins up is exactly what causes
+      // the audible pop/thump some browsers produce on first playback —
+      // fading in gives the stream a moment to settle before it's audible.
+      const rampNow = ctx.currentTime;
+      ambientGain.gain.setValueAtTime(0, rampNow);
+      ambientGain.gain.linearRampToValueAtTime(0.16, rampNow + 1.4);
 
       // Warm, clean sub-bass pad — sine waves only (no sawtooth grit,
       // no close detuning) so the low end stays smooth instead of buzzing.
