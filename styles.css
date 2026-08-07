@@ -583,14 +583,17 @@ section { padding: clamp(60px, 9vw, 110px) 0; }
   transform-origin: bottom center;
   transition: transform 0.25s ease;
 }
+/* A continuously-animated filter here used to re-blur these icons'
+   very dense traced paths on every single frame, forever, for as long
+   as the tab stayed open -- cheap for a plain shape, but expensive
+   enough on this much path data to eventually stall or crash the
+   renderer (worse on weaker/mobile GPUs, and it never lets up the way
+   a one-off animation would). The glow is a static double drop-shadow
+   instead: still reads as a lit neon sign, just not breathing, and the
+   hover/pressed states below still get a one-off, bounded transition. */
 .map-pin-icon-part {
   filter: drop-shadow(0 0 9px var(--pin-color)) drop-shadow(0 0 24px var(--pin-color));
-  animation: pinPulse 2.4s ease-in-out infinite;
   transition: filter 0.25s ease;
-}
-@keyframes pinPulse {
-  0%, 100% { filter: drop-shadow(0 0 9px var(--pin-color)) drop-shadow(0 0 24px var(--pin-color)); }
-  50% { filter: drop-shadow(0 0 13px var(--pin-color)) drop-shadow(0 0 34px var(--pin-color)); }
 }
 .map-pin:hover .map-pin-icon,
 .map-pin[aria-pressed="true"] .map-pin-icon {
