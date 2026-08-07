@@ -523,12 +523,27 @@
       render(first.getAttribute("data-cocktail"));
     }
 
+    // Coalesce to at most one alignment pass per animation frame -- a live
+    // window resize drag (or tablet rotation/split-view) can fire the
+    // observer many times in quick succession, and running the full
+    // realignment on every single one of those stacks up main-thread work
+    // and makes the page feel like it's hung.
+    let alignQueued = false;
+    function scheduleAlignMapPaths() {
+      if (alignQueued) return;
+      alignQueued = true;
+      requestAnimationFrame(() => {
+        alignQueued = false;
+        alignMapPaths();
+      });
+    }
+
     alignMapPaths();
     if (window.ResizeObserver) {
       const map = document.querySelector(".cocktail-map");
-      if (map) new ResizeObserver(alignMapPaths).observe(map);
+      if (map) new ResizeObserver(scheduleAlignMapPaths).observe(map);
     } else {
-      window.addEventListener("resize", alignMapPaths);
+      window.addEventListener("resize", scheduleAlignMapPaths);
     }
   }
 
@@ -544,20 +559,38 @@
      out unevenly), so aiming a ray from its bounding-box center can exit
      through a corner where there's no artwork at all. Instead this samples
      points along the real outline of both icons and connects the closest
-     pair -- guaranteed to land on actual linework on both ends. */
+     pair -- guaranteed to land on actual linework on both ends.
+
+     The icons are traced neon-sign contours with very dense path data, so
+     getTotalLength()/getPointAtLength() are expensive per path. The sampled
+     points are in the path's own local coordinate space and never change
+     (the artwork is static), so they're computed once per path and cached
+     on the element -- alignMapPaths() then only has to redo the cheap part
+     (re-reading each path's current on-screen matrix) on every resize,
+     instead of re-walking the whole contour every time. */
+  function localPathPoints(p) {
+    if (p._localContourPoints) return p._localContourPoints;
+    const len = p.getTotalLength();
+    const points = [];
+    if (len) {
+      const samples = Math.max(12, Math.min(80, Math.round(len / 12)));
+      for (let i = 0; i <= samples; i++) {
+        points.push(p.getPointAtLength((len * i) / samples));
+      }
+    }
+    p._localContourPoints = points;
+    return points;
+  }
+
   function iconContourPoints(pinEl) {
     const points = [];
     pinEl.querySelectorAll(".map-pin-icon path").forEach((p) => {
       const ctm = p.getScreenCTM();
       if (!ctm) return;
-      const len = p.getTotalLength();
-      if (!len) return;
-      const samples = Math.max(12, Math.min(80, Math.round(len / 12)));
-      for (let i = 0; i <= samples; i++) {
-        const pt = p.getPointAtLength((len * i) / samples);
+      localPathPoints(p).forEach((pt) => {
         const screenPt = new DOMPoint(pt.x, pt.y).matrixTransform(ctm);
         points.push({ x: screenPt.x, y: screenPt.y });
-      }
+      });
     });
     return points;
   }
