@@ -538,27 +538,39 @@
      of baking per-breakpoint coordinates, each path's `data-from`/`data-to`
      name the two pins it connects, and this recomputes the endpoints from
      the pins' actual rendered contours -- so the dashes reach every icon
-     edge-to-edge at any screen size. */
-  function iconContourBox(pinEl) {
-    const parts = pinEl.querySelectorAll(".map-pin-icon path");
-    let left = Infinity, top = Infinity, right = -Infinity, bottom = -Infinity;
-    parts.forEach((p) => {
-      const r = p.getBoundingClientRect();
-      left = Math.min(left, r.left);
-      top = Math.min(top, r.top);
-      right = Math.max(right, r.right);
-      bottom = Math.max(bottom, r.bottom);
+     edge-to-edge at any screen size.
+
+     A glass's silhouette isn't a rectangle (stems, garnishes, handles stick
+     out unevenly), so aiming a ray from its bounding-box center can exit
+     through a corner where there's no artwork at all. Instead this samples
+     points along the real outline of both icons and connects the closest
+     pair -- guaranteed to land on actual linework on both ends. */
+  function iconContourPoints(pinEl) {
+    const points = [];
+    pinEl.querySelectorAll(".map-pin-icon path").forEach((p) => {
+      const ctm = p.getScreenCTM();
+      if (!ctm) return;
+      const len = p.getTotalLength();
+      if (!len) return;
+      const samples = Math.max(12, Math.min(80, Math.round(len / 12)));
+      for (let i = 0; i <= samples; i++) {
+        const pt = p.getPointAtLength((len * i) / samples);
+        const screenPt = new DOMPoint(pt.x, pt.y).matrixTransform(ctm);
+        points.push({ x: screenPt.x, y: screenPt.y });
+      }
     });
-    return { left, top, right, bottom, cx: (left + right) / 2, cy: (top + bottom) / 2 };
+    return points;
   }
 
-  // Where a ray from a box's center (ux,uy unit direction) exits the box,
-  // nudged out by marginPx so the dash touches the contour without overlapping it.
-  function rayExitPoint(cx, cy, ux, uy, box, marginPx) {
-    const tx = ux > 0 ? (box.right - cx) / ux : ux < 0 ? (box.left - cx) / ux : Infinity;
-    const ty = uy > 0 ? (box.bottom - cy) / uy : uy < 0 ? (box.top - cy) / uy : Infinity;
-    const t = Math.min(tx, ty) + marginPx;
-    return { x: cx + ux * t, y: cy + uy * t };
+  function closestPointPair(pointsA, pointsB) {
+    let best = null;
+    for (const a of pointsA) {
+      for (const b of pointsB) {
+        const d = Math.hypot(a.x - b.x, a.y - b.y);
+        if (!best || d < best.d) best = { a, b, d };
+      }
+    }
+    return best;
   }
 
   function alignMapPaths() {
@@ -569,22 +581,26 @@
     const scale = svgRect.width / 100; // viewBox is 0 0 100 100 on a square map
     const TOUCH_MARGIN = 1.2; // px left between the dash tip and the contour
 
+    const contourCache = new Map();
+    const contourFor = (id, el) => {
+      if (!contourCache.has(id)) contourCache.set(id, iconContourPoints(el));
+      return contourCache.get(id);
+    };
+
     svg.querySelectorAll(".map-path[data-from][data-to]").forEach((path) => {
       const fromPin = document.querySelector(`[data-cocktail="${path.dataset.from}"]`);
       const toPin = document.querySelector(`[data-cocktail="${path.dataset.to}"]`);
       if (!fromPin || !toPin) return;
 
-      const fromBox = iconContourBox(fromPin);
-      const toBox = iconContourBox(toPin);
-      let dx = toBox.cx - fromBox.cx;
-      let dy = toBox.cy - fromBox.cy;
-      const centerDist = Math.hypot(dx, dy);
-      if (!centerDist) return;
-      dx /= centerDist;
-      dy /= centerDist;
+      const fromPoints = contourFor(path.dataset.from, fromPin);
+      const toPoints = contourFor(path.dataset.to, toPin);
+      const closest = closestPointPair(fromPoints, toPoints);
+      if (!closest || !closest.d) return;
 
-      const start = rayExitPoint(fromBox.cx, fromBox.cy, dx, dy, fromBox, TOUCH_MARGIN);
-      const end = rayExitPoint(toBox.cx, toBox.cy, -dx, -dy, toBox, TOUCH_MARGIN);
+      const ux = (closest.a.x - closest.b.x) / closest.d;
+      const uy = (closest.a.y - closest.b.y) / closest.d;
+      const start = { x: closest.a.x + ux * TOUCH_MARGIN, y: closest.a.y + uy * TOUCH_MARGIN };
+      const end = { x: closest.b.x - ux * TOUCH_MARGIN, y: closest.b.y - uy * TOUCH_MARGIN };
 
       const x1 = (start.x - svgRect.left) / scale;
       const y1 = (start.y - svgRect.top) / scale;
