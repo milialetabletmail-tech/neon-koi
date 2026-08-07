@@ -52,7 +52,7 @@ body {
     radial-gradient(ellipse at 20% -10%, rgba(177, 76, 255, 0.16), transparent 55%),
     radial-gradient(ellipse at 85% 0%, rgba(0, 212, 255, 0.14), transparent 50%),
     linear-gradient(120deg, #B14CFF 0%, #00D4FF 100%),
-    url("https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=1920&q=80");
+    url("images/skyline-bg.jpg");
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
