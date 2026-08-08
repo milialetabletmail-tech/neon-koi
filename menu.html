@@ -6,7 +6,13 @@
 <title>Menu — Neon Koi</title>
 <meta name="description" content="Explore the Neon Koi menu: small plates, robata grill, signature sushi, and desserts.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Fonts load async (not render-blocking): the page paints immediately in
+     fallback fonts and swaps to these once they arrive, instead of every
+     first paint waiting on a Google Fonts round-trip. -->
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet"></noscript>
 <link rel="stylesheet" href="styles.css">
 </head>
 <body class="page-menu">

@@ -3,7 +3,11 @@
    Shared design system for all pages
    ========================================================================== */
 
-@import url("https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&display=swap");
+/* Syne loads from each page's <head> alongside the other two families now
+   (one combined, non-blocking Google Fonts request) instead of via @import
+   here -- @import forces the browser to fetch and wait on it before the
+   rest of this stylesheet can even be parsed, which was adding a second
+   serial round-trip on top of the page's own render-blocking font <link>. */
 
 :root {
   --void: #08060F;
