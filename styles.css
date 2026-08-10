@@ -79,30 +79,27 @@ body.page-menu .bg-photo {
 }
 
 /* Cocktail Map page: reusing the homepage's skyline photo here read
-   generic, like the page never got its own backdrop. Swapping it for a
-   hand-drawn glassware motif -- a handful of coupe/rocks/tulip outlines,
-   inline as an SVG data URI -- keeps the same dark/duotone wash but ties
-   the background to what the page is actually about. It also drops a
-   photo request entirely on this page (the tile is a few hundred bytes,
-   inlined, no network round-trip), so it's a net win for load time, not
-   just a cosmetic swap. Kept very low-opacity/monochrome-gold so it stays
-   a texture behind the map and pins, never competes with them. */
+   generic, like the page never got its own backdrop. A first pass tried a
+   hand-drawn glassware line pattern, but at watermark size/opacity the
+   shapes stopped reading as actual glasses. This uses a real photo of
+   Neon Nashi (the default-selected pour) instead -- but pre-blurred,
+   darkened, and duotoned into a soft color-pool silhouette *before* it's
+   saved, not filtered live in CSS. That keeps the "real photography, not
+   a literal product shot" mood the client asked for, while being cheaper
+   than the skyline photo it replaces: downscaled + blurred source data
+   compresses to ~4KB (vs. the ~240KB skyline photo), and baking the blur
+   into the asset means the browser never has to run a live filter over
+   it on scroll/repaint the way an on-the-fly CSS blur would. */
 body.page-cocktails .bg-photo {
   background-color: #08060F;
-  /* The glassware tile has to be the topmost layer: it's transparent
-     everywhere except the thin gold strokes, so stacking it under the
-     dark vignette (like the photo layer below is) would let that vignette's
-     ~85-95% opacity crush it to invisible. On top, its own stroke opacity
-     is the only thing controlling how faint it reads -- no fighting with
-     the wash underneath. */
   background-image:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240' viewBox='0 0 240 240'%3E%3Cg fill='none' stroke='%23D4AF37' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round' opacity='0.16'%3E%3Cpath d='M20 22 L64 22 L42 52 L42 80 M31 80 L53 80'/%3E%3Cpath d='M128 34 L128 82 Q128 90 136 90 L162 90 Q170 90 170 82 L170 34'/%3E%3Cpath d='M42 132 C42 157 57 170 70 170 C83 170 98 157 98 132 L42 132 Z M70 170 L70 198 M54 198 L86 198'/%3E%3Cpath d='M158 148 L158 196 Q158 204 166 204 L184 204 Q192 204 192 196 L192 148 M160 138 L190 138'/%3E%3C/g%3E%3C/svg%3E"),
-    linear-gradient(180deg, rgba(5, 3, 10, 0.9) 0%, rgba(8, 6, 20, 0.8) 45%, rgba(5, 3, 10, 0.96) 100%),
+    linear-gradient(180deg, rgba(5, 3, 10, 0.82) 0%, rgba(8, 6, 20, 0.7) 45%, rgba(5, 3, 10, 0.92) 100%),
     radial-gradient(ellipse at 18% -10%, rgba(177, 76, 255, 0.15), transparent 55%),
-    radial-gradient(ellipse at 86% 2%, rgba(0, 212, 255, 0.13), transparent 50%);
-  background-size: 240px 240px, cover, cover, cover;
+    radial-gradient(ellipse at 86% 2%, rgba(0, 212, 255, 0.13), transparent 50%),
+    url("images/cocktails-bg.jpg");
+  background-size: cover, cover, cover, cover;
   background-position: center, center, center, center;
-  background-repeat: repeat, no-repeat, no-repeat, no-repeat;
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
 }
 
 img, svg { max-width: 100%; display: block; }
