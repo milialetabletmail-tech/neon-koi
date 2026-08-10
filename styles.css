@@ -110,6 +110,24 @@ body.page-cocktails .bg-photo {
   background-repeat: no-repeat, no-repeat;
 }
 
+/* Speakeasy page: a real private-room photo (leather booth, brass
+   lamp, candles, glass shelving) instead of the shared purple/cyan
+   skyline -- that duotone reads as "the rest of the site", not as a
+   gold-lit room. Same move as the cocktails page just above: keep the
+   photo's own warm color, wash it for legibility, and drop the
+   cool-tint layer entirely instead of fighting it. The photo is
+   already darkest at the very top and bottom on its own, which lines
+   up with where the hero heading and the footer sit. */
+body.page-speakeasy .bg-photo {
+  background-color: #08060F;
+  background-image:
+    linear-gradient(180deg, rgba(6, 4, 1, 0.86) 0%, rgba(10, 7, 2, 0.58) 45%, rgba(6, 4, 1, 0.88) 100%),
+    url("images/speakeasy-bg.jpg");
+  background-size: cover, cover;
+  background-position: center, center;
+  background-repeat: no-repeat, no-repeat;
+}
+
 /* A hairline text-shadow -- not a heavy drop-shadow -- keeps the hero
    copy crisp against the photo without flattening it into a solid card,
    which would fight the "photo behind glass" feel of the rest of the
@@ -785,6 +803,8 @@ body.theme-gold .neon-text {
 body.theme-gold .eyebrow { color: var(--gold); }
 body.theme-gold .main-nav a::after { background: linear-gradient(90deg, var(--gold), #f4dd8b); }
 body.theme-gold .feature-card:hover { box-shadow: var(--glow-gold); }
+body.theme-gold .footer-col h4 { color: var(--gold); }
+body.theme-gold .footer-col a:hover { color: var(--gold); }
 body.theme-gold .ambient-backdrop {
   background-image:
     linear-gradient(rgba(212, 175, 55, 0.06) 1px, transparent 1px),
