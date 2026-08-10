@@ -516,13 +516,6 @@
       });
     });
 
-    // Reveal Neon Nashi by default for a populated first impression.
-    const first = document.querySelector('[data-cocktail="neon-nashi"]');
-    if (first) {
-      first.setAttribute("aria-pressed", "true");
-      render(first.getAttribute("data-cocktail"));
-    }
-
     // Coalesce to at most one alignment pass per animation frame -- a live
     // window resize drag (or tablet rotation/split-view) can fire the
     // observer many times in quick succession, and running the full
@@ -538,7 +531,20 @@
       });
     }
 
+    // Align paths first, while every pin (including Neon Nashi) is still at
+    // its default, unpressed size. Marking Neon Nashi pressed beforehand
+    // would align its paths to the 1.4x-scaled icon, so the moment a visitor
+    // picks a different pin and it shrinks back down, the paths would stay
+    // reaching for where the enlarged icon used to be.
     alignMapPaths();
+
+    // Reveal Neon Nashi by default for a populated first impression.
+    const first = document.querySelector('[data-cocktail="neon-nashi"]');
+    if (first) {
+      first.setAttribute("aria-pressed", "true");
+      render(first.getAttribute("data-cocktail"));
+    }
+
     if (window.ResizeObserver) {
       const map = document.querySelector(".cocktail-map");
       if (map) new ResizeObserver(scheduleAlignMapPaths).observe(map);
