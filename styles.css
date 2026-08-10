@@ -821,6 +821,15 @@ body.theme-gold .ambient-backdrop {
   padding: 18px 22px;
 }
 .perk-list .mark { color: var(--gold); font-size: 1.1rem; }
+body.theme-gold .perk-list li {
+  border-color: rgba(212, 175, 55, 0.18);
+  transition: border-color 0.4s var(--ease), box-shadow 0.4s var(--ease), transform 0.4s var(--ease);
+}
+body.theme-gold .perk-list li:hover {
+  border-color: rgba(212, 175, 55, 0.42);
+  box-shadow: var(--glow-gold);
+  transform: translateY(-2px);
+}
 
 /* ---------- The Gold Room — VIP request form ---------- */
 
