@@ -805,6 +805,9 @@ body.theme-gold .main-nav a::after { background: linear-gradient(90deg, var(--go
 body.theme-gold .feature-card:hover { box-shadow: var(--glow-gold); }
 body.theme-gold .footer-col h4 { color: var(--gold); }
 body.theme-gold .footer-col a:hover { color: var(--gold); }
+body.theme-gold .sound-toggle { border-color: rgba(212, 175, 55, 0.28); }
+body.theme-gold .sound-toggle:hover { border-color: rgba(212, 175, 55, 0.6); box-shadow: var(--glow-gold); }
+body.theme-gold .wave-icon .bar { background: var(--gold); }
 body.theme-gold .ambient-backdrop {
   background-image:
     linear-gradient(rgba(212, 175, 55, 0.06) 1px, transparent 1px),
