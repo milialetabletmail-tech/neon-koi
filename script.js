@@ -699,6 +699,82 @@
     });
   }
 
+  /* ---------------------------------------------------------------------
+     Reservations — live table preview
+     Mirrors the party-size/time pills and the date field into a single
+     line in the intro column as they're answered, so the page feels
+     like it's listening instead of just waiting for a submit. No-ops
+     everywhere but reservations.html.
+  --------------------------------------------------------------------- */
+  function initReservationPreview() {
+    const root = document.querySelector("[data-reservation-preview]");
+    if (!root) return;
+    const guestsOut = root.querySelector("[data-preview-guests]");
+    const dateOut = root.querySelector("[data-preview-date]");
+    const timeOut = root.querySelector("[data-preview-time]");
+
+    function labelFor(input) {
+      if (!input) return null;
+      return document.querySelector(`label[for="${input.id}"]`);
+    }
+
+    function setPart(el, text, filled) {
+      if (!el) return;
+      el.textContent = text;
+      el.classList.toggle("is-filled", filled);
+    }
+
+    function updateGuests() {
+      const label = labelFor(document.querySelector('input[name="guests"]:checked'));
+      setPart(guestsOut, label ? `${label.textContent} guests` : "party size", !!label);
+    }
+
+    function updateTime() {
+      const label = labelFor(document.querySelector('input[name="time"]:checked'));
+      setPart(timeOut, label ? label.textContent : "time", !!label);
+    }
+
+    function updateDate() {
+      const dateInput = document.getElementById("r-date");
+      if (dateInput && dateInput.value) {
+        const parsed = new Date(`${dateInput.value}T00:00:00`);
+        const formatted = parsed.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
+        setPart(dateOut, formatted, true);
+      } else {
+        setPart(dateOut, "date", false);
+      }
+    }
+
+    document.querySelectorAll('input[name="guests"]').forEach((el) => el.addEventListener("change", updateGuests));
+    document.querySelectorAll('input[name="time"]').forEach((el) => el.addEventListener("change", updateTime));
+    const dateInput = document.getElementById("r-date");
+    if (dateInput) dateInput.addEventListener("input", updateDate);
+  }
+
+  /* ---------------------------------------------------------------------
+     Reservations — koi silhouette parallax
+     A few px of cursor-follow drift on the oversized background koi,
+     so the "atmospheric silhouette" reads as alive rather than a
+     static watermark. Skipped for touch input and reduced-motion.
+  --------------------------------------------------------------------- */
+  function initReservationsParallax() {
+    const intro = document.querySelector(".reservations-intro");
+    const koi = document.querySelector(".reservations-koi");
+    if (!intro || !koi) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (window.matchMedia("(hover: none)").matches) return;
+
+    intro.addEventListener("pointermove", (e) => {
+      const rect = intro.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width - 0.5;
+      const y = (e.clientY - rect.top) / rect.height - 0.5;
+      koi.style.transform = `translate(calc(-50% + ${(x * 16).toFixed(1)}px), calc(-50% + ${(y * 16).toFixed(1)}px))`;
+    });
+    intro.addEventListener("pointerleave", () => {
+      koi.style.transform = "translate(-50%, -50%)";
+    });
+  }
+
   // Minimal roman numeral converter — plenty for a handful of form steps.
   const ROMAN_NUMERALS = [
     [10, "X"], [9, "IX"], [5, "V"], [4, "IV"], [1, "I"],
@@ -857,6 +933,8 @@
     initMenuTabs();
     initCocktailMap();
     initForm("[data-reservation-form]", "[data-reservation-confirmation]", "NK-RES", true);
+    initReservationPreview();
+    initReservationsParallax();
     initSpeakeasyForm();
     initForm("[data-contact-form]", "[data-contact-confirmation]", "NK-MSG");
 

@@ -65,12 +65,19 @@
             <path d="M10,50 C40,10 90,10 120,35 C140,15 170,20 190,10 C180,30 165,40 165,40 C180,45 190,60 190,60 C170,55 145,55 125,65 C95,90 40,90 10,50 Z" fill="none" stroke="url(#koiGradReservations)" stroke-width="2.5"/>
             <circle cx="35" cy="45" r="6" fill="url(#koiGradReservations)"/>
           </svg>
-          <span class="eyebrow">Reservations</span>
-          <h1 class="section-title">Reserve your evening</h1>
-          <p class="section-lede">Tables are limited on the rooftop. Tell us a little about your evening and we'll hold your spot under the neon koi.</p>
+          <span class="eyebrow" data-reveal>Reservations</span>
+          <h1 class="section-title" data-reveal data-reveal-delay="1">Reserve your evening</h1>
+          <p class="section-lede" data-reveal data-reveal-delay="2">Tables are limited on the rooftop. Tell us a little about your evening and we'll hold your spot under the neon koi.</p>
+
+          <div class="reservation-preview" data-reservation-preview data-reveal data-reveal-delay="3">
+            <span class="preview-kicker">Your table</span>
+            <p class="preview-line">
+              <span class="preview-part" data-preview-guests>party size</span><span class="preview-sep">·</span><span class="preview-part" data-preview-date>date</span><span class="preview-sep">·</span><span class="preview-part" data-preview-time>time</span>
+            </p>
+          </div>
         </div>
 
-        <div class="glass form-card">
+        <div class="glass form-card" data-reveal data-reveal-delay="2">
         <form data-reservation-form novalidate>
           <div class="form-grid">
             <div class="field">
@@ -86,33 +93,60 @@
               <input id="r-phone" name="phone" type="tel" required placeholder="+1 (555) 000-0000">
             </div>
             <div class="field">
-              <label for="r-guests">Guests</label>
-              <select id="r-guests" name="guests" required>
-                <option value="">Select party size</option>
-                <option>1 – 2 guests</option>
-                <option>3 – 4 guests</option>
-                <option>5 – 6 guests</option>
-                <option>7+ guests (private table)</option>
-              </select>
-            </div>
-            <div class="field">
               <label for="r-date">Date</label>
               <input id="r-date" name="date" type="date" required>
             </div>
-            <div class="field">
-              <label for="r-time">Time</label>
-              <input id="r-time" name="time" type="time" required>
-            </div>
-            <div class="field full">
-              <label for="r-occasion">Occasion</label>
-              <select id="r-occasion" name="occasion">
-                <option value="">Just because</option>
-                <option>Birthday</option>
-                <option>Anniversary</option>
-                <option>Business Dinner</option>
-                <option>Celebration</option>
-              </select>
-            </div>
+            <fieldset class="field pill-field full">
+              <legend>Guests</legend>
+              <div class="pill-group">
+                <input type="radio" id="guests-1" name="guests" value="1 – 2 guests" required>
+                <label for="guests-1">1–2</label>
+                <input type="radio" id="guests-2" name="guests" value="3 – 4 guests">
+                <label for="guests-2">3–4</label>
+                <input type="radio" id="guests-3" name="guests" value="5 – 6 guests">
+                <label for="guests-3">5–6</label>
+                <input type="radio" id="guests-4" name="guests" value="7+ guests (private table)">
+                <label for="guests-4">7+</label>
+              </div>
+            </fieldset>
+            <fieldset class="field pill-field full">
+              <legend>Time</legend>
+              <div class="pill-group">
+                <input type="radio" id="time-1" name="time" value="6:00 PM" required>
+                <label for="time-1">6:00 PM</label>
+                <input type="radio" id="time-2" name="time" value="6:30 PM">
+                <label for="time-2">6:30 PM</label>
+                <input type="radio" id="time-3" name="time" value="7:00 PM">
+                <label for="time-3">7:00 PM</label>
+                <input type="radio" id="time-4" name="time" value="7:30 PM">
+                <label for="time-4">7:30 PM</label>
+                <input type="radio" id="time-5" name="time" value="8:00 PM">
+                <label for="time-5">8:00 PM</label>
+                <input type="radio" id="time-6" name="time" value="8:30 PM">
+                <label for="time-6">8:30 PM</label>
+                <input type="radio" id="time-7" name="time" value="9:00 PM">
+                <label for="time-7">9:00 PM</label>
+                <input type="radio" id="time-8" name="time" value="9:30 PM">
+                <label for="time-8">9:30 PM</label>
+                <input type="radio" id="time-9" name="time" value="10:00 PM">
+                <label for="time-9">10:00 PM</label>
+              </div>
+            </fieldset>
+            <fieldset class="field pill-field full">
+              <legend>Occasion</legend>
+              <div class="pill-group">
+                <input type="radio" id="occ-none" name="occasion" value="" checked>
+                <label for="occ-none">Just because</label>
+                <input type="radio" id="occ-bday" name="occasion" value="Birthday">
+                <label for="occ-bday">Birthday</label>
+                <input type="radio" id="occ-anniv" name="occasion" value="Anniversary">
+                <label for="occ-anniv">Anniversary</label>
+                <input type="radio" id="occ-biz" name="occasion" value="Business Dinner">
+                <label for="occ-biz">Business Dinner</label>
+                <input type="radio" id="occ-cel" name="occasion" value="Celebration">
+                <label for="occ-cel">Celebration</label>
+              </div>
+            </fieldset>
             <div class="field full">
               <label for="r-requests">Special Requests</label>
               <textarea id="r-requests" name="requests" placeholder="Dietary needs, seating preference, anything else"></textarea>
@@ -125,9 +159,20 @@
         <div class="confirmation" data-reservation-confirmation>
           <span class="eyebrow">Table Held</span>
           <h3>You're on the list.</h3>
-          <p style="color:var(--ink-dim);">Reservation code</p>
-          <div class="code" data-code>NK-RES-0000</div>
-          <p style="color:var(--ink-dim);">We look forward to hosting you under the neon koi.</p>
+          <div class="ticket">
+            <svg class="ticket-seal" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <defs>
+                <linearGradient id="koiGradTicket" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#B14CFF"/>
+                  <stop offset="100%" stop-color="#00D4FF"/>
+                </linearGradient>
+              </defs>
+              <path d="M10,50 C40,10 90,10 120,35 C140,15 170,20 190,10 C180,30 165,40 165,40 C180,45 190,60 190,60 C170,55 145,55 125,65 C95,90 40,90 10,50 Z" fill="none" stroke="url(#koiGradTicket)" stroke-width="4"/>
+            </svg>
+            <p class="ticket-label">Reservation code</p>
+            <div class="code" data-code>NK-RES-0000</div>
+            <p class="ticket-note">We look forward to hosting you under the neon koi.</p>
+          </div>
         </div>
         </div>
       </div>
