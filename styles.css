@@ -641,7 +641,11 @@ body.page-cocktails .section-head { margin-bottom: clamp(44px, 7vw, 72px); }
    instead: still reads as a lit neon sign, just not breathing, and the
    hover/pressed states below still get a one-off, bounded transition. */
 .map-pin-icon-part {
-  filter: drop-shadow(0 0 9px var(--pin-color)) drop-shadow(0 0 24px var(--pin-color));
+  /* A tight near-zero-blur layer added on top of the original two --
+     it hugs the white linework closely, so the color reads richer and
+     more saturated right at the edge instead of only in the soft outer
+     halo. Fill stays pure white; only the glow around it got stronger. */
+  filter: drop-shadow(0 0 1.5px var(--pin-color)) drop-shadow(0 0 10px var(--pin-color)) drop-shadow(0 0 26px var(--pin-color));
   transition: filter 0.25s ease;
 }
 .map-pin:hover .map-pin-icon,
@@ -651,7 +655,7 @@ body.page-cocktails .section-head { margin-bottom: clamp(44px, 7vw, 72px); }
 .map-pin:hover .map-pin-icon-part,
 .map-pin[aria-pressed="true"] .map-pin-icon-part {
   animation: none;
-  filter: drop-shadow(0 0 13px var(--pin-color)) drop-shadow(0 0 30px var(--pin-color)) drop-shadow(0 0 54px var(--pin-color));
+  filter: drop-shadow(0 0 2px var(--pin-color)) drop-shadow(0 0 15px var(--pin-color)) drop-shadow(0 0 32px var(--pin-color)) drop-shadow(0 0 56px var(--pin-color));
 }
 
 .cocktail-detail {
