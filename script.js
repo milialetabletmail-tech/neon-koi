@@ -37,6 +37,36 @@
       sfxGain.connect(masterGain);
     }
 
+    // Slowly sweeps an AudioParam back and forth like a sine LFO, but via
+    // scheduled ramp keyframes instead of an audio-rate oscillator wired
+    // straight into the param. Audio-rate modulation of a filter's
+    // frequency forces the browser to recompute filter coefficients on
+    // every single sample, which is heavy enough on weaker/mobile CPUs to
+    // starve the audio thread and produce exactly the kind of random
+    // click/pop/static that shows up mid-playback with no clear trigger.
+    // A handful of ramp keyframes per cycle sounds identical for a sweep
+    // this slow, at a fraction of the CPU cost.
+    function scheduleBreathing(param, base, depth, periodSec) {
+      const pointsPerCycle = 16;
+      let cycleStart = ctx.currentTime;
+
+      function scheduleCycle() {
+        param.setValueAtTime(base, cycleStart);
+        for (let i = 1; i <= pointsPerCycle; i++) {
+          const t = cycleStart + (periodSec * i) / pointsPerCycle;
+          const v = base + depth * Math.sin((2 * Math.PI * i) / pointsPerCycle);
+          param.linearRampToValueAtTime(v, t);
+        }
+        cycleStart += periodSec;
+      }
+
+      // Keep two cycles queued up at all times so there's always slack
+      // even if a setTimeout tick lands late.
+      scheduleCycle();
+      scheduleCycle();
+      setInterval(scheduleCycle, periodSec * 500);
+    }
+
     function startAmbient() {
       if (ambientStarted) return;
       ensureContext();
@@ -61,14 +91,7 @@
       filter.frequency.value = 320;
       filter.Q.value = 0.4;
       filter.connect(ambientGain);
-
-      const lfo = ctx.createOscillator();
-      lfo.frequency.value = 0.05;
-      const lfoGain = ctx.createGain();
-      lfoGain.gain.value = 100;
-      lfo.connect(lfoGain);
-      lfoGain.connect(filter.frequency);
-      lfo.start();
+      scheduleBreathing(filter.frequency, 320, 100, 1 / 0.05);
 
       baseFreqs.forEach((freq, i) => {
         const osc = ctx.createOscillator();
@@ -102,13 +125,7 @@
       filter.connect(arpGain);
 
       // Slow "breathing" filter movement so the arp never feels static.
-      const filterLfo = ctx.createOscillator();
-      filterLfo.frequency.value = 0.035;
-      const filterLfoGain = ctx.createGain();
-      filterLfoGain.gain.value = 480;
-      filterLfo.connect(filterLfoGain);
-      filterLfoGain.connect(filter.frequency);
-      filterLfo.start();
+      scheduleBreathing(filter.frequency, 1100, 480, 1 / 0.035);
 
       // Feedback delay for a spacious, glowing echo trail.
       const delay = ctx.createDelay(1.0);
