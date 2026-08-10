@@ -79,23 +79,25 @@ body.page-menu .bg-photo {
 }
 
 /* Cocktail Map page: reusing the homepage's skyline photo here read
-   generic, like the page never got its own backdrop. A first pass tried a
-   hand-drawn glassware line pattern, but at watermark size/opacity the
-   shapes stopped reading as actual glasses. This uses a real photo of
-   Neon Nashi (the default-selected pour) instead -- but pre-blurred,
-   darkened, and duotoned into a soft color-pool silhouette *before* it's
-   saved, not filtered live in CSS. That keeps the "real photography, not
-   a literal product shot" mood the client asked for, while being cheaper
-   than the skyline photo it replaces: downscaled + blurred source data
-   compresses to ~4KB (vs. the ~240KB skyline photo), and baking the blur
-   into the asset means the browser never has to run a live filter over
-   it on scroll/repaint the way an on-the-fly CSS blur would. */
+   generic, like the page never got its own backdrop. Two earlier passes
+   (a hand-drawn glassware pattern, then an over-darkened photo silhouette)
+   both ended up reading as "no background" once actually seen live. This
+   uses a client-supplied bar photo -- an Old Fashioned with warm bokeh
+   bottles and candlelight behind it, already high-contrast against a
+   near-black backdrop -- pre-blurred and lightly graded *before* saving
+   (not filtered live in CSS), and left in its natural amber tone instead
+   of forced into the brand duotone, since that's what makes the glow
+   actually visible instead of muddy. Brand color still shows up via the
+   purple/cyan radial glows layered on top, same as every other page.
+   Downscaled + blurred source compresses to ~21KB, still a fraction of
+   the ~240KB skyline photo it replaces, and the blur is baked into the
+   file so there's no live filter cost on scroll/repaint. */
 body.page-cocktails .bg-photo {
   background-color: #08060F;
   background-image:
-    linear-gradient(180deg, rgba(5, 3, 10, 0.82) 0%, rgba(8, 6, 20, 0.7) 45%, rgba(5, 3, 10, 0.92) 100%),
-    radial-gradient(ellipse at 18% -10%, rgba(177, 76, 255, 0.15), transparent 55%),
-    radial-gradient(ellipse at 86% 2%, rgba(0, 212, 255, 0.13), transparent 50%),
+    linear-gradient(180deg, rgba(5, 3, 10, 0.55) 0%, rgba(8, 6, 20, 0.4) 45%, rgba(5, 3, 10, 0.72) 100%),
+    radial-gradient(ellipse at 18% -10%, rgba(177, 76, 255, 0.18), transparent 55%),
+    radial-gradient(ellipse at 86% 2%, rgba(0, 212, 255, 0.15), transparent 50%),
     url("images/cocktails-bg.jpg");
   background-size: cover, cover, cover, cover;
   background-position: center, center, center, center;
