@@ -696,10 +696,26 @@
     });
   }
 
+  // Minimal roman numeral converter — plenty for a handful of form steps.
+  const ROMAN_NUMERALS = [
+    [10, "X"], [9, "IX"], [5, "V"], [4, "IV"], [1, "I"],
+  ];
+  function toRoman(num) {
+    let result = "";
+    let n = num;
+    ROMAN_NUMERALS.forEach(([value, symbol]) => {
+      while (n >= value) {
+        result += symbol;
+        n -= value;
+      }
+    });
+    return result;
+  }
+
   /* ---------------------------------------------------------------------
-     The Gold Ledger — speakeasy.html's step-by-step VIP terminal form.
-     One field on stage at a time: "Next" (or Enter) flies the current
-     field up and out, then the next field rises in from below. Same
+     The Gold Room — speakeasy.html's step-by-step VIP request form.
+     One field on stage at a time: "Next" (or Enter) softly dissolves the
+     current field away and lets the next one settle into focus. Same
      native browser validation and success chord as the other forms,
      gated per step instead of all at once.
   --------------------------------------------------------------------- */
@@ -713,7 +729,7 @@
     const countEl = form.querySelector("[data-wizard-count]");
     const fillEl = form.querySelector("[data-wizard-progress-fill]");
     const total = steps.length;
-    const STEP_MS = 350;
+    const STEP_MS = 500;
     let current = 0;
 
     function fieldOf(step) {
@@ -723,7 +739,7 @@
     function updateMeta() {
       const isLast = current === total - 1;
       if (countEl) {
-        countEl.textContent = `Step ${String(current + 1).padStart(2, "0")} / ${String(total).padStart(2, "0")}`;
+        countEl.textContent = `${toRoman(current + 1)} · ${toRoman(total)}`;
       }
       if (fillEl) fillEl.style.width = `${((current + 1) / total) * 100}%`;
       if (nextBtn) {
