@@ -73,7 +73,7 @@
           </ul>
         </div>
         <div class="glass" style="padding: clamp(30px, 4vw, 50px); text-align:center;">
-          <div style="font-size: 4rem; margin-bottom: 10px;" class="neon-text">秘</div>
+          <div style="font-size: 4rem; margin-bottom: 10px;" class="neon-text glyph-flicker">秘</div>
           <p style="color:var(--ink-dim); font-size:0.95rem;">Look for the mark. It glows faintest where the room is quietest.</p>
         </div>
       </div>
@@ -90,33 +90,37 @@
         </div>
 
         <form data-speakeasy-form novalidate>
-          <div class="form-grid">
-            <div class="field">
+          <div class="wizard-progress" aria-hidden="true"><span class="wizard-progress-fill" data-wizard-progress-fill></span></div>
+          <div class="wizard-meta">
+            <span class="wizard-step-count" data-wizard-count>Step 01 / 06</span>
+          </div>
+          <div class="wizard-fields">
+            <div class="field wizard-step is-active" data-step-index="0">
               <label for="ve-name">Full Name</label>
               <input id="ve-name" name="name" type="text" required placeholder="Your name">
             </div>
-            <div class="field">
+            <div class="field wizard-step" data-step-index="1" hidden>
               <label for="ve-email">Email</label>
               <input id="ve-email" name="email" type="email" required placeholder="you@email.com">
             </div>
-            <div class="field">
+            <div class="field wizard-step" data-step-index="2" hidden>
               <label for="ve-phone">Phone</label>
               <input id="ve-phone" name="phone" type="tel" required placeholder="+1 (555) 000-0000">
             </div>
-            <div class="field">
+            <div class="field wizard-step" data-step-index="3" hidden>
               <label for="ve-date">Preferred Date</label>
               <input id="ve-date" name="date" type="date" required>
             </div>
-            <div class="field full">
+            <div class="field wizard-step" data-step-index="4" hidden>
               <label for="ve-referral">How did you hear about the Speakeasy?</label>
               <input id="ve-referral" name="referral" type="text" placeholder="A member, the mark, or something else">
             </div>
-            <div class="field full">
+            <div class="field wizard-step" data-step-index="5" hidden>
               <label for="ve-message">Message</label>
               <textarea id="ve-message" name="message" placeholder="Anything we should know before your visit"></textarea>
             </div>
           </div>
-          <button type="submit" class="btn btn-gold">Request Access</button>
+          <button type="button" class="btn btn-gold" data-wizard-next>Next →</button>
           <p class="form-note">Requests are reviewed within 48 hours. Access is never guaranteed — that's rather the point.</p>
         </form>
 

@@ -672,7 +672,7 @@
   }
 
   /* ---------------------------------------------------------------------
-     Forms (reservations.html, speakeasy.html, contact.html)
+     Forms (reservations.html, contact.html)
   --------------------------------------------------------------------- */
   function initForm(formSelector, confirmationSelector, codePrefix) {
     const form = document.querySelector(formSelector);
@@ -697,6 +697,137 @@
   }
 
   /* ---------------------------------------------------------------------
+     The Gold Ledger — speakeasy.html's step-by-step VIP terminal form.
+     One field on stage at a time: "Next" (or Enter) flies the current
+     field up and out, then the next field rises in from below. Same
+     native browser validation and success chord as the other forms,
+     gated per step instead of all at once.
+  --------------------------------------------------------------------- */
+  function initSpeakeasyForm() {
+    const form = document.querySelector("[data-speakeasy-form]");
+    const confirmation = document.querySelector("[data-speakeasy-confirmation]");
+    if (!form) return;
+
+    const steps = Array.from(form.querySelectorAll(".wizard-step"));
+    const nextBtn = form.querySelector("[data-wizard-next]");
+    const countEl = form.querySelector("[data-wizard-count]");
+    const fillEl = form.querySelector("[data-wizard-progress-fill]");
+    const total = steps.length;
+    const STEP_MS = 350;
+    let current = 0;
+
+    function fieldOf(step) {
+      return step.querySelector("input, textarea");
+    }
+
+    function updateMeta() {
+      const isLast = current === total - 1;
+      if (countEl) {
+        countEl.textContent = `Step ${String(current + 1).padStart(2, "0")} / ${String(total).padStart(2, "0")}`;
+      }
+      if (fillEl) fillEl.style.width = `${((current + 1) / total) * 100}%`;
+      if (nextBtn) {
+        nextBtn.textContent = isLast ? "Request Access" : "Next →";
+        nextBtn.type = isLast ? "submit" : "button";
+      }
+    }
+
+    function goToStep(index) {
+      const leaving = steps[current];
+      leaving.classList.remove("is-active");
+      leaving.classList.add("is-leaving");
+
+      window.setTimeout(() => {
+        leaving.classList.remove("is-leaving");
+        leaving.hidden = true;
+
+        current = index;
+        const entering = steps[current];
+        entering.hidden = false;
+        entering.classList.add("is-entering");
+        void entering.offsetWidth; // force reflow so the enter transition actually plays
+        entering.classList.remove("is-entering");
+        entering.classList.add("is-active");
+
+        updateMeta();
+        const field = fieldOf(entering);
+        if (field) field.focus({ preventScroll: true });
+      }, STEP_MS);
+    }
+
+    function tryAdvance() {
+      const field = fieldOf(steps[current]);
+      if (field && !field.checkValidity()) {
+        field.reportValidity();
+        return;
+      }
+      if (current < total - 1) goToStep(current + 1);
+    }
+
+    if (nextBtn) {
+      nextBtn.addEventListener("click", (e) => {
+        if (nextBtn.type === "button") {
+          e.preventDefault();
+          tryAdvance();
+        }
+      });
+    }
+
+    steps.forEach((step, i) => {
+      const input = step.querySelector("input");
+      if (!input) return;
+      input.addEventListener("keydown", (e) => {
+        if (e.key !== "Enter") return;
+        e.preventDefault();
+        if (i === total - 1) {
+          if (form.requestSubmit) form.requestSubmit();
+          else form.dispatchEvent(new Event("submit", { cancelable: true }));
+        } else {
+          tryAdvance();
+        }
+      });
+    });
+
+    updateMeta();
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+      const digits = String(Math.floor(1000 + Math.random() * 9000));
+      if (confirmation) {
+        const codeEl = confirmation.querySelector("[data-code]");
+        form.style.display = "none";
+        confirmation.classList.add("show");
+        if (codeEl) scrambleCode(codeEl, "NK-VIP-", digits);
+      }
+      AudioEngine.playConfirm();
+    });
+  }
+
+  // "Password-crack" reveal: rapidly cycles random 4-digit endings for
+  // ~0.5s before locking in the real code, like a terminal brute-forcing
+  // the last digits of an access key.
+  function scrambleCode(el, prefix, finalDigits) {
+    const duration = 500;
+    const tickMs = 45;
+    const startedAt = Date.now();
+
+    const timer = window.setInterval(() => {
+      const elapsed = Date.now() - startedAt;
+      if (elapsed >= duration) {
+        window.clearInterval(timer);
+        el.textContent = `${prefix}${finalDigits}`;
+        return;
+      }
+      const randomDigits = String(Math.floor(1000 + Math.random() * 9000));
+      el.textContent = `${prefix}${randomDigits}`;
+    }, tickMs);
+  }
+
+  /* ---------------------------------------------------------------------
      Init
   --------------------------------------------------------------------- */
   document.addEventListener("DOMContentLoaded", () => {
@@ -707,7 +838,7 @@
     initMenuTabs();
     initCocktailMap();
     initForm("[data-reservation-form]", "[data-reservation-confirmation]", "NK-RES");
-    initForm("[data-speakeasy-form]", "[data-speakeasy-confirmation]", "NK-VIP");
+    initSpeakeasyForm();
     initForm("[data-contact-form]", "[data-contact-confirmation]", "NK-MSG");
 
     // Footer year
