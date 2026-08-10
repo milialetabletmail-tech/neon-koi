@@ -15,7 +15,7 @@
 <noscript><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet"></noscript>
 <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body class="page-reservations">
 <div class="bg-photo"></div>
 <div class="ambient-backdrop"></div>
 
@@ -51,15 +51,26 @@
 </header>
 
 <main>
-  <section style="padding-top: clamp(50px, 8vw, 90px);">
+  <section class="reservations-section">
     <div class="container">
-      <div class="section-head center">
-        <span class="eyebrow">Reservations</span>
-        <h1 class="section-title">Reserve your evening</h1>
-        <p class="section-lede">Tables are limited on the rooftop. Tell us a little about your evening and we'll hold your spot under the neon koi.</p>
-      </div>
+      <div class="reservations-layout">
+        <div class="reservations-intro">
+          <svg class="reservations-koi" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <defs>
+              <linearGradient id="koiGradReservations" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#B14CFF"/>
+                <stop offset="100%" stop-color="#00D4FF"/>
+              </linearGradient>
+            </defs>
+            <path d="M10,50 C40,10 90,10 120,35 C140,15 170,20 190,10 C180,30 165,40 165,40 C180,45 190,60 190,60 C170,55 145,55 125,65 C95,90 40,90 10,50 Z" fill="none" stroke="url(#koiGradReservations)" stroke-width="2.5"/>
+            <circle cx="35" cy="45" r="6" fill="url(#koiGradReservations)"/>
+          </svg>
+          <span class="eyebrow">Reservations</span>
+          <h1 class="section-title">Reserve your evening</h1>
+          <p class="section-lede">Tables are limited on the rooftop. Tell us a little about your evening and we'll hold your spot under the neon koi.</p>
+        </div>
 
-      <div class="glass form-card">
+        <div class="glass form-card">
         <form data-reservation-form novalidate>
           <div class="form-grid">
             <div class="field">
@@ -117,6 +128,7 @@
           <p style="color:var(--ink-dim);">Reservation code</p>
           <div class="code" data-code>NK-RES-0000</div>
           <p style="color:var(--ink-dim);">We look forward to hosting you under the neon koi.</p>
+        </div>
         </div>
       </div>
     </div>

@@ -674,7 +674,7 @@
   /* ---------------------------------------------------------------------
      Forms (reservations.html, contact.html)
   --------------------------------------------------------------------- */
-  function initForm(formSelector, confirmationSelector, codePrefix) {
+  function initForm(formSelector, confirmationSelector, codePrefix, scramble = false) {
     const form = document.querySelector(formSelector);
     const confirmation = document.querySelector(confirmationSelector);
     if (!form) return;
@@ -685,12 +685,15 @@
         form.reportValidity();
         return;
       }
-      const code = `${codePrefix}-${Math.floor(1000 + Math.random() * 9000)}`;
+      const digits = String(Math.floor(1000 + Math.random() * 9000));
       if (confirmation) {
         const codeEl = confirmation.querySelector("[data-code]");
-        if (codeEl) codeEl.textContent = code;
         form.style.display = "none";
         confirmation.classList.add("show");
+        if (codeEl) {
+          if (scramble) scrambleCode(codeEl, `${codePrefix}-`, digits);
+          else codeEl.textContent = `${codePrefix}-${digits}`;
+        }
       }
       AudioEngine.playConfirm();
     });
@@ -853,7 +856,7 @@
     initCursorGlow();
     initMenuTabs();
     initCocktailMap();
-    initForm("[data-reservation-form]", "[data-reservation-confirmation]", "NK-RES");
+    initForm("[data-reservation-form]", "[data-reservation-confirmation]", "NK-RES", true);
     initSpeakeasyForm();
     initForm("[data-contact-form]", "[data-contact-confirmation]", "NK-MSG");
 

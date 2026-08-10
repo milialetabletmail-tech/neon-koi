@@ -794,6 +794,162 @@ body.page-cocktails .cocktail-detail {
   margin: 14px 0;
 }
 
+/* ---------- Reservations — asymmetric two-column luxury layout ----------
+   40/60 split: an atmospheric intro column with a huge, near-invisible
+   koi silhouette fixed behind the copy, and an open, all-fields-visible
+   form laid out on a grid instead of one long vertical run. */
+body.page-reservations .reservations-section {
+  padding-top: clamp(50px, 8vw, 90px);
+  padding-bottom: clamp(40px, 6vw, 70px);
+}
+
+body.page-reservations .reservations-layout {
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  gap: clamp(36px, 6vw, 84px);
+  align-items: start;
+}
+@media (max-width: 860px) {
+  body.page-reservations .reservations-layout { grid-template-columns: 1fr; }
+}
+
+body.page-reservations .reservations-intro {
+  position: relative;
+  padding: 12px 0 40px;
+  overflow: hidden;
+}
+@media (min-width: 861px) {
+  body.page-reservations .reservations-intro { position: sticky; top: clamp(100px, 13vw, 160px); }
+}
+
+/* The koi is oversized and nearly invisible on purpose — a watermark,
+   not an illustration, so the copy stays the thing you actually read. */
+body.page-reservations .reservations-koi {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  width: clamp(560px, 64vw, 980px);
+  transform: translate(-50%, -50%);
+  opacity: 0.15;
+  z-index: 0;
+  pointer-events: none;
+}
+@media (max-width: 860px) {
+  body.page-reservations .reservations-koi { width: clamp(380px, 92vw, 600px); top: 40%; }
+}
+
+body.page-reservations .reservations-intro > :not(.reservations-koi) {
+  position: relative;
+  z-index: 1;
+}
+body.page-reservations .reservations-intro .section-lede { max-width: 46ch; }
+
+body.page-reservations .form-card { padding: clamp(28px, 3.4vw, 46px); }
+
+/* Airy inputs: no fill, no box — just a hairline that ignites on focus. */
+body.page-reservations .field input,
+body.page-reservations .field select,
+body.page-reservations .field textarea {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(177, 76, 255, 0.32);
+  border-radius: 0;
+  padding: 0.75em 0.1em;
+  box-shadow: none;
+}
+body.page-reservations .field input:focus,
+body.page-reservations .field select:focus,
+body.page-reservations .field textarea:focus {
+  outline: none;
+  border-bottom-color: var(--cyan);
+  box-shadow: 0 1px 0 0 var(--cyan), 0 14px 26px -18px rgba(0, 212, 255, 0.95);
+  color: #fff;
+}
+body.page-reservations .field:focus-within label {
+  color: var(--cyan);
+  letter-spacing: 0.16em;
+}
+body.page-reservations .field label {
+  transition: color 0.35s var(--ease), letter-spacing 0.35s var(--ease);
+}
+body.page-reservations .field textarea { resize: vertical; min-height: 90px; }
+
+/* Custom chevrons in place of the native dropdown arrow. */
+body.page-reservations .field select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1L6 6L11 1' stroke='%2300D4FF' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 0.2em center;
+  background-size: 11px 7px;
+  padding-right: 1.5em;
+  cursor: pointer;
+}
+body.page-reservations .field select option {
+  background: var(--void-soft);
+  color: var(--ink);
+}
+
+/* Native date/time chrome tinted to sit quietly in the transparent field. */
+body.page-reservations .field input[type="date"],
+body.page-reservations .field input[type="time"] {
+  color-scheme: dark;
+}
+body.page-reservations .field input[type="date"]::-webkit-calendar-picker-indicator,
+body.page-reservations .field input[type="time"]::-webkit-calendar-picker-indicator {
+  filter: invert(72%) sepia(87%) saturate(1974%) hue-rotate(160deg) brightness(101%) contrast(101%);
+  opacity: 0.8;
+  cursor: pointer;
+}
+
+/* Ghost button: a hairline purple-to-cyan gradient outline (cut with a
+   mask so it stays a true ring over the card's blurred glass, instead
+   of a flat color that would need to match a background that isn't
+   flat) that floods with soft neon on hover instead of ever reading
+   as a filled block. */
+body.page-reservations .form-card .btn-primary {
+  position: relative;
+  isolation: isolate;
+  color: var(--ink);
+  background: transparent;
+  border: none;
+  border-radius: 3px;
+  padding: 0.9em 2.4em;
+  transition: color 0.4s var(--ease), box-shadow 0.4s var(--ease), transform 0.35s var(--ease);
+}
+body.page-reservations .form-card .btn-primary::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  padding: 1.5px;
+  border-radius: inherit;
+  background: linear-gradient(120deg, var(--purple), var(--cyan));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+body.page-reservations .form-card .btn-primary::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  border-radius: inherit;
+  background: linear-gradient(120deg, var(--purple), var(--cyan));
+  opacity: 0;
+  transition: opacity 0.4s var(--ease);
+}
+body.page-reservations .form-card .btn-primary:hover,
+body.page-reservations .form-card .btn-primary:focus-visible {
+  color: #05030a;
+  box-shadow: var(--glow-purple), var(--glow-cyan);
+}
+body.page-reservations .form-card .btn-primary:hover::after,
+body.page-reservations .form-card .btn-primary:focus-visible::after { opacity: 1; }
+
+body.page-reservations .confirmation .code { text-shadow: 0 0 18px rgba(0, 212, 255, 0.5); }
+
 /* ---------- Speakeasy / Gold theme ---------- */
 body.theme-gold .neon-text {
   background: linear-gradient(90deg, var(--gold), #f4dd8b);
