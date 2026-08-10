@@ -95,7 +95,7 @@ body.page-menu .bg-photo {
 body.page-cocktails .bg-photo {
   background-color: #08060F;
   background-image:
-    linear-gradient(180deg, rgba(5, 3, 10, 0.55) 0%, rgba(8, 6, 20, 0.4) 45%, rgba(5, 3, 10, 0.72) 100%),
+    linear-gradient(180deg, rgba(5, 3, 10, 0.38) 0%, rgba(8, 6, 20, 0.25) 45%, rgba(5, 3, 10, 0.58) 100%),
     radial-gradient(ellipse at 18% -10%, rgba(177, 76, 255, 0.18), transparent 55%),
     radial-gradient(ellipse at 86% 2%, rgba(0, 212, 255, 0.15), transparent 50%),
     url("images/cocktails-bg.jpg");
