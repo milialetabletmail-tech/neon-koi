@@ -293,13 +293,32 @@
   --------------------------------------------------------------------- */
   function initAudioUI() {
     const soundToggle = document.querySelector("[data-sound-toggle]");
+    const soundHint = document.querySelector("[data-sound-hint]");
+    let hintTimers = [];
+
+    const dismissHint = () => {
+      hintTimers.forEach(clearTimeout);
+      hintTimers = [];
+      if (soundHint) soundHint.classList.remove("is-visible");
+    };
+
     const startOnce = () => {
       AudioEngine.firstInteraction();
+      dismissHint();
       window.removeEventListener("pointerdown", startOnce);
       window.removeEventListener("keydown", startOnce);
     };
     window.addEventListener("pointerdown", startOnce, { once: true });
     window.addEventListener("keydown", startOnce, { once: true });
+
+    // Sound may have been left "on" from a previous page, but every fresh
+    // page load still needs its own first tap before the browser will let
+    // audio play — nudge the visitor instead of leaving them wondering
+    // why it's silent.
+    if (soundHint && !AudioEngine.isMuted()) {
+      hintTimers.push(setTimeout(() => soundHint.classList.add("is-visible"), 900));
+      hintTimers.push(setTimeout(dismissHint, 7000));
+    }
 
     if (soundToggle) {
       const label = soundToggle.querySelector(".sound-label");
