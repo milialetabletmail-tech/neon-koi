@@ -97,11 +97,13 @@ body.page-cocktails .bg-photo {
   background-color: #08060F;
   /* Darkest right where the eyebrow/title/lede sit (0-30%), easing up
      around the map card so the photo's warmth still reads there, then
-     back down toward the footer. The flat 0.32-alpha dip in the middle
-     of the previous version landed right under the hero copy, which is
-     why the text felt heavy to read against it. */
+     back down toward the footer. Pushed noticeably darker throughout
+     (vs. the first cut of this wash) -- the neon pin icons and the
+     sharp, well-lit cocktail photo in the detail card both need real
+     black around them to read as glowing/vivid; a bright warm backdrop
+     was competing with both instead of setting them off. */
   background-image:
-    linear-gradient(180deg, rgba(6, 3, 3, 0.74) 0%, rgba(8, 4, 4, 0.56) 28%, rgba(9, 5, 4, 0.4) 55%, rgba(6, 3, 3, 0.72) 100%),
+    linear-gradient(180deg, rgba(4, 2, 2, 0.88) 0%, rgba(6, 3, 3, 0.76) 28%, rgba(7, 4, 3, 0.64) 55%, rgba(4, 2, 2, 0.86) 100%),
     url("images/cocktails-bg.jpg");
   background-size: cover, cover;
   background-position: center, center;
