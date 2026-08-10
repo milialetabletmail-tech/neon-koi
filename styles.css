@@ -79,29 +79,28 @@ body.page-menu .bg-photo {
 }
 
 /* Cocktail Map page: reusing the homepage's skyline photo here read
-   generic, like the page never got its own backdrop. Two earlier passes
-   (a hand-drawn glassware pattern, then an over-darkened photo silhouette)
-   both ended up reading as "no background" once actually seen live. This
-   uses a client-supplied bar photo -- an Old Fashioned with warm bokeh
-   bottles and candlelight behind it, already high-contrast against a
-   near-black backdrop -- pre-blurred and lightly graded *before* saving
-   (not filtered live in CSS), and left in its natural amber tone instead
-   of forced into the brand duotone, since that's what makes the glow
-   actually visible instead of muddy. Brand color still shows up via the
-   purple/cyan radial glows layered on top, same as every other page.
-   Downscaled + blurred source compresses to ~21KB, still a fraction of
-   the ~240KB skyline photo it replaces, and the blur is baked into the
-   file so there's no live filter cost on scroll/repaint. */
+   generic, like the page never got its own backdrop. This uses a
+   client-supplied bar photo -- an Old Fashioned with warm bokeh bottles
+   and candlelight behind it -- pre-blurred and graded *before* saving
+   (not filtered live in CSS), left in its natural amber tone.
+
+   Earlier passes also layered this site's usual purple/cyan radial
+   glows on top, copied from how every other page's photo backdrop
+   works. That was the actual bug, not the photo or the blur: translucent
+   cool purple/cyan over a translucent warm-amber photo mixes into a
+   muddy brown-olive smear wherever they overlap -- complementary colors
+   blended at medium alpha canceling toward mud is a known trap, not a
+   matter of retuning the numbers. This photo already carries its own
+   color and doesn't need (or survive) that treatment; it gets only a
+   warm-toned dark wash for text legibility, no competing cool tint. */
 body.page-cocktails .bg-photo {
   background-color: #08060F;
   background-image:
-    linear-gradient(180deg, rgba(5, 3, 10, 0.38) 0%, rgba(8, 6, 20, 0.25) 45%, rgba(5, 3, 10, 0.58) 100%),
-    radial-gradient(ellipse at 18% -10%, rgba(177, 76, 255, 0.18), transparent 55%),
-    radial-gradient(ellipse at 86% 2%, rgba(0, 212, 255, 0.15), transparent 50%),
+    linear-gradient(180deg, rgba(8, 4, 4, 0.5) 0%, rgba(10, 5, 4, 0.32) 45%, rgba(6, 3, 3, 0.68) 100%),
     url("images/cocktails-bg.jpg");
-  background-size: cover, cover, cover, cover;
-  background-position: center, center, center, center;
-  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
+  background-size: cover, cover;
+  background-position: center, center;
+  background-repeat: no-repeat, no-repeat;
 }
 
 img, svg { max-width: 100%; display: block; }
