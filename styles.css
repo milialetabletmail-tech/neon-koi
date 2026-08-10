@@ -492,7 +492,8 @@ body.page-cocktails .section-head { margin-bottom: clamp(44px, 7vw, 72px); }
   border-radius: 20px;
   overflow: hidden;
   background: linear-gradient(160deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.015));
-  border: 1px solid rgba(212, 175, 55, 0.3);
+  border: 1px solid rgba(212, 175, 55, 0.45);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
   transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease), border-color 0.35s var(--ease);
 }
 .menu-item:hover {
@@ -903,7 +904,9 @@ body.theme-gold .ambient-backdrop {
     flex-direction: column;
     align-items: flex-start;
     padding: 24px clamp(20px, 5vw, 64px);
-    background: rgba(8, 6, 15, 0.97);
+    background: rgba(8, 6, 15, 1);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     transform: translateY(-130%);
     transition: transform 0.4s var(--ease);
