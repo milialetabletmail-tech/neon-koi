@@ -800,10 +800,73 @@ body.theme-gold .ambient-backdrop {
 .perk-list .mark { color: var(--gold); font-size: 1.1rem; }
 
 /* ---------- The Gold Room — VIP request form ---------- */
+
+/* The card reads as a spotlit invitation rather than a generic glass
+   panel: a soft gold vignette glowing behind it, a hairline gold edge,
+   and a thin accent rule across the top like engraved letterpress
+   stock catching the light. */
+body.theme-gold .form-card {
+  position: relative;
+  padding: clamp(38px, 5.5vw, 68px);
+  border-color: rgba(212, 175, 55, 0.22);
+  overflow: visible;
+}
+body.theme-gold .form-card::before {
+  content: "";
+  position: absolute;
+  inset: -16px;
+  z-index: -1;
+  background: radial-gradient(ellipse at 50% 15%, rgba(212, 175, 55, 0.14), transparent 65%);
+  pointer-events: none;
+}
+body.theme-gold .form-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 8%;
+  right: 8%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.65), transparent);
+}
+
+/* A quiet ornamental rule between the invitation copy and the request
+   instrument itself — the way an engraved card separates its
+   salutation from its particulars. */
+.ornament-rule {
+  display: flex;
+  align-items: center;
+  margin: 36px 0 32px;
+}
+.ornament-rule::before,
+.ornament-rule::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.35));
+}
+.ornament-rule::after { background: linear-gradient(90deg, rgba(212, 175, 55, 0.35), transparent); }
+.ornament-rule span {
+  flex: none;
+  width: 6px;
+  height: 6px;
+  margin: 0 14px;
+  background: var(--gold);
+  transform: rotate(45deg);
+  box-shadow: 0 0 8px rgba(212, 175, 55, 0.7);
+}
+
 /* Borderless, oversized serif inputs: no box, no radius, just a dim
    gold hairline underneath that ignites into a neon-lit sign on
    focus — the visual language of a private members' ledger, not a
    web form. */
+body.theme-gold .field label {
+  transition: color 0.4s var(--ease), letter-spacing 0.4s var(--ease);
+}
+body.theme-gold .field:has(input:focus) label,
+body.theme-gold .field:has(textarea:focus) label {
+  color: var(--gold);
+  letter-spacing: 0.16em;
+}
 body.theme-gold .field input,
 body.theme-gold .field select,
 body.theme-gold .field textarea {
@@ -815,6 +878,8 @@ body.theme-gold .field textarea {
   font-family: var(--font-display);
   font-size: 1.35rem;
   font-weight: 500;
+  letter-spacing: 0.01em;
+  caret-color: var(--gold);
   box-shadow: none;
   transition: border-color 0.45s var(--ease), box-shadow 0.45s var(--ease);
 }
@@ -855,8 +920,16 @@ body.theme-gold .field input[type="date"]::-webkit-calendar-picker-indicator {
 
 .wizard-meta {
   display: flex;
-  justify-content: flex-end;
-  margin: 0 0 10px;
+  justify-content: space-between;
+  align-items: baseline;
+  margin: 0 0 12px;
+}
+.wizard-meta-label {
+  font-family: var(--font-body);
+  font-size: 0.68rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
 }
 .wizard-step-count {
   font-family: var(--font-display);
@@ -866,22 +939,38 @@ body.theme-gold .field input[type="date"]::-webkit-calendar-picker-indicator {
   color: rgba(212, 175, 55, 0.55);
 }
 .wizard-progress {
+  position: relative;
   height: 1px;
   background: rgba(212, 175, 55, 0.15);
-  overflow: hidden;
-  margin-bottom: 26px;
+  overflow: visible;
+  margin-bottom: 30px;
 }
 .wizard-progress-fill {
+  position: relative;
   display: block;
   height: 100%;
   background: linear-gradient(90deg, var(--gold), #f4dd8b);
   box-shadow: 0 0 10px rgba(212, 175, 55, 0.6);
   transition: width 0.6s cubic-bezier(0.25, 1, 0.5, 1);
 }
+.wizard-progress-fill::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  transform: translate(50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff3d6, rgba(244, 221, 139, 0.7) 60%, transparent 75%);
+}
 
 /* Outlined, square-edged "Next" — a doorman's plaque, not a web
-   button: quiet by default, igniting gold only on hover. */
+   button: quiet by default, igniting gold with a slow light sweep
+   only on hover. */
 body.theme-gold .btn-gold {
+  position: relative;
+  overflow: hidden;
   background: transparent;
   border: 1px solid rgba(212, 175, 55, 0.75);
   border-radius: 3px;
@@ -889,18 +978,51 @@ body.theme-gold .btn-gold {
   box-shadow: none;
   transition: background 0.45s var(--ease), box-shadow 0.45s var(--ease), border-color 0.45s var(--ease), color 0.45s var(--ease);
 }
+body.theme-gold .btn-gold::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -60%;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(115deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.75s var(--ease);
+}
 body.theme-gold .btn-gold:hover {
   background: rgba(212, 175, 55, 0.14);
   border-color: #f4dd8b;
   color: #f7e6a8;
   box-shadow: 0 0 24px rgba(212, 175, 55, 0.4), inset 0 0 16px rgba(212, 175, 55, 0.18);
 }
+body.theme-gold .btn-gold:hover::before { left: 130%; }
+body.theme-gold .btn-gold:active { transform: translateY(-1px) scale(0.98); }
 
+body.theme-gold .confirmation-seal {
+  width: 58px;
+  height: 58px;
+  margin: 0 auto 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  color: var(--gold);
+  border: 1px solid rgba(212, 175, 55, 0.55);
+  border-radius: 50%;
+  box-shadow: 0 0 22px rgba(212, 175, 55, 0.35), inset 0 0 14px rgba(212, 175, 55, 0.15);
+}
 body.theme-gold .confirmation .code {
+  display: inline-block;
+  margin: 14px 0;
+  padding: 14px 30px;
   font-family: var(--font-display);
   font-size: 1.8rem;
   letter-spacing: 0.15em;
   color: var(--gold);
+  background: rgba(212, 175, 55, 0.05);
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  border-radius: 4px;
   text-shadow: 0 0 14px rgba(212, 175, 55, 0.55), 0 0 30px rgba(212, 175, 55, 0.3);
 }
 
