@@ -1101,7 +1101,7 @@
     initReservationsParallax();
     initPillSound();
     initSpeakeasyForm();
-    initForm("[data-contact-form]", "[data-contact-confirmation]", "NK-MSG");
+    initForm("[data-contact-form]", "[data-contact-confirmation]", "NK-MSG", true, true);
 
     // Footer year
     document.querySelectorAll("[data-year]").forEach((el) => {

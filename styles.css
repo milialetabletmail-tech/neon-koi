@@ -128,6 +128,26 @@ body.page-speakeasy .bg-photo {
   background-repeat: no-repeat, no-repeat;
 }
 
+/* Contact page: previously reused the homepage skyline wholesale, which
+   read as "the page nobody finished" next to every other inner page's
+   dedicated photo. A closer, quieter shot -- the rooftop's own entrance
+   glow rather than the wide skyline -- keeps this page visually distinct
+   from Home while staying in the same purple/cyan duotone as the rest of
+   the (non-gold) site, since Contact isn't a themed sub-room the way
+   Cocktails/Speakeasy are. */
+body.page-contact .bg-photo {
+  background-image:
+    linear-gradient(180deg, rgba(5, 3, 10, 0.9) 0%, rgba(8, 6, 20, 0.8) 45%, rgba(5, 3, 10, 0.95) 100%),
+    radial-gradient(ellipse at 20% -10%, rgba(177, 76, 255, 0.16), transparent 55%),
+    radial-gradient(ellipse at 85% 0%, rgba(0, 212, 255, 0.14), transparent 50%),
+    linear-gradient(120deg, #B14CFF 0%, #00D4FF 100%),
+    url("images/contact-bg.jpg");
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-blend-mode: normal, normal, normal, color, normal;
+}
+
 /* A hairline text-shadow -- not a heavy drop-shadow -- keeps the hero
    copy crisp against the photo without flattening it into a solid card,
    which would fight the "photo behind glass" feel of the rest of the
@@ -1142,6 +1162,128 @@ body.page-reservations .ticket-seal {
   filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.5));
 }
 body.page-reservations .ticket .code {
+  color: var(--cyan);
+  text-shadow: 0 0 18px rgba(0, 212, 255, 0.5);
+  border-bottom: 1px dashed rgba(0, 212, 255, 0.3);
+}
+
+/* ---------- Contact ---------- */
+
+/* Info cards: an icon tile beside the copy instead of bare text in a
+   glass box, so Location/Hours/Reach Us read as three considered rows
+   rather than three identical placeholder cards. */
+.contact-info-list { display: grid; gap: 20px; }
+.contact-info-card {
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+  padding: 26px 28px;
+}
+.contact-info-icon {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-glass);
+}
+.contact-info-icon svg { width: 20px; height: 20px; filter: drop-shadow(0 0 6px rgba(177, 76, 255, 0.55)); }
+.contact-info-card h3 { font-size: 1.15rem; margin-bottom: 0.3em; }
+
+.contact-link { transition: color 0.25s var(--ease), text-shadow 0.25s var(--ease); }
+.contact-link:hover, .contact-link:focus-visible { color: var(--cyan); text-shadow: 0 0 12px rgba(0, 212, 255, 0.4); }
+
+/* Location panel: a real photo standing in for the emoji-pin placeholder
+   this used to be, treated the same way the cocktail detail card treats
+   its bottle shot -- full-bleed image, a legibility wash pinned to the
+   bottom, and a small pin badge riding on top instead of centered text
+   over a flat gradient. */
+.contact-map {
+  position: relative;
+  min-height: 340px;
+  overflow: hidden;
+  padding: 0;
+}
+.contact-map-media { position: absolute; inset: 0; }
+.contact-map-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.contact-map-media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(8, 6, 15, 0) 45%, rgba(6, 4, 10, 0.88) 100%);
+}
+.contact-map-badge {
+  position: absolute;
+  left: 24px;
+  bottom: 22px;
+  right: 24px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 1;
+}
+.contact-map-badge svg { flex: none; width: 22px; height: 22px; filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.6)); }
+.contact-map-badge span {
+  font-size: 0.76rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+}
+
+/* Airy underline fields, matching the register the Reservations form
+   already established -- the same move, scoped to this page, so Contact
+   stops being the one form left in the site's default boxed-input style. */
+body.page-contact .field input,
+body.page-contact .field textarea {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(177, 76, 255, 0.32);
+  border-radius: 0;
+  padding: 0.75em 0.1em;
+  box-shadow: none;
+}
+body.page-contact .field input:focus,
+body.page-contact .field textarea:focus {
+  outline: none;
+  border-bottom-color: var(--cyan);
+  box-shadow: 0 1px 0 0 var(--cyan), 0 14px 26px -18px rgba(0, 212, 255, 0.95);
+  color: #fff;
+}
+body.page-contact .field:focus-within > label {
+  color: var(--cyan);
+  letter-spacing: 0.16em;
+}
+body.page-contact .field label {
+  transition: color 0.35s var(--ease), letter-spacing 0.35s var(--ease);
+}
+
+/* The ornament-rule component defaults to gold (built for Speakeasy's
+   engraved-invitation look) -- retuned to the site's default purple/cyan
+   accent here so it doesn't drop an unrelated gold note into an
+   otherwise cyan-accented page. */
+body.page-contact .ornament-rule::before {
+  background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.35));
+}
+body.page-contact .ornament-rule::after {
+  background: linear-gradient(90deg, rgba(0, 212, 255, 0.35), transparent);
+}
+body.page-contact .ornament-rule span {
+  background: var(--cyan);
+  box-shadow: 0 0 8px rgba(0, 212, 255, 0.7);
+}
+
+body.page-contact .ticket::before {
+  background: linear-gradient(120deg, var(--purple), var(--cyan));
+}
+body.page-contact .ticket-seal {
+  width: 46px;
+  filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.5));
+}
+body.page-contact .ticket .code {
   color: var(--cyan);
   text-shadow: 0 0 18px rgba(0, 212, 255, 0.5);
   border-bottom: 1px dashed rgba(0, 212, 255, 0.3);
