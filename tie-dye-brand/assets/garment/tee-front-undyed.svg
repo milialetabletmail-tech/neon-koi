@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 760" fill="none">
+  <!--
+    PLACEHOLDER PRODUCT ART.
+    Swap this file for the real photographed PNG cutout (transparent background)
+    when it's ready — keep the same filename/path (or update the two references
+    in index.html: .garment-photo img src, and .garment-dye mask-image) and the
+    dye-soak masking in js/main.js + css/style.css keeps working unchanged,
+    since it reads the alpha channel of whatever image sits at that path.
+
+    Shading is deliberately gradient-only (no strokes/hard lines) — this file
+    doubles as the dye layer's CSS mask source, so any hard edge here shows up
+    as a visible seam cutting through the color, not just the base garment.
+  -->
+  <defs>
+    <clipPath id="teeClip">
+      <path fill-rule="evenodd" d="
+        M220 120 L160 150 L60 250 L95 380 L165 320 L165 690
+        Q165 715 190 715 L450 715 Q475 715 475 690 L475 320
+        L545 380 L580 250 L480 150 L420 120
+        Q320 165 220 120 Z
+        M262 118 Q320 178 378 118 Q320 145 262 118 Z
+      "/>
+    </clipPath>
+
+    <radialGradient id="chestLight" cx="46%" cy="26%" r="60%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+
+    <radialGradient id="sleeveShadeL" cx="18%" cy="38%" r="30%">
+      <stop offset="0%" stop-color="#000000" stop-opacity="0.1"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+
+    <radialGradient id="sleeveShadeR" cx="82%" cy="38%" r="30%">
+      <stop offset="0%" stop-color="#000000" stop-opacity="0.1"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+
+    <linearGradient id="hemShadow" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="55%" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.14"/>
+    </linearGradient>
+  </defs>
+
+  <path fill-rule="evenodd" fill="#f4eee1" d="
+    M220 120 L160 150 L60 250 L95 380 L165 320 L165 690
+    Q165 715 190 715 L450 715 Q475 715 475 690 L475 320
+    L545 380 L580 250 L480 150 L420 120
+    Q320 165 220 120 Z
+    M262 118 Q320 178 378 118 Q320 145 262 118 Z
+  "/>
+
+  <g clip-path="url(#teeClip)">
+    <rect x="0" y="0" width="640" height="760" fill="url(#sleeveShadeL)"/>
+    <rect x="0" y="0" width="640" height="760" fill="url(#sleeveShadeR)"/>
+    <rect x="0" y="0" width="640" height="760" fill="url(#hemShadow)"/>
+    <rect x="0" y="0" width="640" height="760" fill="url(#chestLight)"/>
+  </g>
+</svg>
