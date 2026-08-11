@@ -226,29 +226,30 @@ body.preloading { overflow: hidden; height: 100vh; }
   background: var(--gradient-spiral);
   mix-blend-mode: color;
   opacity: 0.96;
+  filter: blur(3px); /* softens the vector-crisp mask edge so it bleeds like ink, not a die-cut sticker */
 
   -webkit-mask-image:
     url('../assets/garment/tee-front-undyed.svg'),
     radial-gradient(circle at var(--soak-x, 50%) var(--soak-y, 50%),
       #000 var(--soak-r, 0%),
-      transparent calc(var(--soak-r, 0%) + 18%));
+      transparent calc(var(--soak-r, 0%) + 55%));
   mask-image:
     url('../assets/garment/tee-front-undyed.svg'),
     radial-gradient(circle at var(--soak-x, 50%) var(--soak-y, 50%),
       #000 var(--soak-r, 0%),
-      transparent calc(var(--soak-r, 0%) + 18%));
+      transparent calc(var(--soak-r, 0%) + 55%));
 
   -webkit-mask-repeat: no-repeat, no-repeat;
   mask-repeat: no-repeat, no-repeat;
   -webkit-mask-position: center, center;
   mask-position: center, center;
-  -webkit-mask-size: contain, cover;
-  mask-size: contain, cover;
+  -webkit-mask-size: contain, contain;
+  mask-size: contain, contain;
 
   -webkit-mask-composite: source-in; /* Safari: intersect the two masks */
   mask-composite: intersect;         /* spec name for the same operation */
 
-  will-change: opacity;
+  will-change: opacity, filter;
 }
 
 /* Browsers without mask-composite support just fall back to a full-garment
@@ -265,12 +266,12 @@ body.preloading { overflow: hidden; height: 100vh; }
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 34vw;
-  height: 34vw;
-  max-width: 420px;
-  max-height: 420px;
+  width: 42vw;
+  height: 42vw;
+  max-width: 520px;
+  max-height: 520px;
   border-radius: 50%;
-  filter: blur(38px);
+  filter: blur(90px);
   opacity: 0;
   will-change: transform, opacity;
   z-index: 2;

@@ -106,7 +106,7 @@
     gsap.set(dye, { '--soak-r': '0%' });
 
     const tl = gsap.timeline({
-      defaults: { ease: 'none' },
+      defaults: { ease: 'power2.out' },
       scrollTrigger: {
         trigger: '.colorburst',
         start: 'top top',
@@ -122,19 +122,19 @@
 
     // --- State 1 (15% - 45%): burst — blobs race in, dye soaks ---
     tl.addLabel('burst', 0.15);
-    tl.to(bg, { opacity: 0.5, scale: 1, filter: 'blur(60px) saturate(1)', duration: 0.3 }, 'burst');
-    tl.to(blobs.pink,   { x: '-8vw', y: '-6vh', scale: 1, opacity: 0.85, duration: 0.28 }, 'burst');
-    tl.to(blobs.blue,   { x: '9vw',  y: '-4vh', scale: 1, opacity: 0.85, duration: 0.28 }, 'burst+=0.03');
-    tl.to(blobs.orange, { x: '0vw',  y: '8vh',  scale: 1, opacity: 0.8,  duration: 0.28 }, 'burst+=0.05');
+    tl.to(bg, { opacity: 0.5, scale: 1, filter: 'blur(90px) saturate(1)', duration: 0.3, ease: 'sine.out' }, 'burst');
+    tl.to(blobs.pink,   { x: '-8vw', y: '-6vh', scale: 1, opacity: 0.85, duration: 0.28, ease: 'power2.out' }, 'burst');
+    tl.to(blobs.blue,   { x: '9vw',  y: '-4vh', scale: 1, opacity: 0.85, duration: 0.28, ease: 'power2.out' }, 'burst+=0.03');
+    tl.to(blobs.orange, { x: '0vw',  y: '8vh',  scale: 1, opacity: 0.8,  duration: 0.28, ease: 'power2.out' }, 'burst+=0.05');
     tl.to(dye, {
       '--soak-x': '45%', '--soak-y': '40%', '--soak-r': '85%',
-      opacity: 1, duration: 0.3,
+      opacity: 1, duration: 0.3, ease: 'sine.inOut',
     }, 'burst+=0.05');
 
     // --- State 2 (45% - 70%): saturate + text assembles ---
     tl.addLabel('saturate', 0.45);
-    tl.to(dye, { '--soak-r': '140%', duration: 0.2 }, 'saturate');
-    tl.to([blobs.pink, blobs.blue, blobs.orange], { opacity: 0, scale: 1.3, duration: 0.22 }, 'saturate');
+    tl.to(dye, { '--soak-r': '140%', duration: 0.2, ease: 'sine.inOut' }, 'saturate');
+    tl.to([blobs.pink, blobs.blue, blobs.orange], { opacity: 0, scale: 1.3, duration: 0.22, ease: 'sine.in' }, 'saturate');
     tl.to(bg, { opacity: 0.85, filter: 'blur(90px) saturate(1.15)', duration: 0.25 }, 'saturate');
     tl.to(label, { opacity: 0, y: -10, duration: 0.12 }, 'saturate');
     tl.to(headlineChars, {

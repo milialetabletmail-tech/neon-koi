@@ -6,6 +6,10 @@
     in index.html: .garment-photo img src, and .garment-dye mask-image) and the
     dye-soak masking in js/main.js + css/style.css keeps working unchanged,
     since it reads the alpha channel of whatever image sits at that path.
+
+    Shading is deliberately gradient-only (no strokes/hard lines) — this file
+    doubles as the dye layer's CSS mask source, so any hard edge here shows up
+    as a visible seam cutting through the color, not just the base garment.
   -->
   <defs>
     <clipPath id="teeClip">
@@ -17,6 +21,26 @@
         M262 118 Q320 178 378 118 Q320 145 262 118 Z
       "/>
     </clipPath>
+
+    <radialGradient id="chestLight" cx="46%" cy="26%" r="60%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+
+    <radialGradient id="sleeveShadeL" cx="18%" cy="38%" r="30%">
+      <stop offset="0%" stop-color="#000000" stop-opacity="0.1"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+
+    <radialGradient id="sleeveShadeR" cx="82%" cy="38%" r="30%">
+      <stop offset="0%" stop-color="#000000" stop-opacity="0.1"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+
+    <linearGradient id="hemShadow" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="55%" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.14"/>
+    </linearGradient>
   </defs>
 
   <path fill-rule="evenodd" fill="#f4eee1" d="
@@ -27,11 +51,10 @@
     M262 118 Q320 178 378 118 Q320 145 262 118 Z
   "/>
 
-  <g clip-path="url(#teeClip)" opacity="0.55">
-    <path d="M220 120 L237 400 L205 715" stroke="#c9bfa9" stroke-width="6" stroke-linecap="round" opacity="0.5"/>
-    <path d="M420 120 L403 400 L435 715" stroke="#c9bfa9" stroke-width="6" stroke-linecap="round" opacity="0.5"/>
-    <path d="M320 165 L320 715" stroke="#dcd3bf" stroke-width="3" opacity="0.4"/>
-    <path d="M165 320 L475 320" stroke="#c9bfa9" stroke-width="4" opacity="0.35"/>
-    <ellipse cx="320" cy="200" rx="140" ry="46" fill="#ffffff" opacity="0.25"/>
+  <g clip-path="url(#teeClip)">
+    <rect x="0" y="0" width="640" height="760" fill="url(#sleeveShadeL)"/>
+    <rect x="0" y="0" width="640" height="760" fill="url(#sleeveShadeR)"/>
+    <rect x="0" y="0" width="640" height="760" fill="url(#hemShadow)"/>
+    <rect x="0" y="0" width="640" height="760" fill="url(#chestLight)"/>
   </g>
 </svg>
