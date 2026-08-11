@@ -1197,41 +1197,16 @@ body.theme-gold .perk-list li:hover {
   transform: translateY(-2px);
 }
 
-/* "Look for the mark" card — was a big text glyph and one caption
-   sitting in a mostly-empty box next to the fully-fleshed-out perk
-   list. Now a real photo of the hallway with the brass plate itself
-   riding its bottom edge like a seal — the same "issued pass" motif
-   as the confirmation ticket — plus a few short fragments and an
-   ornament rule, so the card carries its own weight. */
+/* "Look for the mark" card — a few short, specific fragments and an
+   ornament rule around the pulsing glyph, so the card carries its own
+   weight next to the fully-fleshed-out perk list without needing a
+   photo of its own — one strong hero image plus confident negative
+   space reads more expensive here than photography in every slot. */
 .mark-card {
-  padding: 0;
-  overflow: hidden;
+  padding: clamp(30px, 4vw, 50px);
   text-align: center;
 }
-.mark-card-photo-frame {
-  position: relative;
-  aspect-ratio: 16 / 9;
-}
-.mark-card-photo {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-.mark-card-seal-photo {
-  position: absolute;
-  bottom: -30px;
-  left: 50%;
-  width: 76px;
-  height: 76px;
-  transform: translateX(-50%) rotate(-3deg);
-  object-fit: cover;
-  border-radius: 10px;
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.55), 0 0 0 3px rgba(8, 6, 15, 0.9);
-}
-.mark-card-body {
-  padding: 52px clamp(26px, 4vw, 46px) clamp(30px, 4vw, 50px);
-}
+.mark-card-glyph { font-size: 4rem; margin-bottom: 10px; }
 .mark-card-lede { color: var(--ink-dim); font-size: 0.95rem; margin: 0; }
 .mark-card .ornament-rule { margin: 26px 0 22px; }
 .mark-card-notes {
@@ -1290,20 +1265,11 @@ body.theme-gold .stat-num {
   text-shadow: 0 0 14px rgba(212, 175, 55, 0.4);
 }
 
-/* How It Works — a short three-step ritual between the room's perks
-   and the request form, so the page builds anticipation instead of
-   jumping straight from "here's what you get" to "fill this out."
-   Carries its own bar-interior photo instead of just the same fixed
-   hero image bleeding through everywhere on the page. */
-.ritual-section {
-  position: relative;
-  background-image:
-    linear-gradient(180deg, rgba(6, 4, 1, 0.88) 0%, rgba(10, 7, 2, 0.55) 40%, rgba(6, 4, 1, 0.92) 100%),
-    url("images/speakeasy-bar.jpg");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
+/* How It Works — a short, undecorated three-step ritual between the
+   room's perks and the request form, so the page builds anticipation
+   instead of jumping straight from "here's what you get" to "fill
+   this out." Left on the plain fixed backdrop rather than given its
+   own photo — the numerals and rule carry it. */
 .ritual-steps {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
