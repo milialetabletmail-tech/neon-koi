@@ -84,6 +84,14 @@
           const source = ctx.createBufferSource();
           source.buffer = audioBuffer;
           source.loop = true;
+          // loopEnd defaults to 0, which the spec defines as "loop to the
+          // end of the buffer" — but not every mobile browser's audio
+          // stack honors that default correctly, and getting it wrong
+          // means playback just stops dead at the end of the buffer
+          // instead of looping. Setting both bounds explicitly removes
+          // any ambiguity.
+          source.loopStart = 0;
+          source.loopEnd = audioBuffer.duration;
           source.connect(ambientGain);
           source.start();
         })
