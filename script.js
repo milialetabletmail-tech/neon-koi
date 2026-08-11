@@ -975,7 +975,7 @@
     function updateMeta() {
       const isLast = current === total - 1;
       if (countEl) {
-        countEl.textContent = `${toRoman(current + 1)} · ${toRoman(total)}`;
+        countEl.textContent = `${toRoman(current + 1)} — ${toRoman(total)}`;
       }
       if (fillEl) fillEl.style.width = `${((current + 1) / total) * 100}%`;
       if (nextBtn) {
