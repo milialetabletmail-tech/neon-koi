@@ -946,6 +946,20 @@
     const confirmation = document.querySelector("[data-speakeasy-confirmation]");
     if (!form) return;
 
+    form.setAttribute("novalidate", "");
+    form.addEventListener("input", (e) => clearFieldIfValid(e.target));
+    form.addEventListener("change", (e) => clearFieldIfValid(e.target));
+
+    // Same inline treatment as Reservations instead of reportValidity()'s
+    // native OS bubble — remove-then-reflow-then-add so the shake replays
+    // on a second failed attempt, not just the first.
+    function markFieldInvalid(wrapper, message) {
+      wrapper.classList.remove("field-invalid");
+      void wrapper.offsetWidth;
+      wrapper.classList.add("field-invalid");
+      ensureFieldError(wrapper, message);
+    }
+
     const steps = Array.from(form.querySelectorAll(".wizard-step"));
     const nextBtn = form.querySelector("[data-wizard-next]");
     const countEl = form.querySelector("[data-wizard-count]");
@@ -997,7 +1011,7 @@
     function tryAdvance() {
       const field = fieldOf(steps[current]);
       if (field && !field.checkValidity()) {
-        field.reportValidity();
+        markFieldInvalid(steps[current], field.validationMessage || "Please complete this field.");
         return;
       }
       if (current < total - 1) goToStep(current + 1);
@@ -1032,7 +1046,13 @@
     form.addEventListener("submit", (e) => {
       e.preventDefault();
       if (!form.checkValidity()) {
-        form.reportValidity();
+        // Every prior step already passed its own check in tryAdvance(),
+        // so the only field that can still be invalid here is the one
+        // currently on stage.
+        const field = fieldOf(steps[current]);
+        if (field && !field.checkValidity()) {
+          markFieldInvalid(steps[current], field.validationMessage || "Please complete this field.");
+        }
         return;
       }
       const digits = String(Math.floor(1000 + Math.random() * 9000));

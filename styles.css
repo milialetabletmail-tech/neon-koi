@@ -886,24 +886,27 @@ body.page-reservations .field label {
 body.page-reservations .field textarea { resize: vertical; min-height: 90px; }
 
 /* Invalid state: a warm highlight, a short message, and a brief shake
-   instead of the browser's own native validation bubble (see initForm's
-   customValidation path in script.js) — the reservation form calls
-   reportValidity() itself, on purpose, so stock OS chrome never has a
-   chance to pop up over a page this deliberately themed. scroll-margin
-   keeps the sticky header from covering a field scrolled into view. */
-body.page-reservations .field {
+   instead of the browser's own native validation bubble (see initForm
+   and initSpeakeasyForm in script.js — both call reportValidity()
+   themselves, on purpose, so stock OS chrome never has a chance to pop
+   up over a page this deliberately themed). Shared across Reservations
+   and the Speakeasy wizard; only the pill-group accent below is
+   Reservations-specific, since only that page has pill fields.
+   scroll-margin keeps the sticky header from covering a field scrolled
+   into view. */
+.field {
   scroll-margin-top: 96px;
 }
-body.page-reservations .field-invalid input,
-body.page-reservations .field-invalid select,
-body.page-reservations .field-invalid textarea {
+.field-invalid input,
+.field-invalid select,
+.field-invalid textarea {
   border-bottom-color: #ff8a6b;
 }
-body.page-reservations .field-invalid > label,
-body.page-reservations fieldset.field-invalid legend {
+.field-invalid > label,
+fieldset.field-invalid legend {
   color: #ff8a6b;
 }
-body.page-reservations .field-error {
+.field-error {
   margin: 2px 0 0;
   font-size: 0.76rem;
   color: #ff8a6b;
@@ -912,7 +915,7 @@ body.page-reservations .field-invalid .pill-group label {
   border-width: 1.5px;
   border-color: rgba(255, 138, 107, 0.7);
 }
-body.page-reservations .field-invalid {
+.field-invalid {
   animation: fieldInvalidShake 0.4s var(--ease);
 }
 @keyframes fieldInvalidShake {
@@ -921,7 +924,7 @@ body.page-reservations .field-invalid {
   50% { transform: translateX(-3px); }
 }
 @media (prefers-reduced-motion: reduce) {
-  body.page-reservations .field-invalid { animation: none; }
+  .field-invalid { animation: none; }
 }
 
 /* Native date chrome tinted and set in the display serif so it doesn't
@@ -1224,6 +1227,42 @@ body.theme-gold .mark-card-notes li::before {
   left: 0;
   color: var(--gold);
   font-size: 0.8rem;
+}
+
+/* Stat strip — the exclusivity claim made concrete instead of just
+   asserted in prose. Deliberately not a "3 requests this week" live
+   counter (a static site faking real-time scarcity reads as a cheap
+   trick the moment anyone checks back); these are the same facts
+   already in the room's own copy (twelve seats, one bartender, a
+   48-hour review), just given a number's worth of visual weight. */
+.stat-strip {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: clamp(32px, 6vw, 72px);
+  margin: 26px 0 4px;
+}
+.stat { text-align: center; }
+.stat-num {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.8rem, 3vw, 2.3rem);
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.stat-label {
+  display: block;
+  max-width: 13ch;
+  margin: 0 auto;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+body.theme-gold .stat-num {
+  color: var(--gold);
+  text-shadow: 0 0 14px rgba(212, 175, 55, 0.4);
 }
 
 /* How It Works — a short, undecorated three-step ritual between the
