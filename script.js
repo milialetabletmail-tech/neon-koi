@@ -18,6 +18,14 @@
     let ambientStartedAt = 0;
     let muted = localStorage.getItem("neonkoi-muted") === "true";
     const VOLUME = 0.5;
+    // "Muted" still lets a whisper of signal through instead of true
+    // silence. Some devices (Android in particular) detect a fully-silent
+    // output stream and power down the audio hardware to save battery,
+    // then have to spin it back up the moment real signal returns — and
+    // that hardware wake-up is exactly what produces a click/pop right as
+    // you unmute. Keeping the stream just barely alive avoids the
+    // stop/restart entirely, and MUTE_FLOOR is well below audible.
+    const MUTE_FLOOR = 0.0001;
 
     function ensureContext() {
       if (ctx) return;
@@ -25,7 +33,7 @@
       ctx = new Ctx();
 
       masterGain = ctx.createGain();
-      masterGain.gain.value = muted ? 0 : VOLUME;
+      masterGain.gain.value = muted ? MUTE_FLOOR : VOLUME;
       masterGain.connect(ctx.destination);
 
       ambientGain = ctx.createGain();
@@ -261,7 +269,7 @@
       ensureContext();
       muted = !muted;
       localStorage.setItem("neonkoi-muted", String(muted));
-      const target = muted ? 0 : VOLUME;
+      const target = muted ? MUTE_FLOOR : VOLUME;
       masterGain.gain.cancelScheduledValues(ctx.currentTime);
       masterGain.gain.linearRampToValueAtTime(target, ctx.currentTime + 0.4);
       return muted;
