@@ -894,6 +894,15 @@
     const popover = document.querySelector("[data-date-popover]");
     if (!input || !popover) return;
 
+    // Reparent to <body>: on the Speakeasy wizard this field lives inside
+    // a .wizard-step, whose enter/leave animation uses transform/filter —
+    // both create a new stacking context, which traps a position:absolute
+    // descendant's z-index inside it no matter how high the number is.
+    // Living at the body level and positioning from the input's own
+    // getBoundingClientRect() (see positionPopover) sidesteps that trap
+    // entirely instead of fighting it.
+    document.body.appendChild(popover);
+
     const grid = popover.querySelector("[data-date-grid]");
     const monthLabel = popover.querySelector("[data-date-month-label]");
     const prevBtn = popover.querySelector("[data-date-prev]");
@@ -947,12 +956,26 @@
       }
     }
 
+    function positionPopover() {
+      const rect = input.getBoundingClientRect();
+      popover.style.top = `${rect.bottom + 10}px`;
+      let left = rect.left;
+      const maxLeft = window.innerWidth - popover.offsetWidth - 20;
+      if (left > maxLeft) left = Math.max(20, maxLeft);
+      popover.style.left = `${left}px`;
+    }
+
     function onOutsideClick(e) {
       if (!popover.contains(e.target) && e.target !== input) close();
     }
     function onGlobalKeydown(e) {
       if (e.key === "Escape") { close(); input.focus(); }
     }
+    // Fixed positioning is computed once on open, not tracked continuously —
+    // closing on scroll (capture: true, since scroll doesn't bubble) is
+    // simpler than re-deriving it on every scroll/resize tick, and matches
+    // how most native/dropdown pickers behave anyway.
+    function onScrollAway() { close(); }
 
     function open() {
       if (!popover.hidden) return;
@@ -960,9 +983,12 @@
       viewMonth = (selected || today).getMonth();
       render();
       popover.hidden = false;
+      positionPopover();
       input.setAttribute("aria-expanded", "true");
       document.addEventListener("click", onOutsideClick);
       document.addEventListener("keydown", onGlobalKeydown);
+      window.addEventListener("scroll", onScrollAway, true);
+      window.addEventListener("resize", onScrollAway);
     }
     function close() {
       if (popover.hidden) return;
@@ -970,6 +996,8 @@
       input.setAttribute("aria-expanded", "false");
       document.removeEventListener("click", onOutsideClick);
       document.removeEventListener("keydown", onGlobalKeydown);
+      window.removeEventListener("scroll", onScrollAway, true);
+      window.removeEventListener("resize", onScrollAway);
     }
 
     prevBtn.addEventListener("click", () => {
@@ -988,7 +1016,20 @@
     input.addEventListener("keydown", (e) => {
       if (e.key === "Tab") return;
       if (e.key === "Escape") { close(); return; }
-      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(); return; }
+      if (e.key === "Enter" || e.key === " ") {
+        // A date is already picked and the calendar's already closed —
+        // let this Enter fall through to whatever the page itself does
+        // with it (implicit form submit on Reservations, advance to the
+        // next step in the Speakeasy wizard) instead of just reopening
+        // the calendar under it. stopImmediatePropagation below (the
+        // "still picking" case) is what normally blocks that same
+        // page-level Enter handling, registered on this same input.
+        if (e.key === "Enter" && input.value && popover.hidden) return;
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        open();
+        return;
+      }
       e.preventDefault();
     });
   }
