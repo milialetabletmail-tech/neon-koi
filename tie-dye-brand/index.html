@@ -52,6 +52,38 @@
                   0 0 0 8 -1.5"
           result="liquid-bleed-soft" />
       </filter>
+
+      <!-- ============================================================
+           SPIRAL FIBER-BLEED FILTER
+           Real spiral tie-dye is twisted fabric dyed while folded, so
+           color wicks outward along the twist in irregular fibrous
+           streaks and concentric crinkle rings — never a clean pie
+           chart. feTurbulence generates organic fractal noise; instead
+           of using it to fade opacity (blur), we use it as a
+           feDisplacementMap to physically warp the conic-gradient
+           wedges, ring texture and resist lines together, so every
+           boundary frays like fabric instead of tracing a perfect arc.
+           `scale` on the displacement map is animated from 0 (crisp,
+           freshly-applied dye) up to full (soaked-in, fully frayed)
+           by main.js.
+           ============================================================ -->
+      <filter id="spiral-fiber-bleed" x="-80%" y="-80%" width="260%" height="260%" color-interpolation-filters="sRGB">
+        <feTurbulence type="fractalNoise" baseFrequency="0.011 0.018" numOctaves="3" seed="7" result="fibers" />
+        <feDisplacementMap id="spiralDisplacement" in="SourceGraphic" in2="fibers" scale="0" xChannelSelector="R" yChannelSelector="G" result="frayed" />
+        <feGaussianBlur in="frayed" stdDeviation="1.1" />
+      </filter>
+
+      <!-- Fine speckle/overspray halo: high-frequency noise thresholded down
+           to sparse dots via feComponentTransfer, then clipped to the
+           element's own gradient via feComposite "in" — gives scattered
+           color flecks instead of a flat wash. -->
+      <filter id="dye-speckle" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">
+        <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="11" result="grain" />
+        <feComponentTransfer in="grain" result="speckle">
+          <feFuncA type="discrete" tableValues="0 0 0 0 0 0 0 0 1 0 1 0 1" />
+        </feComponentTransfer>
+        <feComposite in="SourceGraphic" in2="speckle" operator="in" />
+      </filter>
     </defs>
   </svg>
 
@@ -92,17 +124,19 @@
           <img src="assets/garment/tee-front-undyed.svg" alt="Undyed cotton tee, front view">
         </div>
 
-        <!-- The actual dye: gooey ink blobs, multiply-blended so they respect
-             the fabric's shading/fold texture, clipped to the garment
-             silhouette by the outer mask layer. Mask and filter are kept on
-             separate elements — combining mask-image + filter + blend-mode
-             on one node clips unreliably. -->
+        <!-- The actual dye: a twisted-spiral wedge pattern (conic-gradient),
+             fiber-frayed by an SVG turbulence displacement so boundaries
+             wick and stray like real dye on twisted cotton, plus a ring
+             layer (fold-crinkle) and a speckle layer (overspray). Mask and
+             filter/blend are kept on separate elements — combining
+             mask-image + filter + blend-mode on one node clips unreliably. -->
         <div class="dye-mask">
-          <div class="dye-liquid">
-            <div class="dye-blob dye-blob--pink"   data-dye="pink"></div>
-            <div class="dye-blob dye-blob--blue"   data-dye="blue"></div>
-            <div class="dye-blob dye-blob--orange" data-dye="orange"></div>
+          <div class="dye-liquid" data-spiral>
+            <div class="dye-spiral"></div>
+            <div class="dye-rings"></div>
+            <div class="dye-resist"></div>
           </div>
+          <div class="dye-splatter" data-splatter></div>
         </div>
       </div>
 

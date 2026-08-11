@@ -25,6 +25,7 @@
   --acid-pink-ink: #c21458;
   --electric-blue-ink: #17399f;
   --sunset-orange-ink: #b8460a;
+  --sunset-gold-ink: #a3711a;
 
   --gradient-spiral:
     radial-gradient(circle at 28% 22%, var(--acid-pink) 0%, transparent 55%),
@@ -281,27 +282,70 @@ body.preloading { overflow: hidden; height: 100vh; }
 .dye-liquid {
   position: absolute;
   inset: 0;
-  filter: url(#liquid-bleed-soft);
+  filter: url(#spiral-fiber-bleed);
   isolation: isolate;
   mix-blend-mode: multiply;
-  will-change: transform, opacity;
-}
-
-.dye-blob {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 62%;
-  height: 62%;
-  border-radius: 50%;
   opacity: 0;
-  transform: translate(-50%, -50%);
+  transform: scale(0.18) rotate(-24deg);
+  transform-origin: 50% 40%;
   will-change: transform, opacity;
 }
 
-.dye-blob--pink   { background: var(--acid-pink-ink); }
-.dye-blob--blue   { background: var(--electric-blue-ink); }
-.dye-blob--orange { background: var(--sunset-orange-ink); }
+/* Twisted-spiral wedges — the actual dye color, arranged as pie sectors
+   radiating from the twist point (slightly above true center, chest-height). */
+.dye-spiral {
+  position: absolute;
+  inset: -20%;
+  background: conic-gradient(from -18deg at 50% 40%,
+    var(--acid-pink-ink) 0deg 78deg,
+    var(--sunset-gold-ink) 78deg 150deg,
+    var(--electric-blue-ink) 150deg 224deg,
+    var(--sunset-orange-ink) 224deg 292deg,
+    var(--acid-pink-ink) 292deg 360deg);
+}
+
+/* Concentric crinkle rings from the fabric folds under the twist —
+   warped by the same displacement filter as everything else, so they
+   read as irregular fold-rings rather than perfect circles. */
+.dye-rings {
+  position: absolute;
+  inset: -20%;
+  background: repeating-radial-gradient(circle at 50% 40%,
+    rgba(255, 255, 255, 0.22) 0px,
+    rgba(255, 255, 255, 0.22) 2px,
+    transparent 3px,
+    transparent 13px);
+  mix-blend-mode: overlay;
+  opacity: 0.6;
+}
+
+/* Thin resist lines where the rubber-band ties blocked dye from reaching
+   the fabric — a handful of angles, not a uniform repeat, so it reads as
+   tied-off rather than a technical diagram. */
+.dye-resist {
+  position: absolute;
+  inset: -20%;
+  background: conic-gradient(from -18deg at 50% 40%,
+    transparent 0deg 76deg, rgba(255, 255, 255, 0.65) 76deg 79deg,
+    transparent 79deg 148deg, rgba(255, 255, 255, 0.65) 148deg 151deg,
+    transparent 151deg 222deg, rgba(255, 255, 255, 0.65) 222deg 225deg,
+    transparent 225deg 290deg, rgba(255, 255, 255, 0.65) 290deg 293deg,
+    transparent 293deg 360deg);
+  mix-blend-mode: soft-light;
+}
+
+/* Overspray halo: sparse color specks fading out from the twist point,
+   thresholded from noise via the dye-speckle filter (see index.html). */
+.dye-splatter {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 40%,
+    var(--acid-pink-ink) 0%, var(--sunset-orange-ink) 35%, transparent 68%);
+  filter: url(#dye-speckle);
+  mix-blend-mode: multiply;
+  opacity: 0;
+  will-change: opacity;
+}
 
 /* ------------------------------------------------------------
    PLACEHOLDER NEXT SECTION (stub — Manifesto block lands in Phase 2)
@@ -333,10 +377,11 @@ body.preloading { overflow: hidden; height: 100vh; }
   .colorburst-bg { opacity: 0.9; transform: none; transition: none; }
   .colorburst-headline .char { opacity: 1; transform: none; }
   .colorburst-batch { opacity: 0.85; transform: translate(-50%, 0); }
-  .dye-liquid { filter: none; }
-  .dye-blob {
+  .dye-liquid {
+    filter: none;
     opacity: 1;
-    transform: translate(-50%, -50%) scale(1.8);
+    transform: scale(1.3) rotate(0deg);
   }
+  .dye-splatter { opacity: 0.5; filter: none; }
   .burst-liquid { display: none; }
 }

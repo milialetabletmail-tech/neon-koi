@@ -85,11 +85,9 @@
       blue: document.querySelector('[data-blob="blue"]'),
       orange: document.querySelector('[data-blob="orange"]'),
     };
-    const dyeBlobs = {
-      pink: document.querySelector('[data-dye="pink"]'),
-      blue: document.querySelector('[data-dye="blue"]'),
-      orange: document.querySelector('[data-dye="orange"]'),
-    };
+    const spiral = document.querySelector('[data-spiral]');
+    const splatter = document.querySelector('[data-splatter]');
+    const spiralDisplacement = document.getElementById('spiralDisplacement');
     const garmentStage = document.querySelector('.garment-stage');
     const headlineChars = splitHeadline(document.querySelector('[data-split]'));
     const label = document.querySelector('.colorburst-label');
@@ -107,12 +105,13 @@
     gsap.set(blobs.blue,   { x: '50vw',  y: '-32vh', scale: 0.6, opacity: 0 });
     gsap.set(blobs.orange, { x: '10vw',  y: '50vh',  scale: 0.7, opacity: 0 });
 
-    // Dye blobs: contained within the garment box, so the gooey filter's
-    // effect region (and the mask it sits under) never has to clip them.
-    // "Soaking growth" comes from scaling these up, not a separate mask.
-    gsap.set(dyeBlobs.pink,   { xPercent: -50, yPercent: -50, x: '-14%', y: '-18%', scale: 0.2, opacity: 0 });
-    gsap.set(dyeBlobs.blue,   { xPercent: -50, yPercent: -50, x: '16%',  y: '-10%', scale: 0.2, opacity: 0 });
-    gsap.set(dyeBlobs.orange, { xPercent: -50, yPercent: -50, x: '2%',   y: '20%',  scale: 0.22, opacity: 0 });
+    // Spiral: starts tight/small at the twist point, unrolls outward to
+    // cover the garment. The displacement map's `scale` attribute starts
+    // at 0 (crisp, freshly-applied dye) and grows as it "soaks in," so the
+    // fibrous fraying is itself part of the reveal, not a static texture.
+    gsap.set(spiral, { opacity: 0, scale: 0.18, rotate: -24 });
+    gsap.set(splatter, { opacity: 0 });
+    gsap.set(spiralDisplacement, { attr: { scale: 0 } });
 
     gsap.set(garmentStage, { scale: 1, rotate: 0, transformOrigin: '50% 50%' });
 
@@ -137,22 +136,19 @@
     tl.to(blobs.pink,   { x: '-8vw', y: '-6vh', scale: 1, opacity: 0.8, duration: 0.28, ease: 'power2.out' }, 'burst');
     tl.to(blobs.blue,   { x: '9vw',  y: '-4vh', scale: 1, opacity: 0.8, duration: 0.28, ease: 'power2.out' }, 'burst+=0.03');
     tl.to(blobs.orange, { x: '0vw',  y: '8vh',  scale: 1, opacity: 0.75, duration: 0.28, ease: 'power2.out' }, 'burst+=0.05');
-    tl.to(dyeBlobs.pink,   { x: '-8%', y: '-10%', scale: 1, opacity: 0.95, duration: 0.3, ease: 'sine.inOut' }, 'burst+=0.05');
-    tl.to(dyeBlobs.blue,   { x: '9%',  y: '-4%',  scale: 1, opacity: 0.95, duration: 0.3, ease: 'sine.inOut' }, 'burst+=0.08');
-    tl.to(dyeBlobs.orange, { x: '0%',  y: '10%',  scale: 1.05, opacity: 0.95, duration: 0.3, ease: 'sine.inOut' }, 'burst+=0.1');
+    tl.to(spiral, { opacity: 0.95, scale: 0.55, rotate: -10, duration: 0.3, ease: 'sine.inOut' }, 'burst+=0.05');
+    tl.to(spiralDisplacement, { attr: { scale: 26 }, duration: 0.3, ease: 'sine.inOut' }, 'burst+=0.05');
 
     // --- State 2 (45% - 70%): saturate + text assembles ---
-    // Each dye blob grows large enough for full garment coverage, but stays
-    // anchored over its own region (chest-left / shoulder-right / hem)
-    // rather than converging on the same spot — if all three stack on top
-    // of each other, the blur has no nearby edge left to mix across and the
-    // top-painted color just flatly covers the rest. Keeping them spread
-    // out means their blurred borders keep meeting (and mixing) even at
-    // full coverage, which is what actually reads as tie-dye.
+    // The spiral unrolls the rest of the way to full coverage and the
+    // fiber-fraying displacement keeps increasing — the dye keeps wicking
+    // outward along the twist as it soaks in, rather than snapping straight
+    // to a static texture. Splatter lands last, like overspray settling
+    // after the main dye has spread.
     tl.addLabel('saturate', 0.45);
-    tl.to(dyeBlobs.pink,   { scale: 1.35, x: '-24%', y: '-22%', opacity: 0.88, duration: 0.22, ease: 'sine.inOut' }, 'saturate');
-    tl.to(dyeBlobs.blue,   { scale: 1.35, x: '25%',  y: '-14%', opacity: 0.88, duration: 0.22, ease: 'sine.inOut' }, 'saturate+=0.02');
-    tl.to(dyeBlobs.orange, { scale: 1.5,  x: '0%',   y: '26%',  opacity: 0.88, duration: 0.22, ease: 'sine.inOut' }, 'saturate+=0.04');
+    tl.to(spiral, { scale: 1.3, rotate: 0, duration: 0.24, ease: 'sine.inOut' }, 'saturate');
+    tl.to(spiralDisplacement, { attr: { scale: 60 }, duration: 0.26, ease: 'sine.inOut' }, 'saturate');
+    tl.to(splatter, { opacity: 0.5, duration: 0.2, ease: 'sine.out' }, 'saturate+=0.1');
     tl.to([blobs.pink, blobs.blue, blobs.orange], { opacity: 0, scale: 1.3, duration: 0.22, ease: 'sine.in' }, 'saturate');
     tl.to(bg, { opacity: 0.32, filter: 'blur(140px) saturate(0.95)', duration: 0.25 }, 'saturate');
     tl.to(label, { opacity: 0, y: -10, duration: 0.12 }, 'saturate');
