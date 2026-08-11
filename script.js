@@ -236,6 +236,41 @@
       });
     }
 
+    // A heavier "latch" sound for the Speakeasy wizard's step advance —
+    // a low thud under a short tick, like a mechanism releasing, used
+    // instead of the sitewide click tick. Reinforces "a private door,
+    // not a web form" on every step forward through the request.
+    function playStep() {
+      ensureContext();
+      if (ctx.state === "suspended") ctx.resume();
+      const now = ctx.currentTime;
+
+      const thud = ctx.createOscillator();
+      thud.type = "sine";
+      thud.frequency.setValueAtTime(160, now);
+      thud.frequency.exponentialRampToValueAtTime(90, now + 0.12);
+      const thudGain = ctx.createGain();
+      thudGain.gain.setValueAtTime(0.0001, now);
+      thudGain.gain.linearRampToValueAtTime(0.16, now + 0.008);
+      thudGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.16);
+      thud.connect(thudGain);
+      thudGain.connect(sfxGain);
+      thud.start(now);
+      thud.stop(now + 0.18);
+
+      const tick = ctx.createOscillator();
+      tick.type = "triangle";
+      tick.frequency.value = 640;
+      const tickGain = ctx.createGain();
+      tickGain.gain.setValueAtTime(0.0001, now);
+      tickGain.gain.linearRampToValueAtTime(0.06, now + 0.004);
+      tickGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.05);
+      tick.connect(tickGain);
+      tickGain.connect(sfxGain);
+      tick.start(now);
+      tick.stop(now + 0.06);
+    }
+
     function playConfirm() {
       ensureContext();
       if (ctx.state === "suspended") ctx.resume();
@@ -282,7 +317,7 @@
       startAmbient();
     }
 
-    return { firstInteraction, playClick, playSelect, playConfirm, toggleMute, isMuted, justStarted };
+    return { firstInteraction, playClick, playSelect, playStep, playConfirm, toggleMute, isMuted, justStarted };
   })();
 
   /* ---------------------------------------------------------------------
@@ -323,10 +358,12 @@
       });
     }
 
-    // Click SFX on every link/button, except the mute control itself.
+    // Click SFX on every link/button, except the mute control (has its
+    // own toggle sound via toggleMute) and the Speakeasy wizard's Next
+    // button (gets a heavier "latch" sound instead — see playStep()).
     document.addEventListener("click", (e) => {
       const target = e.target.closest("a, button");
-      if (!target || target.hasAttribute("data-sound-toggle")) return;
+      if (!target || target.hasAttribute("data-sound-toggle") || target.hasAttribute("data-wizard-next")) return;
       AudioEngine.playClick();
     });
   }
@@ -934,6 +971,7 @@
     }
 
     function goToStep(index) {
+      AudioEngine.playStep();
       const leaving = steps[current];
       leaving.classList.remove("is-active");
       leaving.classList.add("is-leaving");

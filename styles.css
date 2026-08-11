@@ -1083,59 +1083,81 @@ body.page-reservations .form-card .btn-primary:focus-visible::after { opacity: 1
 
 /* Confirmation ticket: the code reads as an issued pass, not a form
    receipt — a gradient hairline ring (same mask trick as the button,
-   so it holds up over the card's blur), a small koi seal riding the
-   top edge, and a dashed tear line under the code itself. */
-body.page-reservations .ticket {
+   so it holds up over the card's blur), a small seal riding the top
+   edge, and a dashed tear line under the code itself. Structure is
+   shared across themes (used on both Reservations and the Speakeasy);
+   only the accent color differs, set per page/theme below. */
+.ticket {
   position: relative;
   max-width: 380px;
   margin: 26px auto 0;
   padding: 30px 28px 26px;
   border-radius: 12px;
 }
-body.page-reservations .ticket::before {
+.ticket::before {
   content: "";
   position: absolute;
   inset: 0;
   padding: 1.5px;
   border-radius: inherit;
-  background: linear-gradient(120deg, var(--purple), var(--cyan));
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   pointer-events: none;
 }
-body.page-reservations .ticket-seal {
+.ticket-seal {
   position: absolute;
   top: -16px;
   left: 50%;
-  width: 46px;
   transform: translateX(-50%) rotate(-4deg);
-  filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.5));
 }
-body.page-reservations .ticket-label {
+.ticket-label {
   font-size: 0.7rem;
   letter-spacing: 0.3em;
   text-transform: uppercase;
   color: var(--ink-faint);
   margin: 6px 0 8px;
 }
-body.page-reservations .ticket .code {
+.ticket .code {
   font-family: var(--font-display);
   font-size: 1.9rem;
   letter-spacing: 0.12em;
-  color: var(--cyan);
-  text-shadow: 0 0 18px rgba(0, 212, 255, 0.5);
   margin: 0 0 16px;
   padding-bottom: 16px;
-  border-bottom: 1px dashed rgba(0, 212, 255, 0.3);
 }
-body.page-reservations .ticket-note {
+.ticket-note {
   font-size: 0.85rem;
   color: var(--ink-dim);
   margin: 0;
 }
 
+body.page-reservations .ticket::before {
+  background: linear-gradient(120deg, var(--purple), var(--cyan));
+}
+body.page-reservations .ticket-seal {
+  width: 46px;
+  filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.5));
+}
+body.page-reservations .ticket .code {
+  color: var(--cyan);
+  text-shadow: 0 0 18px rgba(0, 212, 255, 0.5);
+  border-bottom: 1px dashed rgba(0, 212, 255, 0.3);
+}
+
 /* ---------- Speakeasy / Gold theme ---------- */
+
+/* Headings shift from the site's wide tech-neon Syne to the display
+   serif used for the reservation/membership codes elsewhere — the one
+   typographic move that makes the Speakeasy read as its own register
+   (an old-world members' room) rather than "the rest of the site, but
+   gold-colored." */
+body.theme-gold h1,
+body.theme-gold h2 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
 body.theme-gold .neon-text {
   background: linear-gradient(90deg, var(--gold), #f4dd8b);
   -webkit-background-clip: text;
@@ -1170,6 +1192,69 @@ body.theme-gold .perk-list li:hover {
   border-color: rgba(212, 175, 55, 0.42);
   box-shadow: var(--glow-gold);
   transform: translateY(-2px);
+}
+
+/* "Look for the mark" card — was a big glyph and one caption sitting
+   in a mostly-empty box next to the fully-fleshed-out perk list. Adds
+   a few short, specific fragments (no new photography, just copy and
+   an ornament rule reused from the request form) so the card carries
+   its own weight instead of reading like a placeholder. */
+.mark-card {
+  padding: clamp(30px, 4vw, 50px);
+  text-align: center;
+}
+.mark-card-glyph { font-size: 4rem; margin-bottom: 10px; }
+.mark-card-lede { color: var(--ink-dim); font-size: 0.95rem; margin: 0; }
+.mark-card .ornament-rule { margin: 26px 0 22px; }
+.mark-card-notes {
+  display: grid;
+  gap: 10px;
+  text-align: left;
+}
+.mark-card-notes li {
+  position: relative;
+  padding-left: 20px;
+  color: var(--ink-dim);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+body.theme-gold .mark-card-notes li::before {
+  content: "✧";
+  position: absolute;
+  left: 0;
+  color: var(--gold);
+  font-size: 0.8rem;
+}
+
+/* How It Works — a short, undecorated three-step ritual between the
+   room's perks and the request form, so the page builds anticipation
+   instead of jumping straight from "here's what you get" to "fill
+   this out." No imagery needed: the numerals and rule do the work. */
+.ritual-steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(24px, 4vw, 48px);
+  margin-top: clamp(28px, 4vw, 44px);
+}
+@media (max-width: 720px) {
+  .ritual-steps { grid-template-columns: 1fr; gap: 32px; }
+}
+.ritual-step { text-align: center; }
+.ritual-step-num {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.1rem;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  color: var(--ink-faint);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+.ritual-step h3 { font-size: 1.15rem; margin-bottom: 0.4em; }
+.ritual-step p { color: var(--ink-dim); font-size: 0.9rem; margin: 0; }
+body.theme-gold .ritual-step-num {
+  color: var(--gold);
+  border-bottom-color: rgba(212, 175, 55, 0.3);
 }
 
 /* ---------- The Gold Room — VIP request form ---------- */
@@ -1371,28 +1456,25 @@ body.theme-gold .btn-gold:hover {
 body.theme-gold .btn-gold:hover::before { left: 130%; }
 body.theme-gold .btn-gold:active { transform: translateY(-1px) scale(0.98); }
 
-/* No more medallion ring — just the mark itself, breathing the same
-   slow gold pulse as the nav's VIP glyph. */
-body.theme-gold .confirmation-seal {
-  margin: 0 0 20px;
+/* The confirmation ticket, gold accent: same gradient-ring/dashed-tear
+   structure as Reservations' pass (see the shared .ticket rules
+   above), just carrying the room's own mark instead of a koi, and
+   breathing the same slow pulse as the nav's VIP glyph and the "Look
+   for the mark" card. */
+body.theme-gold .ticket::before {
+  background: linear-gradient(120deg, var(--gold), #f4dd8b);
+}
+body.theme-gold .ticket-seal {
   font-family: var(--font-heading);
-  font-size: 2.6rem;
+  font-size: 1.7rem;
   line-height: 1;
   color: var(--gold);
   animation: vipAccessPulse 3.6s ease-in-out infinite;
 }
-body.theme-gold .confirmation .code {
-  display: inline-block;
-  margin: 14px 0;
-  padding: 14px 30px;
-  font-family: var(--font-display);
-  font-size: 1.8rem;
-  letter-spacing: 0.15em;
+body.theme-gold .ticket .code {
   color: var(--gold);
-  background: rgba(212, 175, 55, 0.05);
-  border: 1px solid rgba(212, 175, 55, 0.35);
-  border-radius: 4px;
   text-shadow: 0 0 14px rgba(212, 175, 55, 0.55), 0 0 30px rgba(212, 175, 55, 0.3);
+  border-bottom: 1px dashed rgba(212, 175, 55, 0.35);
 }
 
 /* Neon 秘 — the same unhurried breathing glow as the nav's VIP glyph,

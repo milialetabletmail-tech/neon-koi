@@ -53,16 +53,16 @@
 <main>
   <section class="hero" style="padding-top: clamp(50px, 8vw, 90px);">
     <div class="container">
-      <span class="eyebrow">秘 · By Invitation or Discovery</span>
-      <h1>Beyond the neon,<br><span class="neon-text">a gold-lit room.</span></h1>
-      <p class="hero-sub">The Speakeasy sits behind an unmarked door on the rooftop's quietest corner. You either know someone, or you noticed something. Either way — welcome.</p>
+      <span class="eyebrow" data-reveal>秘 · By Invitation or Discovery</span>
+      <h1 data-reveal data-reveal-delay="1">Beyond the neon,<br><span class="neon-text">a gold-lit room.</span></h1>
+      <p class="hero-sub" data-reveal data-reveal-delay="2">The Speakeasy sits behind an unmarked door on the rooftop's quietest corner. You either know someone, or you noticed something. Either way — welcome.</p>
     </div>
   </section>
 
   <section>
     <div class="container">
       <div class="grid grid-2" style="align-items:center;">
-        <div>
+        <div data-reveal>
           <span class="eyebrow">The Room</span>
           <h2 class="section-title">A private hour, uninterrupted</h2>
           <p class="section-lede">Twelve seats, one bar, no windows to the street below — only the glow from within. The Speakeasy runs its own pour list, unlisted anywhere else in the lounge, mixed one guest at a time.</p>
@@ -72,9 +72,41 @@
             <li class="glass"><span class="mark">✧</span><div><strong>Curated Late Bites</strong><br><span style="color:var(--ink-dim); font-size:0.9rem;">Off-menu small plates, paired to whatever you're drinking.</span></div></li>
           </ul>
         </div>
-        <div class="glass" style="padding: clamp(30px, 4vw, 50px); text-align:center;">
-          <div style="font-size: 4rem; margin-bottom: 10px;" class="neon-text glyph-pulse">秘</div>
-          <p style="color:var(--ink-dim); font-size:0.95rem;">Look for the mark. It glows faintest where the room is quietest.</p>
+        <div class="glass mark-card" data-reveal data-reveal-delay="1">
+          <div class="neon-text glyph-pulse mark-card-glyph">秘</div>
+          <p class="mark-card-lede">Look for the mark. It glows faintest where the room is quietest.</p>
+          <div class="ornament-rule" aria-hidden="true"><span></span></div>
+          <ul class="mark-card-notes">
+            <li>The door has no handle — only a plate, worn smooth.</li>
+            <li>The candle by the host stand burns even when the room is empty.</li>
+            <li>Ask for the 秘. Never ask for "the VIP room."</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ritual-section">
+    <div class="container">
+      <div class="section-head center" data-reveal>
+        <span class="eyebrow">How It Works</span>
+        <h2 class="section-title">Three steps, no more</h2>
+      </div>
+      <div class="ritual-steps">
+        <div class="ritual-step" data-reveal>
+          <span class="ritual-step-num">I</span>
+          <h3>You Ask</h3>
+          <p>Six short questions — who you are, and when you'd like to visit.</p>
+        </div>
+        <div class="ritual-step" data-reveal data-reveal-delay="1">
+          <span class="ritual-step-num">II</span>
+          <h3>We Read</h3>
+          <p>No form letters. Every request is read personally, usually within 48 hours.</p>
+        </div>
+        <div class="ritual-step" data-reveal data-reveal-delay="2">
+          <span class="ritual-step-num">III</span>
+          <h3>You're Invited</h3>
+          <p>If the room has a seat for you, the invitation arrives by email — quietly, with your entry details.</p>
         </div>
       </div>
     </div>
@@ -82,7 +114,7 @@
 
   <section>
     <div class="container">
-      <div class="glass form-card">
+      <div class="glass form-card" data-reveal>
         <div class="section-head">
           <span class="eyebrow">Request Access</span>
           <h2 class="section-title">Ask for the room</h2>
@@ -128,12 +160,14 @@
         </form>
 
         <div class="confirmation" data-speakeasy-confirmation>
-          <div class="confirmation-seal" aria-hidden="true">秘</div>
           <span class="eyebrow">Request Received</span>
           <h3>Your request has entered the room.</h3>
-          <p style="color:var(--ink-dim);">Reference code</p>
-          <div class="code" data-code>NK-VIP-0000</div>
-          <p style="color:var(--ink-dim);">If chosen, you'll hear from us at the email provided.</p>
+          <div class="ticket">
+            <span class="ticket-seal" aria-hidden="true">秘</span>
+            <p class="ticket-label">Reference code</p>
+            <div class="code" data-code>NK-VIP-0000</div>
+            <p class="ticket-note">If chosen, you'll hear from us at the email provided.</p>
+          </div>
         </div>
       </div>
     </div>
