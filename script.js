@@ -93,50 +93,6 @@
         });
     }
 
-    function playClick() {
-      ensureContext();
-      if (ctx.state === "suspended") ctx.resume();
-      const now = ctx.currentTime;
-
-      // Soft digital UI tick: two fixed-pitch tones (no frequency sweep,
-      // so it never reads as a laser/gunshot "pew") with a quiet echo tail.
-      const echo = ctx.createDelay(0.3);
-      echo.delayTime.value = 0.085;
-      const echoFeedback = ctx.createGain();
-      echoFeedback.gain.value = 0.14;
-      echo.connect(echoFeedback);
-      echoFeedback.connect(echo);
-
-      const osc = ctx.createOscillator();
-      osc.type = "sine";
-      osc.frequency.value = 1600;
-
-      const gain = ctx.createGain();
-      gain.gain.setValueAtTime(0.0001, now);
-      gain.gain.linearRampToValueAtTime(0.065, now + 0.004);
-      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.05);
-
-      osc.connect(gain);
-      gain.connect(sfxGain);
-      gain.connect(echo);
-      echo.connect(sfxGain);
-      osc.start(now);
-      osc.stop(now + 0.06);
-
-      // A faint upper-octave sparkle so it still feels "digital", not dull.
-      const osc2 = ctx.createOscillator();
-      osc2.type = "sine";
-      osc2.frequency.value = 3200;
-      const gain2 = ctx.createGain();
-      gain2.gain.setValueAtTime(0.0001, now);
-      gain2.gain.linearRampToValueAtTime(0.02, now + 0.003);
-      gain2.gain.exponentialRampToValueAtTime(0.0001, now + 0.03);
-      osc2.connect(gain2);
-      gain2.connect(sfxGain);
-      osc2.start(now);
-      osc2.stop(now + 0.04);
-    }
-
     function playConfirm() {
       ensureContext();
       if (ctx.state === "suspended") ctx.resume();
@@ -198,7 +154,7 @@
       startAmbient();
     }
 
-    return { firstInteraction, playClick, playConfirm, toggleMute, isMuted, justStarted };
+    return { firstInteraction, playConfirm, toggleMute, isMuted, justStarted };
   })();
 
   /* ---------------------------------------------------------------------
@@ -258,12 +214,6 @@
       });
     }
 
-    // Click SFX on every link/button, except the mute control itself.
-    document.addEventListener("click", (e) => {
-      const target = e.target.closest("a, button");
-      if (!target || target.hasAttribute("data-sound-toggle")) return;
-      AudioEngine.playClick();
-    });
   }
 
   /* ---------------------------------------------------------------------
