@@ -128,6 +128,25 @@ body.page-speakeasy .bg-photo {
   background-repeat: no-repeat, no-repeat;
 }
 
+/* Reservations page: a bespoke shot (candlelit two-top on a rooftop
+   banquette, purple/cyan skyline bokeh behind) instead of the homepage's
+   reused skyline. It already carries the brand's own purple/cyan neon
+   in its background bokeh, so -- same move as cocktails/speakeasy above
+   -- this gets only a dark wash for legibility, no duotone blend fighting
+   the photo's own color. Composed with the table in the lower-left and a
+   near-black right two-thirds, which lines up with this page's layout:
+   the intro column (left) gets the atmosphere, the glass form card
+   (right) sits over the quiet dark side instead of competing with it. */
+body.page-reservations .bg-photo {
+  background-color: #08060F;
+  background-image:
+    linear-gradient(180deg, rgba(5, 3, 10, 0.82) 0%, rgba(6, 4, 12, 0.42) 38%, rgba(5, 3, 10, 0.5) 65%, rgba(5, 3, 10, 0.9) 100%),
+    url("images/reservations-bg.png");
+  background-size: cover, cover;
+  background-position: center, 32% 38%;
+  background-repeat: no-repeat, no-repeat;
+}
+
 /* A hairline text-shadow -- not a heavy drop-shadow -- keeps the hero
    copy crisp against the photo without flattening it into a solid card,
    which would fight the "photo behind glass" feel of the rest of the
@@ -927,20 +946,119 @@ body.page-reservations .field-invalid .pill-group label {
   .field-invalid { animation: none; }
 }
 
-/* Native date chrome tinted and set in the display serif so it doesn't
-   read as stock browser furniture. Guests/Time/Occasion no longer use
-   <select> at all — see the pill fields below — so there's no native
-   dropdown arrow left to theme on this page. */
-body.page-reservations .field input[type="date"] {
-  color-scheme: dark;
+/* Custom date field: the native input[type=date] chrome (the calendar
+   icon can be tinted, but the popup calendar itself is stock OS/browser
+   furniture in every engine) was the one control on this page that
+   couldn't be fully themed — it broke the illusion the moment it opened.
+   #r-date is now a plain required text input, kept off-limits to the
+   keyboard by script.js (no readonly attribute — readonly exempts an
+   input from the required constraint entirely, which would silently
+   defeat validation), that opens the glass popover calendar below it. */
+body.page-reservations .field.date-field { position: relative; }
+body.page-reservations .field input[data-date-input] {
   font-family: var(--font-display);
   font-size: 1.05rem;
   letter-spacing: 0.02em;
-}
-body.page-reservations .field input[type="date"]::-webkit-calendar-picker-indicator {
-  filter: invert(72%) sepia(87%) saturate(1974%) hue-rotate(160deg) brightness(101%) contrast(101%);
-  opacity: 0.8;
   cursor: pointer;
+  caret-color: transparent;
+}
+body.page-reservations .date-field::after {
+  content: "";
+  position: absolute;
+  right: 0.15em;
+  top: 0.85em;
+  width: 15px;
+  height: 15px;
+  pointer-events: none;
+  background: var(--cyan);
+  opacity: 0.75;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2'/%3E%3Cpath d='M16 2v4M8 2v4M3 10h18'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2'/%3E%3Cpath d='M16 2v4M8 2v4M3 10h18'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.date-popover {
+  position: absolute;
+  z-index: 30;
+  top: calc(100% + 10px);
+  left: 0;
+  width: 300px;
+  max-width: calc(100vw - 40px);
+  padding: 18px;
+  border-radius: 16px;
+  animation: datePopoverIn 0.2s var(--ease);
+}
+@keyframes datePopoverIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .date-popover { animation: none; }
+}
+.date-popover-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+.date-popover-month {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  letter-spacing: 0.03em;
+  color: var(--ink);
+}
+.date-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--border-glass);
+  background: transparent;
+  color: var(--ink-dim);
+  font-size: 1.1rem;
+  line-height: 1;
+  transition: color 0.25s var(--ease), border-color 0.25s var(--ease);
+}
+.date-nav:hover { color: var(--cyan); border-color: rgba(0, 212, 255, 0.5); }
+.date-nav:disabled { opacity: 0.3; cursor: default; }
+.date-nav:disabled:hover { color: var(--ink-dim); border-color: var(--border-glass); }
+.date-popover-weekdays,
+.date-popover-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+.date-popover-weekdays {
+  margin-bottom: 4px;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  color: var(--ink-faint);
+  text-align: center;
+}
+.date-popover-grid button {
+  aspect-ratio: 1;
+  width: 100%;
+  border: 1px solid transparent;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ink-dim);
+  font-size: 0.82rem;
+  font-family: var(--font-body);
+  transition: color 0.2s var(--ease), background 0.2s var(--ease), border-color 0.2s var(--ease);
+}
+.date-popover-grid button:not(:disabled):not(.is-outside):hover {
+  border-color: rgba(0, 212, 255, 0.5);
+  color: var(--ink);
+}
+.date-popover-grid button.is-outside { color: var(--ink-faint); opacity: 0.35; }
+.date-popover-grid button:disabled { color: var(--ink-faint); opacity: 0.25; cursor: default; }
+.date-popover-grid button.is-today { color: var(--cyan); }
+.date-popover-grid button.is-selected {
+  color: #05030a;
+  background: linear-gradient(135deg, var(--purple), var(--cyan));
+  border-color: transparent;
+  box-shadow: var(--glow-cyan);
 }
 
 /* Pill fields: Guests, Time and Occasion trade native <select>/<input
