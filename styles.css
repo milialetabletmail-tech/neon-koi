@@ -1251,6 +1251,16 @@ body.theme-gold .mark-card-notes li::before {
   line-height: 1;
   margin-bottom: 6px;
 }
+/* Cormorant Garamond's "h" carries a tall looping ascender that rides
+   noticeably higher than plain digits — fine alone, but next to "12"
+   and "1" it reads as off-level even though all three boxes measure
+   identical top/height. Shrinking just the unit letter keeps the
+   large digits the same visual size across all three stats. */
+.stat-unit {
+  font-size: 0.5em;
+  font-weight: 500;
+  vertical-align: baseline;
+}
 .stat-label {
   display: block;
   max-width: 13ch;
