@@ -15,6 +15,47 @@
 <body class="preloading">
 
   <!-- ============================================================
+       GOOEY / LIQUID-BLEED SVG FILTER
+       Classic metaball technique: blur the source, then push the
+       alpha channel through a steep threshold via feColorMatrix so
+       overlapping blurred blobs fuse into one soft, organic shape
+       instead of just showing translucent circles stacked on top
+       of each other. Referenced via `filter: url(#liquid-bleed)`.
+       ============================================================ -->
+  <svg aria-hidden="true" focusable="false" style="position:absolute; width:0; height:0; overflow:hidden;">
+    <defs>
+      <filter id="liquid-bleed" x="-150%" y="-150%" width="400%" height="400%" color-interpolation-filters="sRGB">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="18" result="blur" />
+        <feColorMatrix in="blur" mode="matrix"
+          values="1 0 0 0 0
+                  0 1 0 0 0
+                  0 0 1 0 0
+                  0 0 0 22 -10"
+          result="liquid-bleed" />
+        <feComposite in="SourceGraphic" in2="liquid-bleed" operator="atop" />
+      </filter>
+
+      <!-- On-garment variant: deliberately skips the final feComposite-atop
+           recombine step. That step is what makes the classic gooey filter
+           fuse alpha/shape while keeping each blob's original color sharp —
+           great for same-color metaballs, but it leaves a hard seam where
+           two DIFFERENT colors overlap. Here we output the blurred layer
+           directly, so pigment blurs and mixes at the overlaps too (pink
+           bleeding into blue reads as violet, not a hard pink/blue line) —
+           actual ink-bleed rather than shape-only gooeyness. -->
+      <filter id="liquid-bleed-soft" x="-150%" y="-150%" width="400%" height="400%" color-interpolation-filters="sRGB">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="26" result="blur" />
+        <feColorMatrix in="blur" mode="matrix"
+          values="1 0 0 0 0
+                  0 1 0 0 0
+                  0 0 1 0 0
+                  0 0 0 8 -1.5"
+          result="liquid-bleed-soft" />
+      </filter>
+    </defs>
+  </svg>
+
+  <!-- ============================================================
        PRELOADER
        ============================================================ -->
   <div id="preloader">
@@ -32,9 +73,12 @@
 
       <div class="colorburst-bg"></div>
 
-      <div class="burst-blob burst-blob--pink"   data-blob="pink"></div>
-      <div class="burst-blob burst-blob--blue"   data-blob="blue"></div>
-      <div class="burst-blob burst-blob--orange" data-blob="orange"></div>
+      <!-- Ambient background liquid — atmospheric color energy behind the garment -->
+      <div class="burst-liquid">
+        <div class="burst-blob burst-blob--pink"   data-blob="pink"></div>
+        <div class="burst-blob burst-blob--blue"   data-blob="blue"></div>
+        <div class="burst-blob burst-blob--orange" data-blob="orange"></div>
+      </div>
 
       <p class="colorburst-label">Every piece is one moment</p>
 
@@ -47,7 +91,19 @@
         <div class="garment-photo">
           <img src="assets/garment/tee-front-undyed.svg" alt="Undyed cotton tee, front view">
         </div>
-        <div class="garment-dye"></div>
+
+        <!-- The actual dye: gooey ink blobs, multiply-blended so they respect
+             the fabric's shading/fold texture, clipped to the garment
+             silhouette by the outer mask layer. Mask and filter are kept on
+             separate elements — combining mask-image + filter + blend-mode
+             on one node clips unreliably. -->
+        <div class="dye-mask">
+          <div class="dye-liquid">
+            <div class="dye-blob dye-blob--pink"   data-dye="pink"></div>
+            <div class="dye-blob dye-blob--blue"   data-dye="blue"></div>
+            <div class="dye-blob dye-blob--orange" data-dye="orange"></div>
+          </div>
+        </div>
       </div>
 
       <p class="colorburst-batch">Batch 014 — Sunset Spiral</p>

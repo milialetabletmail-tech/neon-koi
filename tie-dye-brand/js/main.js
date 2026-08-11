@@ -85,7 +85,11 @@
       blue: document.querySelector('[data-blob="blue"]'),
       orange: document.querySelector('[data-blob="orange"]'),
     };
-    const dye = document.querySelector('.garment-dye');
+    const dyeBlobs = {
+      pink: document.querySelector('[data-dye="pink"]'),
+      blue: document.querySelector('[data-dye="blue"]'),
+      orange: document.querySelector('[data-dye="orange"]'),
+    };
     const garmentStage = document.querySelector('.garment-stage');
     const headlineChars = splitHeadline(document.querySelector('[data-split]'));
     const label = document.querySelector('.colorburst-label');
@@ -98,12 +102,19 @@
 
     gsap.registerPlugin(ScrollTrigger);
 
-    // Blob starting positions: off-canvas, converging toward center.
-    gsap.set(blobs.pink,   { x: '-60vw', y: '-30vh', scale: 0.6, opacity: 0 });
-    gsap.set(blobs.blue,   { x: '55vw',  y: '-35vh', scale: 0.6, opacity: 0 });
-    gsap.set(blobs.orange, { x: '10vw',  y: '55vh',  scale: 0.7, opacity: 0 });
+    // Ambient blobs: off-canvas, converging toward the stage center.
+    gsap.set(blobs.pink,   { x: '-55vw', y: '-28vh', scale: 0.6, opacity: 0 });
+    gsap.set(blobs.blue,   { x: '50vw',  y: '-32vh', scale: 0.6, opacity: 0 });
+    gsap.set(blobs.orange, { x: '10vw',  y: '50vh',  scale: 0.7, opacity: 0 });
+
+    // Dye blobs: contained within the garment box, so the gooey filter's
+    // effect region (and the mask it sits under) never has to clip them.
+    // "Soaking growth" comes from scaling these up, not a separate mask.
+    gsap.set(dyeBlobs.pink,   { xPercent: -50, yPercent: -50, x: '-14%', y: '-18%', scale: 0.2, opacity: 0 });
+    gsap.set(dyeBlobs.blue,   { xPercent: -50, yPercent: -50, x: '16%',  y: '-10%', scale: 0.2, opacity: 0 });
+    gsap.set(dyeBlobs.orange, { xPercent: -50, yPercent: -50, x: '2%',   y: '20%',  scale: 0.22, opacity: 0 });
+
     gsap.set(garmentStage, { scale: 1, rotate: 0, transformOrigin: '50% 50%' });
-    gsap.set(dye, { '--soak-r': '0%' });
 
     const tl = gsap.timeline({
       defaults: { ease: 'power2.out' },
@@ -120,22 +131,30 @@
     // --- State 0 -> 1 (0% - 15%): quiet hold, undyed garment ---
     tl.addLabel('undyed', 0);
 
-    // --- State 1 (15% - 45%): burst — blobs race in, dye soaks ---
+    // --- State 1 (15% - 45%): burst — blobs race in, dye starts pooling ---
     tl.addLabel('burst', 0.15);
-    tl.to(bg, { opacity: 0.5, scale: 1, filter: 'blur(90px) saturate(1)', duration: 0.3, ease: 'sine.out' }, 'burst');
-    tl.to(blobs.pink,   { x: '-8vw', y: '-6vh', scale: 1, opacity: 0.85, duration: 0.28, ease: 'power2.out' }, 'burst');
-    tl.to(blobs.blue,   { x: '9vw',  y: '-4vh', scale: 1, opacity: 0.85, duration: 0.28, ease: 'power2.out' }, 'burst+=0.03');
-    tl.to(blobs.orange, { x: '0vw',  y: '8vh',  scale: 1, opacity: 0.8,  duration: 0.28, ease: 'power2.out' }, 'burst+=0.05');
-    tl.to(dye, {
-      '--soak-x': '45%', '--soak-y': '40%', '--soak-r': '85%',
-      opacity: 1, duration: 0.3, ease: 'sine.inOut',
-    }, 'burst+=0.05');
+    tl.to(bg, { opacity: 0.22, scale: 1, filter: 'blur(130px) saturate(0.85)', duration: 0.3, ease: 'sine.out' }, 'burst');
+    tl.to(blobs.pink,   { x: '-8vw', y: '-6vh', scale: 1, opacity: 0.8, duration: 0.28, ease: 'power2.out' }, 'burst');
+    tl.to(blobs.blue,   { x: '9vw',  y: '-4vh', scale: 1, opacity: 0.8, duration: 0.28, ease: 'power2.out' }, 'burst+=0.03');
+    tl.to(blobs.orange, { x: '0vw',  y: '8vh',  scale: 1, opacity: 0.75, duration: 0.28, ease: 'power2.out' }, 'burst+=0.05');
+    tl.to(dyeBlobs.pink,   { x: '-8%', y: '-10%', scale: 1, opacity: 0.95, duration: 0.3, ease: 'sine.inOut' }, 'burst+=0.05');
+    tl.to(dyeBlobs.blue,   { x: '9%',  y: '-4%',  scale: 1, opacity: 0.95, duration: 0.3, ease: 'sine.inOut' }, 'burst+=0.08');
+    tl.to(dyeBlobs.orange, { x: '0%',  y: '10%',  scale: 1.05, opacity: 0.95, duration: 0.3, ease: 'sine.inOut' }, 'burst+=0.1');
 
     // --- State 2 (45% - 70%): saturate + text assembles ---
+    // Each dye blob grows large enough for full garment coverage, but stays
+    // anchored over its own region (chest-left / shoulder-right / hem)
+    // rather than converging on the same spot — if all three stack on top
+    // of each other, the blur has no nearby edge left to mix across and the
+    // top-painted color just flatly covers the rest. Keeping them spread
+    // out means their blurred borders keep meeting (and mixing) even at
+    // full coverage, which is what actually reads as tie-dye.
     tl.addLabel('saturate', 0.45);
-    tl.to(dye, { '--soak-r': '140%', duration: 0.2, ease: 'sine.inOut' }, 'saturate');
+    tl.to(dyeBlobs.pink,   { scale: 1.35, x: '-24%', y: '-22%', opacity: 0.88, duration: 0.22, ease: 'sine.inOut' }, 'saturate');
+    tl.to(dyeBlobs.blue,   { scale: 1.35, x: '25%',  y: '-14%', opacity: 0.88, duration: 0.22, ease: 'sine.inOut' }, 'saturate+=0.02');
+    tl.to(dyeBlobs.orange, { scale: 1.5,  x: '0%',   y: '26%',  opacity: 0.88, duration: 0.22, ease: 'sine.inOut' }, 'saturate+=0.04');
     tl.to([blobs.pink, blobs.blue, blobs.orange], { opacity: 0, scale: 1.3, duration: 0.22, ease: 'sine.in' }, 'saturate');
-    tl.to(bg, { opacity: 0.85, filter: 'blur(90px) saturate(1.15)', duration: 0.25 }, 'saturate');
+    tl.to(bg, { opacity: 0.32, filter: 'blur(140px) saturate(0.95)', duration: 0.25 }, 'saturate');
     tl.to(label, { opacity: 0, y: -10, duration: 0.12 }, 'saturate');
     tl.to(headlineChars, {
       opacity: 1,
@@ -149,7 +168,7 @@
     // --- State 3 (70% - 100%): release into next section ---
     tl.addLabel('release', 0.7);
     tl.to(garmentStage, { scale: 0.92, rotate: -2, duration: 0.3 }, 'release');
-    tl.to(bg, { opacity: 0.4, scale: 1.15, duration: 0.3 }, 'release');
+    tl.to(bg, { opacity: 0.16, scale: 1.15, duration: 0.3 }, 'release');
     tl.to([headlineChars, batch], { opacity: 0, duration: 0.2 }, 'release+=0.1');
 
     /* --- subtle mouse-parallax on garment, state0 only --- */
