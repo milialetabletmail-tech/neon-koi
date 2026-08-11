@@ -13,16 +13,23 @@
   --void: #08060F;
   --void-soft: #0f0b1c;
   --void-card: rgba(255, 255, 255, 0.04);
-  --purple: #B14CFF;
-  --cyan: #00D4FF;
+  /* Var names kept as --purple/--cyan (touching every usage site for a
+     rename wasn't worth the diff) but the values themselves are now a
+     single warm-metal duo -- deep bronze to pale champagne -- instead of
+     the old violet/electric-cyan pair, so every gradient, glow and
+     accent built on them reads as brushed brass catching light rather
+     than a tech/SaaS neon duotone. --gold sits as the mid-tone between
+     the two, unchanged. */
+  --purple: #A6743F;
+  --cyan: #D9C27E;
   --gold: #D4AF37;
   --ink: #F4F0FF;
   --ink-dim: rgba(244, 240, 255, 0.62);
   --ink-faint: rgba(244, 240, 255, 0.38);
   --border-glass: rgba(255, 255, 255, 0.1);
-  --glow-purple: 0 0 18px rgba(177, 76, 255, 0.55), 0 0 42px rgba(177, 76, 255, 0.25);
-  --glow-cyan: 0 0 18px rgba(0, 212, 255, 0.55), 0 0 42px rgba(0, 212, 255, 0.25);
-  --glow-gold: 0 0 18px rgba(212, 175, 55, 0.55), 0 0 42px rgba(212, 175, 55, 0.25);
+  --glow-purple: 0 0 15px rgba(166, 116, 63, 0.45), 0 0 36px rgba(166, 116, 63, 0.2);
+  --glow-cyan: 0 0 15px rgba(217, 194, 126, 0.45), 0 0 36px rgba(217, 194, 126, 0.2);
+  --glow-gold: 0 0 16px rgba(212, 175, 55, 0.5), 0 0 38px rgba(212, 175, 55, 0.22);
   --font-display: "Cormorant Garamond", "Playfair Display", serif;
   --font-heading: "Syne", "Manrope", sans-serif;
   --font-body: "Manrope", "Segoe UI", sans-serif;
@@ -53,9 +60,9 @@ body {
   z-index: -2;
   background-image:
     linear-gradient(180deg, rgba(5, 3, 10, 0.9) 0%, rgba(8, 6, 20, 0.78) 45%, rgba(5, 3, 10, 0.95) 100%),
-    radial-gradient(ellipse at 20% -10%, rgba(177, 76, 255, 0.16), transparent 55%),
-    radial-gradient(ellipse at 85% 0%, rgba(0, 212, 255, 0.14), transparent 50%),
-    linear-gradient(120deg, #B14CFF 0%, #00D4FF 100%),
+    radial-gradient(ellipse at 20% -10%, rgba(166, 116, 63, 0.16), transparent 55%),
+    radial-gradient(ellipse at 85% 0%, rgba(217, 194, 126, 0.14), transparent 50%),
+    linear-gradient(120deg, #A6743F 0%, #D9C27E 100%),
     url("images/skyline-bg.jpg");
   background-size: cover;
   background-position: center center;
@@ -72,9 +79,9 @@ body {
 body.page-menu .bg-photo {
   background-image:
     linear-gradient(180deg, rgba(5, 3, 10, 0.9) 0%, rgba(8, 6, 20, 0.78) 45%, rgba(5, 3, 10, 0.95) 100%),
-    radial-gradient(ellipse at 20% -10%, rgba(177, 76, 255, 0.16), transparent 55%),
-    radial-gradient(ellipse at 85% 0%, rgba(0, 212, 255, 0.14), transparent 50%),
-    linear-gradient(120deg, #B14CFF 0%, #00D4FF 100%),
+    radial-gradient(ellipse at 20% -10%, rgba(166, 116, 63, 0.16), transparent 55%),
+    radial-gradient(ellipse at 85% 0%, rgba(217, 194, 126, 0.14), transparent 50%),
+    linear-gradient(120deg, #A6743F 0%, #D9C27E 100%),
     url("images/menu-bg.jpg");
 }
 
@@ -157,9 +164,9 @@ body.page-reservations .bg-photo {
 body.page-contact .bg-photo {
   background-image:
     linear-gradient(180deg, rgba(5, 3, 10, 0.9) 0%, rgba(8, 6, 20, 0.8) 45%, rgba(5, 3, 10, 0.95) 100%),
-    radial-gradient(ellipse at 20% -10%, rgba(177, 76, 255, 0.16), transparent 55%),
-    radial-gradient(ellipse at 85% 0%, rgba(0, 212, 255, 0.14), transparent 50%),
-    linear-gradient(120deg, #B14CFF 0%, #00D4FF 100%),
+    radial-gradient(ellipse at 20% -10%, rgba(166, 116, 63, 0.16), transparent 55%),
+    radial-gradient(ellipse at 85% 0%, rgba(217, 194, 126, 0.14), transparent 50%),
+    linear-gradient(120deg, #A6743F 0%, #D9C27E 100%),
     url("images/contact-bg.jpg");
   background-size: cover;
   background-position: center center;
@@ -180,17 +187,18 @@ a { color: inherit; text-decoration: none; }
 ul { list-style: none; margin: 0; padding: 0; }
 button { font-family: inherit; cursor: pointer; }
 
-/* Background ambient grid + koi glow layer, fixed behind all content */
+/* Ambient glow layer, fixed behind all content. This used to be a visible
+   graph-paper grid (two 1px hairline gradients tiled at 48px) -- a
+   dashboard/tech-product motif that fought the room's own warm light
+   instead of reading like it. A soft, borderless gold halo reads as
+   ambient light spilling from somewhere off-screen rather than UI
+   scaffolding. */
 .ambient-backdrop {
   position: fixed;
   inset: 0;
   z-index: -1;
-  background-image:
-    linear-gradient(rgba(177, 76, 255, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 212, 255, 0.05) 1px, transparent 1px);
-  background-size: 48px 48px;
-  mask-image: radial-gradient(ellipse at 50% 0%, black 0%, transparent 75%);
-  opacity: 0.7;
+  background-image: radial-gradient(ellipse at 50% 0%, rgba(212, 175, 55, 0.06), transparent 65%);
+  opacity: 0.8;
 }
 
 .container {
@@ -210,9 +218,13 @@ h3, h4 {
   font-family: var(--font-display);
 }
 
-/* Wide, unconventional display font for the biggest statements on the page. */
+/* The biggest statements on the page now carry the same display serif
+   as h3/h4 (previously the wide geometric Syne here, Cormorant there --
+   two different registers arguing on the same page, tech-startup next
+   to old-world). One serif voice site-wide reads as a single considered
+   hand instead of a page that changed its mind partway through. */
 h1, h2 {
-  font-family: var(--font-heading);
+  font-family: var(--font-display);
   font-weight: 700;
   letter-spacing: 0;
 }
@@ -314,7 +326,7 @@ h1, h2 {
   font-weight: 700;
   letter-spacing: 0.08em;
 }
-.logo .koi-mark { width: 34px; height: 34px; filter: drop-shadow(0 0 8px rgba(177,76,255,.8)); }
+.logo .koi-mark { width: 34px; height: 34px; filter: drop-shadow(0 0 8px rgba(166, 116, 63,.8)); }
 
 .main-nav {
   display: flex;
@@ -360,35 +372,39 @@ h1, h2 {
   gap: 12px;
 }
 
-/* Mute button */
+/* Mute button. Kept (it's a deliberate feature, not a throwaway), but
+   toned down from an app-style EQ meter to something closer to a candle
+   flicker: smaller, quieter border, a slower/shallower bar animation,
+   and a soft single-layer glow on hover instead of the brand's full
+   double-layer neon glow. */
 .sound-toggle {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 0.55em 1.1em;
+  gap: 7px;
+  padding: 0.5em 1em;
   border-radius: 999px;
-  border: 1px solid var(--border-glass);
-  background: rgba(255, 255, 255, 0.04);
-  font-size: 0.72rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+  font-size: 0.68rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--ink-dim);
+  color: var(--ink-faint);
   transition: all 0.3s var(--ease);
 }
-.sound-toggle:hover { color: var(--ink); box-shadow: var(--glow-cyan); }
+.sound-toggle:hover { color: var(--ink-dim); box-shadow: 0 0 12px rgba(217, 194, 126, 0.22); border-color: rgba(255, 255, 255, 0.16); }
 .sound-toggle .wave-icon { width: 16px; height: 16px; }
 .sound-toggle[data-muted="true"] .wave-icon .bar { opacity: 0.25; animation: none !important; }
 
 @keyframes waveBounce {
-  0%, 100% { transform: scaleY(0.4); }
-  50% { transform: scaleY(1); }
+  0%, 100% { transform: scaleY(0.55); }
+  50% { transform: scaleY(0.9); }
 }
-.wave-icon { display: flex; align-items: flex-end; gap: 2px; }
+.wave-icon { display: flex; align-items: flex-end; gap: 2px; opacity: 0.75; }
 .wave-icon .bar {
   width: 3px; height: 14px;
   background: var(--cyan);
   border-radius: 2px;
-  animation: waveBounce 0.9s ease-in-out infinite;
+  animation: waveBounce 1.8s ease-in-out infinite;
   transform-origin: bottom;
 }
 .wave-icon .bar:nth-child(2) { animation-delay: 0.15s; height: 10px; }
@@ -452,7 +468,7 @@ body.page-cocktails .section-head { margin-bottom: clamp(44px, 7vw, 72px); }
   height: 64px;
   margin: 0 auto 20px;
   opacity: 0.85;
-  filter: drop-shadow(0 0 10px rgba(0, 212, 255, 0.5));
+  filter: drop-shadow(0 0 10px rgba(217, 194, 126, 0.5));
 }
 
 /* ---------- Cards / Grids ---------- */
@@ -469,7 +485,10 @@ body.page-cocktails .section-head { margin-bottom: clamp(44px, 7vw, 72px); }
 .feature-card:hover { transform: translateY(-6px); box-shadow: var(--glow-purple); }
 
 /* Discover cards glow gently at rest in their own accent color, and bloom
-   brighter on hover — same color, just turned up. */
+   a little brighter on hover — same color, just turned up. Rest/hover
+   opacities pulled back from the original (0.3/0.75 at rest/hover) to a
+   quieter 0.2/0.5: enough to still read as lit, not enough to compete
+   with the photography or read as an RGB gaming accent. */
 .discover-grid .feature-card { position: relative; overflow: hidden; }
 .discover-grid .feature-card::before {
   content: "";
@@ -478,20 +497,20 @@ body.page-cocktails .section-head { margin-bottom: clamp(44px, 7vw, 72px); }
   height: 3px;
 }
 .discover-gold {
-  box-shadow: 0 0 15px rgba(212, 175, 55, 0.3), 0 0 34px rgba(212, 175, 55, 0.16);
+  box-shadow: 0 0 14px rgba(212, 175, 55, 0.2), 0 0 30px rgba(212, 175, 55, 0.1);
 }
 .discover-purple {
-  box-shadow: 0 0 15px rgba(177, 76, 255, 0.3), 0 0 34px rgba(177, 76, 255, 0.16);
+  box-shadow: 0 0 14px rgba(166, 116, 63, 0.2), 0 0 30px rgba(166, 116, 63, 0.1);
 }
 .discover-cyan {
-  box-shadow: 0 0 15px rgba(0, 212, 255, 0.3), 0 0 34px rgba(0, 212, 255, 0.16);
+  box-shadow: 0 0 14px rgba(217, 194, 126, 0.2), 0 0 30px rgba(217, 194, 126, 0.1);
 }
-.discover-gold::before { background: linear-gradient(90deg, transparent, var(--gold), transparent); box-shadow: 0 0 6px rgba(212, 175, 55, 0.45); }
-.discover-purple::before { background: linear-gradient(90deg, transparent, var(--purple), transparent); box-shadow: 0 0 6px rgba(177, 76, 255, 0.45); }
-.discover-cyan::before { background: linear-gradient(90deg, transparent, var(--cyan), transparent); box-shadow: 0 0 6px rgba(0, 212, 255, 0.45); }
-.discover-gold:hover { box-shadow: 0 0 30px rgba(212, 175, 55, 0.75), 0 0 70px rgba(212, 175, 55, 0.4); }
-.discover-purple:hover { box-shadow: 0 0 30px rgba(177, 76, 255, 0.75), 0 0 70px rgba(177, 76, 255, 0.4); }
-.discover-cyan:hover { box-shadow: 0 0 30px rgba(0, 212, 255, 0.75), 0 0 70px rgba(0, 212, 255, 0.4); }
+.discover-gold::before { background: linear-gradient(90deg, transparent, var(--gold), transparent); box-shadow: 0 0 6px rgba(212, 175, 55, 0.35); }
+.discover-purple::before { background: linear-gradient(90deg, transparent, var(--purple), transparent); box-shadow: 0 0 6px rgba(166, 116, 63, 0.35); }
+.discover-cyan::before { background: linear-gradient(90deg, transparent, var(--cyan), transparent); box-shadow: 0 0 6px rgba(217, 194, 126, 0.35); }
+.discover-gold:hover { box-shadow: 0 0 26px rgba(212, 175, 55, 0.5), 0 0 58px rgba(212, 175, 55, 0.22); }
+.discover-purple:hover { box-shadow: 0 0 26px rgba(166, 116, 63, 0.5), 0 0 58px rgba(166, 116, 63, 0.22); }
+.discover-cyan:hover { box-shadow: 0 0 26px rgba(217, 194, 126, 0.5), 0 0 58px rgba(217, 194, 126, 0.22); }
 .feature-card .icon { margin-bottom: 16px; }
 .feature-card .icon .neon-mini-icon,
 .feature-card .icon svg.neon-mini-icon {
@@ -607,8 +626,8 @@ body.page-cocktails .section-head { margin-bottom: clamp(44px, 7vw, 72px); }
   border-radius: 28px;
   padding: clamp(20px, 6vw, 40px);
   background:
-    radial-gradient(circle at 20% 30%, rgba(177, 76, 255, 0.22), transparent 45%),
-    radial-gradient(circle at 80% 20%, rgba(0, 212, 255, 0.2), transparent 45%),
+    radial-gradient(circle at 20% 30%, rgba(166, 116, 63, 0.22), transparent 45%),
+    radial-gradient(circle at 80% 20%, rgba(217, 194, 126, 0.2), transparent 45%),
     radial-gradient(circle at 55% 80%, rgba(212, 175, 55, 0.12), transparent 45%),
     linear-gradient(160deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01));
   border: 1px solid var(--border-glass);
@@ -813,7 +832,7 @@ body.page-cocktails .cocktail-detail {
 .field input:focus, .field select:focus, .field textarea:focus {
   outline: none;
   border-color: var(--cyan);
-  box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.15);
+  box-shadow: 0 0 0 3px rgba(217, 194, 126, 0.15);
 }
 .field textarea { resize: vertical; min-height: 100px; }
 
@@ -891,7 +910,7 @@ body.page-reservations .field select,
 body.page-reservations .field textarea {
   background: transparent;
   border: none;
-  border-bottom: 1px solid rgba(177, 76, 255, 0.32);
+  border-bottom: 1px solid rgba(166, 116, 63, 0.32);
   border-radius: 0;
   padding: 0.75em 0.1em;
   box-shadow: none;
@@ -901,7 +920,7 @@ body.page-reservations .field select:focus,
 body.page-reservations .field textarea:focus {
   outline: none;
   border-bottom-color: var(--cyan);
-  box-shadow: 0 1px 0 0 var(--cyan), 0 14px 26px -18px rgba(0, 212, 255, 0.95);
+  box-shadow: 0 1px 0 0 var(--cyan), 0 14px 26px -18px rgba(217, 194, 126, 0.95);
   color: #fff;
 }
 /* Direct-child combinator on purpose: a plain .field's own <label> sits
@@ -1061,7 +1080,7 @@ body.page-reservations .field input[data-date-input] {
   line-height: 1;
   transition: color 0.25s var(--ease), border-color 0.25s var(--ease);
 }
-.date-nav:hover { color: var(--cyan); border-color: rgba(0, 212, 255, 0.5); }
+.date-nav:hover { color: var(--cyan); border-color: rgba(217, 194, 126, 0.5); }
 .date-nav:disabled { opacity: 0.3; cursor: default; }
 .date-nav:disabled:hover { color: var(--ink-dim); border-color: var(--border-glass); }
 .date-popover-weekdays,
@@ -1089,7 +1108,7 @@ body.page-reservations .field input[data-date-input] {
   transition: color 0.2s var(--ease), background 0.2s var(--ease), border-color 0.2s var(--ease);
 }
 .date-popover-grid button:not(:disabled):not(.is-outside):hover {
-  border-color: rgba(0, 212, 255, 0.5);
+  border-color: rgba(217, 194, 126, 0.5);
   color: var(--ink);
 }
 .date-popover-grid button.is-outside { color: var(--ink-faint); opacity: 0.35; }
@@ -1138,7 +1157,7 @@ body.page-reservations .pill-group label {
   align-items: center;
   padding: 0.55em 1.25em;
   border-radius: 999px;
-  border: 1px solid rgba(0, 212, 255, 0.25);
+  border: 1px solid rgba(217, 194, 126, 0.25);
   background: rgba(255, 255, 255, 0.02);
   color: var(--ink-dim);
   font-size: 0.82rem;
@@ -1147,7 +1166,7 @@ body.page-reservations .pill-group label {
   transition: color 0.3s var(--ease), border-color 0.3s var(--ease), background 0.3s var(--ease), box-shadow 0.3s var(--ease), transform 0.3s var(--ease);
 }
 body.page-reservations .pill-group label:hover {
-  border-color: rgba(0, 212, 255, 0.6);
+  border-color: rgba(217, 194, 126, 0.6);
   color: var(--ink);
 }
 body.page-reservations .pill-group input[type="radio"]:checked + label {
@@ -1194,7 +1213,7 @@ body.page-reservations .preview-part {
 }
 body.page-reservations .preview-part.is-filled {
   color: var(--ink);
-  text-shadow: 0 0 16px rgba(0, 212, 255, 0.35);
+  text-shadow: 0 0 16px rgba(217, 194, 126, 0.35);
 }
 
 /* Ghost button: a hairline purple-to-cyan gradient outline (cut with a
@@ -1298,12 +1317,12 @@ body.page-reservations .ticket::before {
 }
 body.page-reservations .ticket-seal {
   width: 46px;
-  filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.5));
+  filter: drop-shadow(0 0 8px rgba(217, 194, 126, 0.5));
 }
 body.page-reservations .ticket .code {
   color: var(--cyan);
-  text-shadow: 0 0 18px rgba(0, 212, 255, 0.5);
-  border-bottom: 1px dashed rgba(0, 212, 255, 0.3);
+  text-shadow: 0 0 18px rgba(217, 194, 126, 0.5);
+  border-bottom: 1px dashed rgba(217, 194, 126, 0.3);
 }
 
 /* ---------- Contact ---------- */
@@ -1329,11 +1348,11 @@ body.page-reservations .ticket .code {
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid var(--border-glass);
 }
-.contact-info-icon svg { width: 20px; height: 20px; filter: drop-shadow(0 0 6px rgba(177, 76, 255, 0.55)); }
+.contact-info-icon svg { width: 20px; height: 20px; filter: drop-shadow(0 0 6px rgba(166, 116, 63, 0.55)); }
 .contact-info-card h3 { font-size: 1.15rem; margin-bottom: 0.3em; }
 
 .contact-link { transition: color 0.25s var(--ease), text-shadow 0.25s var(--ease); }
-.contact-link:hover, .contact-link:focus-visible { color: var(--cyan); text-shadow: 0 0 12px rgba(0, 212, 255, 0.4); }
+.contact-link:hover, .contact-link:focus-visible { color: var(--cyan); text-shadow: 0 0 12px rgba(217, 194, 126, 0.4); }
 
 /* Location panel: a real photo standing in for the emoji-pin placeholder
    this used to be, treated the same way the cocktail detail card treats
@@ -1364,7 +1383,7 @@ body.page-reservations .ticket .code {
   gap: 10px;
   z-index: 1;
 }
-.contact-map-badge svg { flex: none; width: 22px; height: 22px; filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.6)); }
+.contact-map-badge svg { flex: none; width: 22px; height: 22px; filter: drop-shadow(0 0 8px rgba(217, 194, 126, 0.6)); }
 .contact-map-badge span {
   font-size: 0.76rem;
   letter-spacing: 0.12em;
@@ -1380,7 +1399,7 @@ body.page-contact .field input,
 body.page-contact .field textarea {
   background: transparent;
   border: none;
-  border-bottom: 1px solid rgba(177, 76, 255, 0.32);
+  border-bottom: 1px solid rgba(166, 116, 63, 0.32);
   border-radius: 0;
   padding: 0.75em 0.1em;
   box-shadow: none;
@@ -1389,7 +1408,7 @@ body.page-contact .field input:focus,
 body.page-contact .field textarea:focus {
   outline: none;
   border-bottom-color: var(--cyan);
-  box-shadow: 0 1px 0 0 var(--cyan), 0 14px 26px -18px rgba(0, 212, 255, 0.95);
+  box-shadow: 0 1px 0 0 var(--cyan), 0 14px 26px -18px rgba(217, 194, 126, 0.95);
   color: #fff;
 }
 body.page-contact .field:focus-within > label {
@@ -1405,14 +1424,14 @@ body.page-contact .field label {
    accent here so it doesn't drop an unrelated gold note into an
    otherwise cyan-accented page. */
 body.page-contact .ornament-rule::before {
-  background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.35));
+  background: linear-gradient(90deg, transparent, rgba(217, 194, 126, 0.35));
 }
 body.page-contact .ornament-rule::after {
-  background: linear-gradient(90deg, rgba(0, 212, 255, 0.35), transparent);
+  background: linear-gradient(90deg, rgba(217, 194, 126, 0.35), transparent);
 }
 body.page-contact .ornament-rule span {
   background: var(--cyan);
-  box-shadow: 0 0 8px rgba(0, 212, 255, 0.7);
+  box-shadow: 0 0 8px rgba(217, 194, 126, 0.7);
 }
 
 body.page-contact .ticket::before {
@@ -1420,24 +1439,22 @@ body.page-contact .ticket::before {
 }
 body.page-contact .ticket-seal {
   width: 46px;
-  filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.5));
+  filter: drop-shadow(0 0 8px rgba(217, 194, 126, 0.5));
 }
 body.page-contact .ticket .code {
   color: var(--cyan);
-  text-shadow: 0 0 18px rgba(0, 212, 255, 0.5);
-  border-bottom: 1px dashed rgba(0, 212, 255, 0.3);
+  text-shadow: 0 0 18px rgba(217, 194, 126, 0.5);
+  border-bottom: 1px dashed rgba(217, 194, 126, 0.3);
 }
 
 /* ---------- Speakeasy / Gold theme ---------- */
 
-/* Headings shift from the site's wide tech-neon Syne to the display
-   serif used for the reservation/membership codes elsewhere — the one
-   typographic move that makes the Speakeasy read as its own register
-   (an old-world members' room) rather than "the rest of the site, but
-   gold-colored." */
+/* h1/h2 already inherit the shared display serif now (see the base rule
+   above); the gold room just eases off its weight and tracking a touch
+   further, for a slightly quieter, more engraved-invitation feel than
+   the rest of the site's headlines. */
 body.theme-gold h1,
 body.theme-gold h2 {
-  font-family: var(--font-display);
   font-weight: 600;
   letter-spacing: 0.01em;
 }
@@ -1452,14 +1469,9 @@ body.theme-gold .main-nav a::after { background: linear-gradient(90deg, var(--go
 body.theme-gold .feature-card:hover { box-shadow: var(--glow-gold); }
 body.theme-gold .footer-col h4 { color: var(--gold); }
 body.theme-gold .footer-col a:hover { color: var(--gold); }
-body.theme-gold .sound-toggle { border-color: rgba(212, 175, 55, 0.28); }
-body.theme-gold .sound-toggle:hover { border-color: rgba(212, 175, 55, 0.6); box-shadow: var(--glow-gold); }
+body.theme-gold .sound-toggle { border-color: rgba(212, 175, 55, 0.22); }
+body.theme-gold .sound-toggle:hover { border-color: rgba(212, 175, 55, 0.5); box-shadow: 0 0 12px rgba(212, 175, 55, 0.25); }
 body.theme-gold .wave-icon .bar { background: var(--gold); }
-body.theme-gold .ambient-backdrop {
-  background-image:
-    linear-gradient(rgba(212, 175, 55, 0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(212, 175, 55, 0.06) 1px, transparent 1px);
-}
 .perk-list { display: grid; gap: 16px; margin: 30px 0; }
 .perk-list li {
   display: flex;
@@ -1946,7 +1958,7 @@ body.theme-gold .ticket .code {
   .main-nav a.vip-access-btn { width: fit-content; padding: 6px 8px; margin: -6px -8px 0; }
 }
 
-::selection { background: rgba(177, 76, 255, 0.4); color: #fff; }
+::selection { background: rgba(166, 116, 63, 0.4); color: #fff; }
 
 .neon-mini-icon {
     display: block !important;
@@ -2036,7 +2048,7 @@ body.theme-gold .ticket .code {
   height: 560px;
   margin: -280px 0 0 -280px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(177, 76, 255, 0.16), rgba(0, 212, 255, 0.1) 45%, transparent 72%);
+  background: radial-gradient(circle, rgba(166, 116, 63, 0.16), rgba(217, 194, 126, 0.1) 45%, transparent 72%);
   z-index: 1;
   pointer-events: none;
   mix-blend-mode: screen;
