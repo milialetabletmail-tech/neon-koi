@@ -986,6 +986,16 @@ body.page-reservations .date-field::after {
   padding: 18px;
   border-radius: 16px;
   animation: datePopoverIn 0.2s var(--ease);
+  /* Overrides .glass's ~6%-white translucency: that reading works over
+     the page's background photo, but this popover floats over other
+     foreground controls (the Time/Occasion pills below it), which
+     ghosted through the blur instead of reading as a proper menu.
+     Solid and near-opaque, same move as the mobile nav dropdown. */
+  background: linear-gradient(165deg, #171025 0%, #0a0712 100%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 @keyframes datePopoverIn {
   from { opacity: 0; transform: translateY(-6px); }
