@@ -865,20 +865,173 @@
     }
 
     function updateDate() {
+      // #r-date's value is already the friendly "Sat, Aug 15" string set
+      // by initDatePicker() below, not a raw ISO date — no reparsing needed.
       const dateInput = document.getElementById("r-date");
-      if (dateInput && dateInput.value) {
-        const parsed = new Date(`${dateInput.value}T00:00:00`);
-        const formatted = parsed.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
-        setPart(dateOut, formatted, true);
-      } else {
-        setPart(dateOut, "date", false);
-      }
+      const hasValue = !!(dateInput && dateInput.value);
+      setPart(dateOut, hasValue ? dateInput.value : "date", hasValue);
     }
 
     document.querySelectorAll('input[name="guests"]').forEach((el) => el.addEventListener("change", updateGuests));
     document.querySelectorAll('input[name="time"]').forEach((el) => el.addEventListener("change", updateTime));
     const dateInput = document.getElementById("r-date");
     if (dateInput) dateInput.addEventListener("input", updateDate);
+  }
+
+  /* ---------------------------------------------------------------------
+     Reservations — custom date picker
+     Replaces input[type=date]: its calendar-icon indicator could be
+     themed, but the popup calendar it opens is stock OS/browser chrome
+     in every engine, and was the one control on the page that broke the
+     illusion. #r-date stays a real required text input (not readonly —
+     readonly exempts a control from the required constraint entirely) so
+     the existing generic required/:invalid handling in initForm() keeps
+     working untouched; this just blocks the keyboard and drives .value
+     from a themed popover instead.
+  --------------------------------------------------------------------- */
+  function initDatePicker() {
+    const input = document.querySelector("[data-date-input]");
+    const popover = document.querySelector("[data-date-popover]");
+    if (!input || !popover) return;
+
+    // Reparent to <body>: on the Speakeasy wizard this field lives inside
+    // a .wizard-step, whose enter/leave animation uses transform/filter —
+    // both create a new stacking context, which traps a position:absolute
+    // descendant's z-index inside it no matter how high the number is.
+    // Living at the body level and positioning from the input's own
+    // getBoundingClientRect() (see positionPopover) sidesteps that trap
+    // entirely instead of fighting it.
+    document.body.appendChild(popover);
+
+    const grid = popover.querySelector("[data-date-grid]");
+    const monthLabel = popover.querySelector("[data-date-month-label]");
+    const prevBtn = popover.querySelector("[data-date-prev]");
+    const nextBtn = popover.querySelector("[data-date-next]");
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    let selected = null;
+    let viewYear = today.getFullYear();
+    let viewMonth = today.getMonth();
+
+    const pad = (n) => String(n).padStart(2, "0");
+    const isoOf = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+    const displayOf = (d) => d.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
+    const sameDay = (a, b) => !!a && !!b && a.getTime() === b.getTime();
+
+    function render() {
+      monthLabel.textContent = new Date(viewYear, viewMonth, 1).toLocaleDateString("en-US", { month: "long", year: "numeric" });
+      prevBtn.disabled = viewYear === today.getFullYear() && viewMonth === today.getMonth();
+
+      grid.innerHTML = "";
+      const startDay = new Date(viewYear, viewMonth, 1).getDay();
+      const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
+
+      for (let i = 0; i < 42; i++) {
+        const dayNum = i - startDay + 1;
+        const cellDate = new Date(viewYear, viewMonth, dayNum);
+        const outside = dayNum < 1 || dayNum > daysInMonth;
+        const disabled = cellDate.getTime() < today.getTime();
+
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.textContent = cellDate.getDate();
+        if (outside) btn.classList.add("is-outside");
+        if (sameDay(cellDate, today)) btn.classList.add("is-today");
+        if (sameDay(cellDate, selected)) btn.classList.add("is-selected");
+        if (disabled) {
+          btn.disabled = true;
+        } else {
+          btn.addEventListener("click", () => {
+            selected = cellDate;
+            input.value = displayOf(cellDate);
+            input.dataset.iso = isoOf(cellDate);
+            close();
+            input.dispatchEvent(new Event("input", { bubbles: true }));
+            input.dispatchEvent(new Event("change", { bubbles: true }));
+            AudioEngine.playSelect();
+          });
+        }
+        grid.appendChild(btn);
+      }
+    }
+
+    function positionPopover() {
+      const rect = input.getBoundingClientRect();
+      popover.style.top = `${rect.bottom + 10}px`;
+      let left = rect.left;
+      const maxLeft = window.innerWidth - popover.offsetWidth - 20;
+      if (left > maxLeft) left = Math.max(20, maxLeft);
+      popover.style.left = `${left}px`;
+    }
+
+    function onOutsideClick(e) {
+      if (!popover.contains(e.target) && e.target !== input) close();
+    }
+    function onGlobalKeydown(e) {
+      if (e.key === "Escape") { close(); input.focus(); }
+    }
+    // Fixed positioning is computed once on open, not tracked continuously —
+    // closing on scroll (capture: true, since scroll doesn't bubble) is
+    // simpler than re-deriving it on every scroll/resize tick, and matches
+    // how most native/dropdown pickers behave anyway.
+    function onScrollAway() { close(); }
+
+    function open() {
+      if (!popover.hidden) return;
+      viewYear = (selected || today).getFullYear();
+      viewMonth = (selected || today).getMonth();
+      render();
+      popover.hidden = false;
+      positionPopover();
+      input.setAttribute("aria-expanded", "true");
+      document.addEventListener("click", onOutsideClick);
+      document.addEventListener("keydown", onGlobalKeydown);
+      window.addEventListener("scroll", onScrollAway, true);
+      window.addEventListener("resize", onScrollAway);
+    }
+    function close() {
+      if (popover.hidden) return;
+      popover.hidden = true;
+      input.setAttribute("aria-expanded", "false");
+      document.removeEventListener("click", onOutsideClick);
+      document.removeEventListener("keydown", onGlobalKeydown);
+      window.removeEventListener("scroll", onScrollAway, true);
+      window.removeEventListener("resize", onScrollAway);
+    }
+
+    prevBtn.addEventListener("click", () => {
+      viewMonth -= 1;
+      if (viewMonth < 0) { viewMonth = 11; viewYear -= 1; }
+      render();
+    });
+    nextBtn.addEventListener("click", () => {
+      viewMonth += 1;
+      if (viewMonth > 11) { viewMonth = 0; viewYear += 1; }
+      render();
+    });
+
+    input.addEventListener("click", () => (popover.hidden ? open() : close()));
+    input.addEventListener("paste", (e) => e.preventDefault());
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Tab") return;
+      if (e.key === "Escape") { close(); return; }
+      if (e.key === "Enter" || e.key === " ") {
+        // A date is already picked and the calendar's already closed —
+        // let this Enter fall through to whatever the page itself does
+        // with it (implicit form submit on Reservations, advance to the
+        // next step in the Speakeasy wizard) instead of just reopening
+        // the calendar under it. stopImmediatePropagation below (the
+        // "still picking" case) is what normally blocks that same
+        // page-level Enter handling, registered on this same input.
+        if (e.key === "Enter" && input.value && popover.hidden) return;
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        open();
+        return;
+      }
+      e.preventDefault();
+    });
   }
 
   /* ---------------------------------------------------------------------
@@ -1097,11 +1250,12 @@
     initMenuTabs();
     initCocktailMap();
     initForm("[data-reservation-form]", "[data-reservation-confirmation]", "NK-RES", true, true);
+    initDatePicker();
     initReservationPreview();
     initReservationsParallax();
     initPillSound();
     initSpeakeasyForm();
-    initForm("[data-contact-form]", "[data-contact-confirmation]", "NK-MSG");
+    initForm("[data-contact-form]", "[data-contact-confirmation]", "NK-MSG", true, true);
 
     // Footer year
     document.querySelectorAll("[data-year]").forEach((el) => {

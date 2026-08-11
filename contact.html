@@ -15,7 +15,7 @@
 <noscript><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet"></noscript>
 <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body class="page-contact">
 <div class="bg-photo"></div>
 <div class="ambient-backdrop"></div>
 
@@ -54,49 +54,98 @@
   <section style="padding-top: clamp(50px, 8vw, 90px);">
     <div class="container">
       <div class="section-head center">
-        <span class="eyebrow">Contact</span>
-        <h1 class="section-title">Find us on the rooftop</h1>
-        <p class="section-lede">Questions about private events, press, or the menu? Reach out below, or come find the glow yourself.</p>
+        <span class="eyebrow" data-reveal>Contact</span>
+        <h1 class="section-title" data-reveal data-reveal-delay="1">Find us on the rooftop</h1>
+        <p class="section-lede" data-reveal data-reveal-delay="2">Questions about private events, press, or the menu? Reach out below, or come find the glow yourself.</p>
       </div>
 
       <div class="grid grid-2">
-        <div>
-          <div class="glass" style="padding: 34px; margin-bottom: 24px;">
-            <h3>Location</h3>
-            <p style="color:var(--ink-dim);">88 Skyline Avenue<br>Rooftop Level 42<br>Neo Harbor District</p>
+        <div class="contact-info-list" data-reveal data-reveal-delay="1">
+          <div class="glass contact-info-card">
+            <div class="contact-info-icon">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <defs>
+                  <linearGradient id="contactIconPin" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#B14CFF"/>
+                    <stop offset="100%" stop-color="#00D4FF"/>
+                  </linearGradient>
+                </defs>
+                <path d="M12 21s7-7.2 7-12a7 7 0 1 0-14 0c0 4.8 7 12 7 12z" stroke="url(#contactIconPin)" stroke-width="1.5" stroke-linejoin="round"/>
+                <circle cx="12" cy="9" r="2.5" stroke="url(#contactIconPin)" stroke-width="1.5"/>
+              </svg>
+            </div>
+            <div>
+              <h3>Location</h3>
+              <p style="color:var(--ink-dim);">88 Skyline Avenue<br>Rooftop Level 42<br>Neo Harbor District</p>
+            </div>
           </div>
-          <div class="glass" style="padding: 34px; margin-bottom: 24px;">
-            <h3>Hours</h3>
-            <p style="color:var(--ink-dim);">Tuesday – Sunday · 6 PM – 2 AM<br>Closed Mondays</p>
+          <div class="glass contact-info-card">
+            <div class="contact-info-icon">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <defs>
+                  <linearGradient id="contactIconClock" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#B14CFF"/>
+                    <stop offset="100%" stop-color="#00D4FF"/>
+                  </linearGradient>
+                </defs>
+                <circle cx="12" cy="12" r="8.5" stroke="url(#contactIconClock)" stroke-width="1.5"/>
+                <path d="M12 7.5V12l3.2 2" stroke="url(#contactIconClock)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div>
+              <h3>Hours</h3>
+              <p style="color:var(--ink-dim);">Tuesday – Sunday · 6 PM – 2 AM<br>Closed Mondays</p>
+            </div>
           </div>
-          <div class="glass" style="padding: 34px;">
-            <h3>Reach Us</h3>
-            <p style="color:var(--ink-dim);">reservations@neonkoi.example<br>+1 (555) 010-2042</p>
+          <div class="glass contact-info-card">
+            <div class="contact-info-icon">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <defs>
+                  <linearGradient id="contactIconMail" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#B14CFF"/>
+                    <stop offset="100%" stop-color="#00D4FF"/>
+                  </linearGradient>
+                </defs>
+                <rect x="3.25" y="5.5" width="17.5" height="13" rx="2" stroke="url(#contactIconMail)" stroke-width="1.5"/>
+                <path d="M4 7l8 5.5L20 7" stroke="url(#contactIconMail)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div>
+              <h3>Reach Us</h3>
+              <p style="color:var(--ink-dim);">
+                <a href="mailto:reservations@neonkoi.example" class="contact-link">reservations@neonkoi.example</a><br>
+                <a href="tel:+15550102042" class="contact-link">+1 (555) 010-2042</a>
+              </p>
+            </div>
           </div>
         </div>
 
-        <div class="glass" style="position:relative; min-height: 340px; overflow:hidden; padding: 0;">
-          <div style="position:absolute; inset:0; background:
-              radial-gradient(circle at 30% 30%, rgba(177,76,255,.3), transparent 45%),
-              radial-gradient(circle at 70% 60%, rgba(0,212,255,.28), transparent 45%),
-              linear-gradient(160deg, rgba(255,255,255,.05), rgba(255,255,255,.01));
-              background-image:
-                linear-gradient(rgba(255,255,255,.06) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,.06) 1px, transparent 1px);
-              background-size: 32px 32px;">
+        <div class="glass contact-map" data-reveal data-reveal-delay="2">
+          <div class="contact-map-media">
+            <img src="images/contact-location.jpg" alt="Neon Koi's rooftop entrance glowing above the city at night" loading="lazy">
           </div>
-          <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); text-align:center;">
-            <div style="font-size:2.4rem;" class="neon-text">📍</div>
-            <p style="color:var(--ink-dim); font-size:0.85rem; letter-spacing:0.1em; text-transform:uppercase;">Rooftop Level 42</p>
+          <div class="contact-map-badge">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <defs>
+                <linearGradient id="contactMapPin" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#B14CFF"/>
+                  <stop offset="100%" stop-color="#00D4FF"/>
+                </linearGradient>
+              </defs>
+              <path d="M12 21s7-7.2 7-12a7 7 0 1 0-14 0c0 4.8 7 12 7 12z" stroke="url(#contactMapPin)" stroke-width="1.6" stroke-linejoin="round"/>
+              <circle cx="12" cy="9" r="2.5" stroke="url(#contactMapPin)" stroke-width="1.6"/>
+            </svg>
+            <span>Rooftop Level 42 · Neo Harbor District</span>
           </div>
         </div>
       </div>
 
-      <div class="glass form-card" style="margin-top: 40px;">
+      <div class="glass form-card" style="margin-top: 40px;" data-reveal data-reveal-delay="3">
         <div class="section-head">
           <span class="eyebrow">Send a Message</span>
           <h2 class="section-title">Say hello</h2>
         </div>
+        <div class="ornament-rule"><span></span></div>
         <form data-contact-form novalidate>
           <div class="form-grid">
             <div class="field">
@@ -117,14 +166,26 @@
             </div>
           </div>
           <button type="submit" class="btn btn-primary">Send Message</button>
+          <p class="form-note">We read every message and reply within one business day.</p>
         </form>
 
         <div class="confirmation" data-contact-confirmation>
           <span class="eyebrow">Message Sent</span>
           <h3>Thank you for reaching out.</h3>
-          <p style="color:var(--ink-dim);">Reference code</p>
-          <div class="code" data-code>NK-MSG-0000</div>
-          <p style="color:var(--ink-dim);">We'll get back to you shortly.</p>
+          <div class="ticket">
+            <svg class="ticket-seal" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <defs>
+                <linearGradient id="koiGradContactTicket" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#B14CFF"/>
+                  <stop offset="100%" stop-color="#00D4FF"/>
+                </linearGradient>
+              </defs>
+              <path d="M10,50 C40,10 90,10 120,35 C140,15 170,20 190,10 C180,30 165,40 165,40 C180,45 190,60 190,60 C170,55 145,55 125,65 C95,90 40,90 10,50 Z" fill="none" stroke="url(#koiGradContactTicket)" stroke-width="4"/>
+            </svg>
+            <p class="ticket-label">Reference code</p>
+            <div class="code" data-code>NK-MSG-0000</div>
+            <p class="ticket-note">We'll get back to you shortly.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -151,8 +212,8 @@
       </div>
       <div class="footer-col">
         <h4>Connect</h4>
-        <a href="#">Instagram</a>
-        <a href="#">Reservations Line</a>
+        <a href="https://www.instagram.com/neonkoi.rooftop/" target="_blank" rel="noopener">Instagram</a>
+        <a href="tel:+15550102042">Reservations Line</a>
       </div>
     </div>
     <div class="footer-bottom">

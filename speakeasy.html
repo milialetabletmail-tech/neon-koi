@@ -147,9 +147,20 @@
               <label for="ve-phone">Phone</label>
               <input id="ve-phone" name="phone" type="tel" required placeholder="+1 (555) 000-0000">
             </div>
-            <div class="field wizard-step" data-step-index="3" hidden>
+            <div class="field wizard-step date-field" data-step-index="3" hidden>
               <label for="ve-date">Preferred Date</label>
-              <input id="ve-date" name="date" type="date" required>
+              <input id="ve-date" name="date" type="text" required autocomplete="off" inputmode="none" placeholder="Select a date" data-date-input aria-haspopup="dialog" aria-expanded="false">
+              <div class="date-popover glass" data-date-popover hidden role="dialog" aria-label="Choose a date">
+                <div class="date-popover-head">
+                  <button type="button" class="date-nav" data-date-prev aria-label="Previous month">‹</button>
+                  <span class="date-popover-month" data-date-month-label></span>
+                  <button type="button" class="date-nav" data-date-next aria-label="Next month">›</button>
+                </div>
+                <div class="date-popover-weekdays" aria-hidden="true">
+                  <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
+                </div>
+                <div class="date-popover-grid" data-date-grid></div>
+              </div>
             </div>
             <div class="field wizard-step" data-step-index="4" hidden>
               <label for="ve-referral">How did you hear about the Speakeasy?</label>
@@ -199,8 +210,8 @@
       </div>
       <div class="footer-col">
         <h4>Connect</h4>
-        <a href="#">Instagram</a>
-        <a href="#">Reservations Line</a>
+        <a href="https://www.instagram.com/neonkoi.rooftop/" target="_blank" rel="noopener">Instagram</a>
+        <a href="tel:+15550102042">Reservations Line</a>
       </div>
     </div>
     <div class="footer-bottom">
