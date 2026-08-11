@@ -787,7 +787,8 @@ body.page-cocktails .cocktail-detail {
 }
 .confirmation.show { display: block; animation: fadeUp 0.6s var(--ease); }
 .confirmation .code {
-  font-family: var(--font-display);
+  font-family: var(--font-body);
+  font-weight: 700;
   font-size: 1.6rem;
   color: var(--cyan);
   letter-spacing: 0.1em;
@@ -1122,8 +1123,9 @@ body.page-reservations .form-card .btn-primary:focus-visible::after { opacity: 1
   margin: 6px 0 8px;
 }
 .ticket .code {
-  font-family: var(--font-display);
-  font-size: 1.9rem;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 1.7rem;
   letter-spacing: 0.12em;
   margin: 0 0 16px;
   padding-bottom: 16px;
@@ -1245,8 +1247,8 @@ body.theme-gold .mark-card-notes li::before {
 .stat { text-align: center; }
 .stat-num {
   display: block;
-  font-family: var(--font-display);
-  font-weight: 600;
+  font-family: var(--font-body);
+  font-weight: 700;
   font-size: clamp(1.8rem, 3vw, 2.3rem);
   line-height: 1;
   margin-bottom: 6px;
@@ -1292,9 +1294,10 @@ body.theme-gold .stat-num {
 .ritual-step { text-align: center; }
 .ritual-step-num {
   display: inline-block;
-  font-family: var(--font-display);
-  font-style: italic;
-  font-size: 1.1rem;
+  font-family: var(--font-body);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  font-size: 0.95rem;
   margin-bottom: 14px;
   padding-bottom: 10px;
   color: var(--ink-faint);
@@ -1440,9 +1443,9 @@ body.theme-gold .field input[type="date"]::-webkit-calendar-picker-indicator {
   color: var(--ink-faint);
 }
 .wizard-step-count {
-  font-family: var(--font-display);
-  font-style: italic;
-  font-size: 0.85rem;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.78rem;
   letter-spacing: 0.22em;
   color: rgba(212, 175, 55, 0.55);
 }
