@@ -1251,15 +1251,6 @@ body.theme-gold .mark-card-notes li::before {
   line-height: 1;
   margin-bottom: 6px;
 }
-/* "48h" mixed a tall ascender into the digits, throwing that number
-   off against the plain "12" and "1" beside it even though all three
-   boxes sit at the same height — the unit rides small and raised
-   instead, so the big digits stay the same visual size everywhere. */
-.stat-unit {
-  font-size: 0.5em;
-  font-weight: 500;
-  margin-left: 1px;
-}
 .stat-label {
   display: block;
   max-width: 13ch;
