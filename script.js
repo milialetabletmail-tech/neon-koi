@@ -164,18 +164,37 @@
       const lookahead = 60; // ms between scheduler ticks — tight enough to avoid audible gaps
       const scheduleAheadTime = 0.8; // seconds of notes queued ahead — extra slack absorbs brief main-thread stalls
 
-      function playNote(freq, time) {
+      // Two alternating oscillator/gain "voices", reused for every note,
+      // instead of creating a fresh pair per note forever. At this spacing
+      // no more than two notes ever overlap at once, so two voices cover
+      // the same legato overlap the old per-note nodes gave — without the
+      // constant allocate/GC churn, which is cheap on a desktop but can be
+      // enough to stall the audio thread on weaker mobile CPUs over a long
+      // listening session.
+      const voices = [0, 1].map(() => {
         const osc = ctx.createOscillator();
         osc.type = "triangle";
-        osc.frequency.value = freq;
+        osc.frequency.value = 220;
         const noteGain = ctx.createGain();
-        noteGain.gain.setValueAtTime(0, time);
-        noteGain.gain.linearRampToValueAtTime(0.5, time + 0.16);
-        noteGain.gain.exponentialRampToValueAtTime(0.001, time + noteLength);
+        noteGain.gain.value = 0;
         osc.connect(noteGain);
         noteGain.connect(filter);
-        osc.start(time);
-        osc.stop(time + noteLength + 0.05);
+        osc.start();
+        return { osc, noteGain };
+      });
+      let voiceIndex = 0;
+
+      function playNote(freq, time) {
+        const voice = voices[voiceIndex];
+        voiceIndex = (voiceIndex + 1) % voices.length;
+        // The previous note on this voice has always fully decayed away
+        // by the time it comes back around, so jumping frequency here is
+        // silent — no audible glissando between notes.
+        voice.osc.frequency.setValueAtTime(freq, time);
+        voice.noteGain.gain.cancelScheduledValues(time);
+        voice.noteGain.gain.setValueAtTime(0, time);
+        voice.noteGain.gain.linearRampToValueAtTime(0.5, time + 0.16);
+        voice.noteGain.gain.exponentialRampToValueAtTime(0.001, time + noteLength);
       }
 
       function scheduler() {
