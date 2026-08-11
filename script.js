@@ -699,16 +699,37 @@
   /* ---------------------------------------------------------------------
      Forms (reservations.html, contact.html)
   --------------------------------------------------------------------- */
-  // Marks invalid fields inline (a warm border + a small shake) instead
+  // Marks invalid fields inline (a warm border, a short message reusing
+  // the browser's own validationMessage text, and a small shake) instead
   // of calling the browser's native reportValidity(), which pops stock
   // OS-chrome tooltips over an otherwise fully-themed form — the one
   // moment the illusion used to break for anyone who missed a field.
+  function ensureFieldError(field, message) {
+    let el = field.querySelector(".field-error");
+    if (!el) {
+      el = document.createElement("p");
+      el.className = "field-error";
+      field.appendChild(el);
+    }
+    el.textContent = message;
+  }
+
+  function clearFieldError(field) {
+    const el = field.querySelector(".field-error");
+    if (el) el.remove();
+  }
+
   function refreshValidationState(form) {
     let firstInvalid = null;
     form.querySelectorAll(".field").forEach((field) => {
-      const invalid = !!field.querySelector(":invalid");
-      field.classList.toggle("field-invalid", invalid);
-      if (invalid && !firstInvalid) firstInvalid = field;
+      const invalidControl = field.querySelector(":invalid");
+      field.classList.toggle("field-invalid", !!invalidControl);
+      if (invalidControl) {
+        ensureFieldError(field, invalidControl.validationMessage || "Please complete this field.");
+        if (!firstInvalid) firstInvalid = field;
+      } else {
+        clearFieldError(field);
+      }
     });
     return firstInvalid;
   }
@@ -716,7 +737,10 @@
   function clearFieldIfValid(control) {
     const field = control.closest(".field");
     if (!field || !field.classList.contains("field-invalid")) return;
-    if (!field.querySelector(":invalid")) field.classList.remove("field-invalid");
+    if (!field.querySelector(":invalid")) {
+      field.classList.remove("field-invalid");
+      clearFieldError(field);
+    }
   }
 
   function initForm(formSelector, confirmationSelector, codePrefix, scramble = false, customValidation = false) {
@@ -735,10 +759,18 @@
       if (!form.checkValidity()) {
         if (customValidation) {
           const firstInvalid = refreshValidationState(form);
+          // Scroll to the field and stop there — no .focus(). Focusing an
+          // input pops the on-screen keyboard on touch devices, and on a
+          // real phone that produces its own flaky-looking symptom: the
+          // keyboard covers/repositions the very field we just
+          // highlighted, so the next tap near "Confirm Reservation" lands
+          // on the keyboard instead and just dismisses it rather than
+          // resubmitting — making the red highlight appear to work only
+          // "every other" attempt. The scroll + warm border + message
+          // below are enough of a cue on their own; the user can tap the
+          // field themselves when they're ready to fix it.
           if (firstInvalid) {
             firstInvalid.scrollIntoView({ behavior: "smooth", block: "center" });
-            const focusable = firstInvalid.querySelector("input, select, textarea");
-            if (focusable) focusable.focus({ preventScroll: true });
           }
         } else {
           form.reportValidity();

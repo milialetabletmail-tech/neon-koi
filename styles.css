@@ -885,11 +885,15 @@ body.page-reservations .field label {
 }
 body.page-reservations .field textarea { resize: vertical; min-height: 90px; }
 
-/* Invalid state: a warm highlight plus a brief shake instead of the
-   browser's own native validation bubble (see initForm's
+/* Invalid state: a warm highlight, a short message, and a brief shake
+   instead of the browser's own native validation bubble (see initForm's
    customValidation path in script.js) — the reservation form calls
    reportValidity() itself, on purpose, so stock OS chrome never has a
-   chance to pop up over a page this deliberately themed. */
+   chance to pop up over a page this deliberately themed. scroll-margin
+   keeps the sticky header from covering a field scrolled into view. */
+body.page-reservations .field {
+  scroll-margin-top: 96px;
+}
 body.page-reservations .field-invalid input,
 body.page-reservations .field-invalid select,
 body.page-reservations .field-invalid textarea {
@@ -899,8 +903,14 @@ body.page-reservations .field-invalid > label,
 body.page-reservations fieldset.field-invalid legend {
   color: #ff8a6b;
 }
+body.page-reservations .field-error {
+  margin: 2px 0 0;
+  font-size: 0.76rem;
+  color: #ff8a6b;
+}
 body.page-reservations .field-invalid .pill-group label {
-  border-color: rgba(255, 138, 107, 0.45);
+  border-width: 1.5px;
+  border-color: rgba(255, 138, 107, 0.7);
 }
 body.page-reservations .field-invalid {
   animation: fieldInvalidShake 0.4s var(--ease);
