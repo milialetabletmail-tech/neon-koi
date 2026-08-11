@@ -7,9 +7,18 @@
   "use strict";
 
   /* ---------------------------------------------------------------------
-     Audio Engine (Web Audio API) — synthesized ambient pad + click SFX.
-     No external audio files: everything is generated with oscillators,
-     so the whole experience stays self-contained.
+     Audio Engine (Web Audio API) — a pre-rendered, seamlessly-looping
+     ambient track plus a couple of tiny synthesized UI sound effects.
+     The ambient bed used to be synthesized live (oscillators, filters, a
+     feedback delay, all running continuously for as long as the page is
+     open), which kept the whole experience self-contained but turned out
+     to be more real-time CPU work than some phones can sustain glitch-free
+     over a long listening session — occasional audio-thread stalls came
+     out as random crackle. Baking that same synthesis down to a single
+     looping audio file removes essentially all of that ongoing load: the
+     browser just decodes once and streams samples, the same as any music
+     site. The click/confirm SFX stay synthesized since they're a handful
+     of milliseconds each, not a continuous drain.
   --------------------------------------------------------------------- */
   const AudioEngine = (function () {
     let ctx = null;
@@ -18,6 +27,12 @@
     let ambientStartedAt = 0;
     let muted = localStorage.getItem("neonkoi-muted") === "true";
     const VOLUME = 0.5;
+    const AMBIENT_TRACK_URL = "audio/ambient-loop.mp3";
+    // Kick off the download the moment this script runs, well before any
+    // user gesture — fetching doesn't need audio permission, only actually
+    // producing sound does, so this hides network latency behind whatever
+    // time it takes the visitor to first tap/click anything.
+    const ambientTrackFetch = fetch(AMBIENT_TRACK_URL).then((res) => res.arrayBuffer());
     // "Muted" still lets a whisper of signal through instead of true
     // silence. Some devices (Android in particular) detect a fully-silent
     // output stream and power down the audio hardware to save battery,
@@ -45,36 +60,6 @@
       sfxGain.connect(masterGain);
     }
 
-    // Slowly sweeps an AudioParam back and forth like a sine LFO, but via
-    // scheduled ramp keyframes instead of an audio-rate oscillator wired
-    // straight into the param. Audio-rate modulation of a filter's
-    // frequency forces the browser to recompute filter coefficients on
-    // every single sample, which is heavy enough on weaker/mobile CPUs to
-    // starve the audio thread and produce exactly the kind of random
-    // click/pop/static that shows up mid-playback with no clear trigger.
-    // A handful of ramp keyframes per cycle sounds identical for a sweep
-    // this slow, at a fraction of the CPU cost.
-    function scheduleBreathing(param, base, depth, periodSec) {
-      const pointsPerCycle = 16;
-      let cycleStart = ctx.currentTime;
-
-      function scheduleCycle() {
-        param.setValueAtTime(base, cycleStart);
-        for (let i = 1; i <= pointsPerCycle; i++) {
-          const t = cycleStart + (periodSec * i) / pointsPerCycle;
-          const v = base + depth * Math.sin((2 * Math.PI * i) / pointsPerCycle);
-          param.linearRampToValueAtTime(v, t);
-        }
-        cycleStart += periodSec;
-      }
-
-      // Keep two cycles queued up at all times so there's always slack
-      // even if a setTimeout tick lands late.
-      scheduleCycle();
-      scheduleCycle();
-      setInterval(scheduleCycle, periodSec * 500);
-    }
-
     function startAmbient() {
       if (ambientStarted) return;
       ensureContext();
@@ -82,143 +67,30 @@
       ambientStartedAt = Date.now();
 
       // Ease the whole ambient bed in from silence instead of snapping
-      // straight to full level. Oscillators are phase-continuous at
-      // start, but jumping an already-"hot" gain node onto the output the
-      // instant the audio hardware stream spins up is exactly what causes
-      // the audible pop/thump some browsers produce on first playback —
-      // fading in gives the stream a moment to settle before it's audible.
+      // straight to full level — jumping an already-"hot" gain node onto
+      // the output the instant the audio hardware stream spins up is
+      // exactly what causes the audible pop/thump some browsers produce
+      // on first playback. Fading in gives the stream a moment to settle
+      // before it's audible. (The track's own mix level is already baked
+      // into the file, so this ramps to 1, not some lower balance value.)
       const rampNow = ctx.currentTime;
       ambientGain.gain.setValueAtTime(0, rampNow);
-      ambientGain.gain.linearRampToValueAtTime(0.16, rampNow + 1.4);
+      ambientGain.gain.linearRampToValueAtTime(1, rampNow + 1.4);
 
-      // Warm, clean sub-bass pad — sine waves only (no sawtooth grit,
-      // no close detuning) so the low end stays smooth instead of buzzing.
-      const baseFreqs = [55, 82.4]; // A1 root, E2 fifth
-      const filter = ctx.createBiquadFilter();
-      filter.type = "lowpass";
-      filter.frequency.value = 320;
-      filter.Q.value = 0.4;
-      filter.connect(ambientGain);
-      scheduleBreathing(filter.frequency, 320, 100, 1 / 0.05);
-
-      baseFreqs.forEach((freq, i) => {
-        const osc = ctx.createOscillator();
-        osc.type = "sine";
-        osc.frequency.value = freq;
-        const oscGain = ctx.createGain();
-        oscGain.gain.value = i === 0 ? 0.42 : 0.4;
-        osc.connect(oscGain);
-        oscGain.connect(filter);
-        osc.start();
-      });
-
-      startArpeggio();
-    }
-
-    /* ---------------------------------------------------------------------
-       Synthwave arpeggio — a slow, evolving neon melody layered on top of
-       the deep bass drone. A gently filtered triangle lead cycles through
-       a four-chord progression (Am9 – F(add9) – Cadd9 – G(add9)), run
-       through a feedback delay for that classic synthwave shimmer/echo.
-    --------------------------------------------------------------------- */
-    function startArpeggio() {
-      const arpGain = ctx.createGain();
-      arpGain.gain.value = 0.15;
-      arpGain.connect(ambientGain);
-
-      const filter = ctx.createBiquadFilter();
-      filter.type = "lowpass";
-      filter.frequency.value = 1100;
-      filter.Q.value = 0.4;
-      filter.connect(arpGain);
-
-      // Slow "breathing" filter movement so the arp never feels static.
-      scheduleBreathing(filter.frequency, 1100, 480, 1 / 0.035);
-
-      // Feedback delay for a spacious, glowing echo trail.
-      const delay = ctx.createDelay(1.0);
-      delay.delayTime.value = 0.42;
-      const feedback = ctx.createGain();
-      feedback.gain.value = 0.32;
-      const delayFilter = ctx.createBiquadFilter();
-      delayFilter.type = "lowpass";
-      delayFilter.frequency.value = 2200;
-      filter.connect(delay);
-      delay.connect(delayFilter);
-      delayFilter.connect(feedback);
-      feedback.connect(delay);
-      delay.connect(arpGain);
-
-      const progression = [
-        [220.0, 261.63, 329.63, 440.0], // Am9
-        [174.61, 220.0, 261.63, 349.23], // F(add9)
-        [261.63, 329.63, 392.0, 523.25], // Cadd9
-        [196.0, 246.94, 293.66, 392.0], // G(add9)
-      ];
-
-      const noteLength = 0.85;
-      const noteSpacing = noteLength * 0.66; // more overlap = smoother, less "stepped" legato
-      let chordIndex = 0;
-      let noteIndex = 0;
-      let nextNoteTime = ctx.currentTime + 1.0;
-      const lookahead = 60; // ms between scheduler ticks — tight enough to avoid audible gaps
-      const scheduleAheadTime = 0.8; // seconds of notes queued ahead — extra slack absorbs brief main-thread stalls
-
-      // Two alternating oscillator/gain "voices", reused for every note,
-      // instead of creating a fresh pair per note forever. At this spacing
-      // no more than two notes ever overlap at once, so two voices cover
-      // the same legato overlap the old per-note nodes gave — without the
-      // constant allocate/GC churn, which is cheap on a desktop but can be
-      // enough to stall the audio thread on weaker mobile CPUs over a long
-      // listening session.
-      const voices = [0, 1].map(() => {
-        const osc = ctx.createOscillator();
-        osc.type = "triangle";
-        osc.frequency.value = 220;
-        const noteGain = ctx.createGain();
-        noteGain.gain.value = 0;
-        osc.connect(noteGain);
-        noteGain.connect(filter);
-        osc.start();
-        return { osc, noteGain };
-      });
-      let voiceIndex = 0;
-
-      function playNote(freq, time) {
-        const voice = voices[voiceIndex];
-        voiceIndex = (voiceIndex + 1) % voices.length;
-        // The previous note on this voice has always fully decayed away
-        // by the time it comes back around, so jumping frequency here is
-        // silent — no audible glissando between notes.
-        voice.osc.frequency.setValueAtTime(freq, time);
-        voice.noteGain.gain.cancelScheduledValues(time);
-        voice.noteGain.gain.setValueAtTime(0, time);
-        voice.noteGain.gain.linearRampToValueAtTime(0.5, time + 0.16);
-        voice.noteGain.gain.exponentialRampToValueAtTime(0.001, time + noteLength);
-      }
-
-      function scheduler() {
-        // If the tab was backgrounded/throttled and a tick lands very late,
-        // nextNoteTime can fall far behind ctx.currentTime. Scheduling the
-        // whole overdue backlog at once would fire a burst of overlapping
-        // notes all bunched together — audible as a sudden crackle/glitch.
-        // Resyncing instead just picks the beat back up cleanly.
-        if (nextNoteTime < ctx.currentTime - 0.5) {
-          nextNoteTime = ctx.currentTime + 0.05;
-        }
-        while (nextNoteTime < ctx.currentTime + scheduleAheadTime) {
-          const chord = progression[chordIndex];
-          playNote(chord[noteIndex], nextNoteTime);
-          nextNoteTime += noteSpacing;
-          noteIndex++;
-          if (noteIndex >= chord.length) {
-            noteIndex = 0;
-            chordIndex = (chordIndex + 1) % progression.length;
-          }
-        }
-        setTimeout(scheduler, lookahead);
-      }
-      scheduler();
+      ambientTrackFetch
+        .then((arrayBuffer) => ctx.decodeAudioData(arrayBuffer))
+        .then((audioBuffer) => {
+          if (!ambientStarted) return; // muted/torn down before it finished loading
+          const source = ctx.createBufferSource();
+          source.buffer = audioBuffer;
+          source.loop = true;
+          source.connect(ambientGain);
+          source.start();
+        })
+        .catch(() => {
+          // If the track fails to load (offline, blocked, etc.) the page
+          // just stays quiet rather than breaking anything else.
+        });
     }
 
     function playClick() {
