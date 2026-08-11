@@ -289,8 +289,23 @@
       muted = !muted;
       localStorage.setItem("neonkoi-muted", String(muted));
       const target = muted ? MUTE_FLOOR : VOLUME;
-      masterGain.gain.cancelScheduledValues(ctx.currentTime);
-      masterGain.gain.linearRampToValueAtTime(target, ctx.currentTime + 0.4);
+      const now = ctx.currentTime;
+      const current = masterGain.gain.value;
+      masterGain.gain.cancelScheduledValues(now);
+      // Pin the param to its actual current value before ramping.
+      // cancelScheduledValues() is inconsistent across browsers about
+      // where it leaves an in-progress ramp — some snap back to the
+      // value the ramp started from instead of where it currently is,
+      // which is an instant jump (i.e. a click) rather than a ramp.
+      // Anchoring explicitly removes the ambiguity.
+      masterGain.gain.setValueAtTime(current, now);
+      // A slower ramp than the 0.4s this used to be — some phones' audio
+      // amplifiers switch power/gain stages based on signal level, and a
+      // fast swing across that threshold can produce an audible click on
+      // the hardware side no matter how smooth the ramp is mathematically.
+      // Easing it out over a second and a half gives that much less reason
+      // to trip.
+      masterGain.gain.linearRampToValueAtTime(target, now + 1.5);
       return muted;
     }
 
