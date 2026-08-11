@@ -211,6 +211,31 @@
       osc2.stop(now + 0.04);
     }
 
+    // A soft two-note "snap" for picking a chip/pill (party size, time,
+    // occasion) — pitches up rather than the click tick's flat blip, so
+    // choosing a value reads as a small decision landing, not a generic
+    // link tap. Deliberately shorter and quieter than playConfirm so it
+    // never competes with the reservation-complete chord.
+    function playSelect() {
+      ensureContext();
+      if (ctx.state === "suspended") ctx.resume();
+      const now = ctx.currentTime;
+      [980, 1470].forEach((freq, i) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = "sine";
+        osc.frequency.value = freq;
+        const start = now + i * 0.045;
+        gain.gain.setValueAtTime(0.0001, start);
+        gain.gain.linearRampToValueAtTime(i === 0 ? 0.05 : 0.075, start + 0.006);
+        gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.09);
+        osc.connect(gain);
+        gain.connect(sfxGain);
+        osc.start(start);
+        osc.stop(start + 0.1);
+      });
+    }
+
     function playConfirm() {
       ensureContext();
       if (ctx.state === "suspended") ctx.resume();
@@ -257,7 +282,7 @@
       startAmbient();
     }
 
-    return { firstInteraction, playClick, playConfirm, toggleMute, isMuted, justStarted };
+    return { firstInteraction, playClick, playSelect, playConfirm, toggleMute, isMuted, justStarted };
   })();
 
   /* ---------------------------------------------------------------------
@@ -674,17 +699,53 @@
   /* ---------------------------------------------------------------------
      Forms (reservations.html, contact.html)
   --------------------------------------------------------------------- */
-  function initForm(formSelector, confirmationSelector, codePrefix, scramble = false) {
+  // Marks invalid fields inline (a warm border + a small shake) instead
+  // of calling the browser's native reportValidity(), which pops stock
+  // OS-chrome tooltips over an otherwise fully-themed form — the one
+  // moment the illusion used to break for anyone who missed a field.
+  function refreshValidationState(form) {
+    let firstInvalid = null;
+    form.querySelectorAll(".field").forEach((field) => {
+      const invalid = !!field.querySelector(":invalid");
+      field.classList.toggle("field-invalid", invalid);
+      if (invalid && !firstInvalid) firstInvalid = field;
+    });
+    return firstInvalid;
+  }
+
+  function clearFieldIfValid(control) {
+    const field = control.closest(".field");
+    if (!field || !field.classList.contains("field-invalid")) return;
+    if (!field.querySelector(":invalid")) field.classList.remove("field-invalid");
+  }
+
+  function initForm(formSelector, confirmationSelector, codePrefix, scramble = false, customValidation = false) {
     const form = document.querySelector(formSelector);
     const confirmation = document.querySelector(confirmationSelector);
     if (!form) return;
 
+    if (customValidation) {
+      form.setAttribute("novalidate", "");
+      form.addEventListener("input", (e) => clearFieldIfValid(e.target));
+      form.addEventListener("change", (e) => clearFieldIfValid(e.target));
+    }
+
     form.addEventListener("submit", (e) => {
       e.preventDefault();
       if (!form.checkValidity()) {
-        form.reportValidity();
+        if (customValidation) {
+          const firstInvalid = refreshValidationState(form);
+          if (firstInvalid) {
+            firstInvalid.scrollIntoView({ behavior: "smooth", block: "center" });
+            const focusable = firstInvalid.querySelector("input, select, textarea");
+            if (focusable) focusable.focus({ preventScroll: true });
+          }
+        } else {
+          form.reportValidity();
+        }
         return;
       }
+      if (customValidation) refreshValidationState(form);
       const digits = String(Math.floor(1000 + Math.random() * 9000));
       if (confirmation) {
         const codeEl = confirmation.querySelector("[data-code]");
@@ -772,6 +833,19 @@
     });
     intro.addEventListener("pointerleave", () => {
       koi.style.transform = "translate(-50%, -50%)";
+    });
+  }
+
+  /* ---------------------------------------------------------------------
+     Reservations — pill selection sound
+     Chip labels aren't <a>/<button>, so they never reached the generic
+     click-tick delegate below — picking a party size or time slot was
+     silent. Give it its own small "snap" instead of just wiring it into
+     the generic tick, so choosing a value feels like its own moment.
+  --------------------------------------------------------------------- */
+  function initPillSound() {
+    document.querySelectorAll(".pill-group input[type=\"radio\"]").forEach((el) => {
+      el.addEventListener("change", () => AudioEngine.playSelect());
     });
   }
 
@@ -932,9 +1006,10 @@
     initCursorGlow();
     initMenuTabs();
     initCocktailMap();
-    initForm("[data-reservation-form]", "[data-reservation-confirmation]", "NK-RES", true);
+    initForm("[data-reservation-form]", "[data-reservation-confirmation]", "NK-RES", true, true);
     initReservationPreview();
     initReservationsParallax();
+    initPillSound();
     initSpeakeasyForm();
     initForm("[data-contact-form]", "[data-contact-confirmation]", "NK-MSG");
 
