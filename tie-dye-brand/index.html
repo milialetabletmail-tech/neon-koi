@@ -49,16 +49,22 @@
         <p class="hero-subhead">Tie-Dye</p>
       </div>
 
-      <!-- The dye reveal: a real filmed sequence (white tee -> paint splash ->
-           finished spiral tie-dye) scrubbed frame-by-frame against scroll
-           position via canvas, rather than a native <video>. Native
-           video.currentTime seeking is throttled/keyframe-limited and gets
-           janky under fast, repeated scroll-driven seeks — drawing
-           pre-decoded frames to canvas is instant and stays perfectly
-           locked to scroll. Frame list + preloading + draw logic in main.js. -->
+      <!-- The dye reveal: the real filmed footage (white tee -> paint splash ->
+           finished spiral tie-dye), scrubbed against scroll position by
+           driving video.currentTime directly — see buildColorBurst() in
+           main.js. Both sources are encoded with a short GOP (keyframe
+           every 6 frames) so scroll-driven seeks land on or near a
+           keyframe instead of decoding forward from a distant one, which
+           is what makes native video seeking feel janky under fast,
+           repeated seeks. WebM/VP9 first (smaller, and the only one some
+           Chromium builds decode at all), MP4/H.264 as the fallback
+           everywhere else (Safari doesn't speak WebM). -->
       <div class="garment-stage">
-        <canvas class="dye-canvas" width="1728" height="992"
-          aria-label="A white t-shirt splashed with pink, blue and orange dye, twisted into a spiral tie-dye pattern"></canvas>
+        <video class="dye-video" muted playsinline preload="auto"
+          aria-label="A white t-shirt splashed with lavender, cyan and sage dye, twisted into a spiral tie-dye pattern">
+          <source src="assets/video/dye-reveal.webm" type="video/webm">
+          <source src="assets/video/dye-reveal.mp4" type="video/mp4">
+        </video>
       </div>
 
       <p class="colorburst-batch">Batch 014 — Sunset Spiral</p>
