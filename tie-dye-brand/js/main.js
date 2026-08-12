@@ -78,6 +78,7 @@
   function buildColorBurst(video) {
     const stage = document.querySelector('.colorburst-stage');
     const garmentStage = document.querySelector('.garment-stage');
+    const wordmarkGlow = document.querySelector('.hero-wordmark-glow');
     const wordmark = document.querySelector('.hero-wordmark');
     const subhead = document.querySelector('.hero-subhead');
     const label = document.querySelector('.colorburst-label');
@@ -195,6 +196,7 @@
     // --- State 2 (45% - 70%): text assembles as the tee finishes dyeing ---
     tl.addLabel('saturate', 0.45);
     tl.to(label, { opacity: 0, y: -10, duration: 0.12 }, 'saturate');
+    tl.to(wordmarkGlow, { opacity: 1, duration: 0.3, ease: 'sine.out' }, 'saturate');
     tl.to(subhead, { opacity: 0.85, duration: 0.2, ease: 'sine.out' }, 'saturate');
     // The wordmark lands as one unified "stamp" (scale + fade), not a
     // per-letter stagger — a short logotype reads as a mark, not a
@@ -215,7 +217,7 @@
     // the footage box stays perfectly flat throughout the whole scroll.
     tl.addLabel('release', 0.7);
     tl.to(garmentStage, { scale: 0.92, duration: 0.3 }, 'release');
-    tl.to([wordmark, subhead, batch], { opacity: 0, duration: 0.2 }, 'release+=0.1');
+    tl.to([wordmark, subhead, batch, wordmarkGlow], { opacity: 0, duration: 0.2 }, 'release+=0.1');
   }
 
   /* ------------------------------------------------------------

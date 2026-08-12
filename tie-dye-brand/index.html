@@ -37,6 +37,15 @@
 
       <p class="colorburst-label">No two spirals alike</p>
 
+      <!-- Both marks are solid black now (see css/style.css), which reads
+           fine over the lighter/pastel patches of the dyed garment but
+           needs help over the studio-gray and darker dye. Rather than a
+           drop-shadow halo outlining the letters (visible as a ring), a
+           soft-light-blended glow sits behind the whole group and lifts
+           the video underneath just enough for black-on-dark to read,
+           without the glow itself looking like a shape. -->
+      <div class="hero-wordmark-glow" aria-hidden="true"></div>
+
       <!-- LN-team is the brand wordmark and the dominant visual on screen,
            centered in the stage; "Tie-Dye" is a small editorial collection
            tag sitting directly beneath it as a detail, not a competing
@@ -64,7 +73,7 @@
         </video>
       </div>
 
-      <p class="colorburst-batch">Batch 014 — Sunset Spiral</p>
+      <p class="colorburst-batch">Batch 014 — Закатная спираль</p>
 
       <!-- Interaction hint: fades in shortly after load, fades out for
            good on the first scroll or tap (see hideScrollHint in main.js).

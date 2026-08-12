@@ -182,6 +182,29 @@ body.preloading { overflow: hidden; height: 100vh; }
    as a small italic editorial tag underneath so it reads as a detail,
    not a competing headline. */
 
+/* Sits behind .hero-wordmark-group (z-index 4 vs. 6) and lifts the video
+   underneath with a very soft, wide radial gradient — mix-blend-mode:
+   soft-light so it reads as the footage itself being a little brighter
+   there, not as a translucent white shape laid on top. Generously sized
+   and heavily blurred well past the group's own bounds so the falloff
+   has nowhere left to end in a visible edge; opacity is animated in
+   alongside the wordmark in main.js. */
+.hero-wordmark-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(60rem, 92vw);
+  height: 34rem;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(ellipse 50% 55% at 50% 50%, rgba(255, 250, 240, 0.55) 0%, rgba(255, 250, 240, 0.22) 40%, transparent 75%);
+  mix-blend-mode: soft-light;
+  filter: blur(50px);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 4;
+  will-change: opacity;
+}
+
 .hero-wordmark-group {
   position: absolute;
   top: 50%;
@@ -200,12 +223,12 @@ body.preloading { overflow: hidden; height: 100vh; }
   transform: scale(0.9);
   will-change: transform, opacity, filter;
 
-  /* Solid ink black, not the old glossy-white gradient. Flat black over a
-     busy dyed garment would flatten out against its own darkest patches,
-     so the halo drop-shadows do the work the white fill used to do for
-     free: a soft paper-colored glow keeps the strokes readable over dark
-     video and studio-gray alike, and the tight dark shadow underneath
-     still grounds the edge where the letters cross lighter fabric. */
+  /* Solid ink black, not the old glossy-white gradient. Legibility over
+     the busy dyed garment comes from .hero-wordmark-glow brightening the
+     footage behind it, not from a light halo outlining the letters
+     (which would read as a visible ring) — this shadow is just a tight,
+     dark grounding shadow for edge depth against the lighter, busier
+     patches of fabric. */
   background: var(--ink-letter);
   -webkit-mask-image: url('../assets/wordmark/ln-team.png');
   mask-image: url('../assets/wordmark/ln-team.png');
@@ -215,10 +238,7 @@ body.preloading { overflow: hidden; height: 100vh; }
   mask-size: contain;
   -webkit-mask-position: center;
   mask-position: center;
-  filter:
-    drop-shadow(0 0 6px rgba(244, 238, 225, 0.85))
-    drop-shadow(0 0 22px rgba(244, 238, 225, 0.5))
-    drop-shadow(0 10px 24px rgba(0, 0, 0, 0.55));
+  filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.45));
 }
 
 .hero-subhead {
@@ -229,14 +249,7 @@ body.preloading { overflow: hidden; height: 100vh; }
   font-size: clamp(1.3rem, 2.6vw, 2.1rem);
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--paper);
-  /* Stacked glow (not a single soft blur) so the mark stays legible
-     sitting directly over the busy dyed garment, not just a plain
-     background. */
-  text-shadow:
-    0 0 3px rgba(0, 0, 0, 0.85),
-    0 0 10px rgba(0, 0, 0, 0.65),
-    0 0 20px rgba(0, 0, 0, 0.45);
+  color: var(--ink-letter);
   opacity: 0;
 }
 
@@ -265,8 +278,7 @@ body.preloading { overflow: hidden; height: 100vh; }
   font-size: 0.75rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--paper);
-  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+  color: var(--ink-letter);
   opacity: 0;
   z-index: 5;
   display: flex;
@@ -458,6 +470,7 @@ body.preloading { overflow: hidden; height: 100vh; }
 @media (prefers-reduced-motion: reduce) {
   .colorburst { height: auto; }
   .colorburst-stage { height: 100vh; }
+  .hero-wordmark-glow { opacity: 1; }
   .hero-wordmark { opacity: 1; transform: none; }
   .hero-subhead { opacity: 1; }
   .colorburst-batch { opacity: 0.85; transform: translate(-50%, 0); }
