@@ -1,6 +1,6 @@
 /* ============================================================
    TIE-DYE BRAND — Phase 1: Preloader + "Color Burst" Hero
-   Palette: Sunset Spiral (fixed, tokenized below)
+   Palette: lavender / teal / sage + warm gray (fixed, tokenized below)
    ============================================================ */
 
 @font-face {
@@ -10,7 +10,7 @@
 }
 
 :root {
-  /* --- Sunset Spiral palette --- */
+  /* --- Lavender / Teal / Sage palette --- */
   /* Coffee-ash: hard site-wide backdrop, incl. the Hero. The filmed
      dye-reveal footage was shot on a neutral studio-gray backdrop; the
      footage itself isn't regraded (that's the pastel recolor pass, done
@@ -25,16 +25,26 @@
   --ink-letter: #0f0c0b;
   --paper: #f4eee1;
   --paper-dim: #e8dfcd;
-  --acid-pink: #ff3d81;
-  --electric-blue: #2b6dff;
-  --sunset-orange: #ff7a2f;
-  --sunset-gold: #ffb648;
+
+  /* The four brand swatches, sampled from the owner's reference photos —
+     replaces the old hot-pink/electric-blue/orange/gold "Sunset Spiral"
+     set, which was left over from before the LN-team rebrand and read as
+     a completely different, much louder brand than the pastel dye on the
+     tee itself. --stone is the odd one out (desaturated, not "bright"
+     like the other three) — it's not used as a blob color for that
+     reason, only as the gradient's base fill, the same job
+     --sunset-gold used to do: a warm, muted canvas for the three pastel
+     blobs to sit on top of, instead of a bright gold one. */
+  --lavender: #9b98bb;
+  --teal: #6eaaa9;
+  --sage: #9ca16c;
+  --stone: #6a6662;
 
   --gradient-spiral:
-    radial-gradient(circle at 28% 22%, var(--acid-pink) 0%, transparent 55%),
-    radial-gradient(circle at 76% 28%, var(--electric-blue) 0%, transparent 58%),
-    radial-gradient(circle at 48% 88%, var(--sunset-orange) 0%, transparent 62%),
-    var(--sunset-gold);
+    radial-gradient(circle at 28% 22%, var(--lavender) 0%, transparent 55%),
+    radial-gradient(circle at 76% 28%, var(--teal) 0%, transparent 58%),
+    radial-gradient(circle at 48% 88%, var(--sage) 0%, transparent 62%),
+    var(--stone);
 
   /* --- Type --- */
   --font-ui: 'Space Grotesk', 'Helvetica Neue', Arial, sans-serif;
@@ -300,8 +310,8 @@ body.preloading { overflow: hidden; height: 100vh; }
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: var(--acid-pink);
-  box-shadow: 0 0 12px var(--acid-pink);
+  background: var(--lavender);
+  box-shadow: 0 0 12px var(--lavender);
 }
 
 /* --- interaction hint: "scroll or tap" --- */
@@ -509,8 +519,8 @@ body.preloading { overflow: hidden; height: 100vh; }
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--sunset-gold);
-  color: var(--ink);
+  background: var(--stone);
+  color: var(--paper);
   font-family: var(--font-ui);
   letter-spacing: 0.08em;
   text-transform: uppercase;
