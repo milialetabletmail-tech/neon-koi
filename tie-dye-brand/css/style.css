@@ -204,11 +204,11 @@ body.preloading { overflow: hidden; height: 100vh; }
   transform: scale(0.9);
   will-change: transform, opacity, filter;
 
-  /* Glossy liquid-black: a gradient fill (not a flat color) reads as an
-     inked, reflective surface; the drop-shadows add ink depth and a
-     hairline highlight rather than a flat cutout. The real brush artwork
-     is the mask; this element supplies the color. */
-  background: linear-gradient(152deg, #030303 0%, #262626 28%, #060606 48%, #333333 64%, #050505 82%, #1a1a1a 100%);
+  /* Glossy liquid-white: a gradient fill (not a flat color) reads as an
+     inked, reflective surface; the drop-shadows ground it against the
+     lighter parts of the dyed garment instead of letting it wash out.
+     The real brush artwork is the mask; this element supplies the color. */
+  background: linear-gradient(152deg, #ffffff 0%, #f1f1f1 28%, #ffffff 48%, #e4e4e4 64%, #ffffff 82%, #f3f3f3 100%);
   -webkit-mask-image: url('../assets/wordmark/smn.png');
   mask-image: url('../assets/wordmark/smn.png');
   -webkit-mask-repeat: no-repeat;
@@ -218,26 +218,26 @@ body.preloading { overflow: hidden; height: 100vh; }
   -webkit-mask-position: center;
   mask-position: center;
   filter:
-    drop-shadow(0 14px 30px rgba(0, 0, 0, 0.5))
-    drop-shadow(0 1px 0 rgba(255, 255, 255, 0.12));
+    drop-shadow(0 14px 30px rgba(0, 0, 0, 0.6))
+    drop-shadow(0 1px 0 rgba(0, 0, 0, 0.2));
 }
 
 .hero-subhead {
-  margin: 0.7rem 0 0;
+  margin: 1rem 0 0;
   font-family: var(--font-display);
   font-style: italic;
-  font-weight: 500;
-  font-size: clamp(0.82rem, 1.25vw, 1.05rem);
-  letter-spacing: 0.14em;
+  font-weight: 800;
+  font-size: clamp(1.3rem, 2.6vw, 2.1rem);
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--ink);
+  color: var(--paper);
   /* Stacked glow (not a single soft blur) so the mark stays legible
      sitting directly over the busy dyed garment, not just a plain
      background. */
   text-shadow:
-    0 0 3px rgba(244, 238, 225, 0.95),
-    0 0 8px rgba(244, 238, 225, 0.8),
-    0 0 16px rgba(244, 238, 225, 0.55);
+    0 0 3px rgba(0, 0, 0, 0.85),
+    0 0 10px rgba(0, 0, 0, 0.65),
+    0 0 20px rgba(0, 0, 0, 0.45);
   opacity: 0;
 }
 
