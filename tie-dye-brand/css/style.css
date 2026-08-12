@@ -125,7 +125,6 @@ body.preloading { overflow: hidden; height: 100vh; }
   align-items: center;
   justify-content: center;
   background: radial-gradient(circle at 50% 55%, var(--studio-gray-light), var(--studio-gray-dark));
-  perspective: 1200px;
 }
 
 .colorburst-bg {
@@ -138,35 +137,60 @@ body.preloading { overflow: hidden; height: 100vh; }
   will-change: opacity, transform;
 }
 
-/* --- kinetic headline --- */
+/* --- brand wordmark (dominant) + collection tag (demoted) ---
+   SMN is the primary identity on screen — large, glossy liquid-black
+   type. "Color Burst" is now just the edition/collection name, styled
+   as a small italic editorial tag underneath so it reads as a detail,
+   not a competing headline. */
 
-.colorburst-headline {
+.hero-wordmark-group {
   position: absolute;
-  top: 5%;
+  top: 2%;
   left: 50%;
   transform: translateX(-50%);
-  margin: 0;
   text-align: center;
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-style: normal;
-  font-size: clamp(2.4rem, 7vw, 6rem);
-  line-height: 0.96;
-  letter-spacing: -0.01em;
-  color: var(--paper);
-  text-shadow: 0 4px 28px rgba(0, 0, 0, 0.55), 0 1px 3px rgba(0, 0, 0, 0.45);
   pointer-events: none;
-  z-index: 5;
+  z-index: 6;
 }
 
-.colorburst-headline .char {
-  display: inline-block;
+.hero-wordmark {
+  margin: 0.3rem 0 0;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-style: normal;
+  font-size: clamp(4.2rem, 13vw, 10.5rem);
+  line-height: 0.88;
+  letter-spacing: -0.03em;
   opacity: 0;
-  transform: translateY(0.6em) rotate(3deg);
-  will-change: transform, opacity;
+  transform: scale(0.9);
+  will-change: transform, opacity, filter;
+
+  /* Glossy liquid-black: a gradient fill (not a flat color) reads as an
+     inked, reflective surface; the drop-shadows add ink depth and a
+     hairline highlight rather than a flat cutout. Must stay directly on
+     this element (not a child span) — background-clip: text only clips
+     to glyphs the element itself renders. */
+  background: linear-gradient(152deg, #030303 0%, #262626 28%, #060606 48%, #333333 64%, #050505 82%, #1a1a1a 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter:
+    drop-shadow(0 14px 30px rgba(0, 0, 0, 0.5))
+    drop-shadow(0 1px 0 rgba(255, 255, 255, 0.12));
 }
 
-.colorburst-headline .line { display: block; }
+.hero-subhead {
+  margin: 0;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(0.82rem, 1.25vw, 1.05rem);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--paper);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+}
 
 .colorburst-label {
   position: absolute;
@@ -234,12 +258,55 @@ body.preloading { overflow: hidden; height: 100vh; }
   object-fit: cover;
   display: block;
 
-  -webkit-mask-image: radial-gradient(circle, rgba(0, 0, 0, 1) 40%, rgba(0, 0, 0, 0) 75%);
-  mask-image: radial-gradient(circle, rgba(0, 0, 0, 1) 40%, rgba(0, 0, 0, 0) 75%);
+  /* Elliptical, not circular: the studio box is landscape, so a circular
+     mask either clips the side splatters early or leaves the top/bottom
+     corners hard. An ellipse lets the fade reach further out
+     horizontally (splatters stay crisp) while still fully resolving
+     vertically before the top/bottom edge (no reintroduced hard line). */
+  -webkit-mask-image: radial-gradient(ellipse 68% 92% at 50% 50%, rgba(0, 0, 0, 1) 48%, rgba(0, 0, 0, 0) 90%);
+  mask-image: radial-gradient(ellipse 68% 92% at 50% 50%, rgba(0, 0, 0, 1) 48%, rgba(0, 0, 0, 0) 90%);
   -webkit-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
   -webkit-mask-size: 100% 100%;
   mask-size: 100% 100%;
+}
+
+/* ------------------------------------------------------------
+   MOBILE: strictly vertical/portrait — no landscape hacks. The footage
+   is letterboxed (object-fit: contain) instead of cropped full-bleed,
+   so the empty space above/below it is real page background, filled
+   with a flat tone sampled from the footage's own edge gray so the
+   seam between "video" and "page" stays invisible. The desktop cover
+   vignette is dropped here since contain already shows the full frame
+   with nothing to mask.
+   ------------------------------------------------------------ */
+
+@media (max-width: 768px) {
+  .colorburst,
+  .colorburst-stage {
+    background: var(--studio-gray-light);
+  }
+
+  .dye-canvas {
+    object-fit: contain;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  /* The atmospheric color wash spans the full viewport behind everything;
+     on desktop the full-bleed canvas covers it entirely, but on mobile
+     the letterboxed (contain-fit) canvas leaves it visible above/below,
+     tinting what's meant to be a flat, seamless gray bar. */
+  .colorburst-bg {
+    display: none;
+  }
+
+  /* Clear the fixed corner wordmark (top: 2rem/left: 2rem) — at narrow
+     widths the centered SMN/Color Burst group sits close enough to
+     read as a collision rather than two separate marks. */
+  .hero-wordmark-group {
+    top: 4.5rem;
+  }
 }
 
 /* ------------------------------------------------------------
@@ -270,7 +337,8 @@ body.preloading { overflow: hidden; height: 100vh; }
   .colorburst { height: auto; }
   .colorburst-stage { height: 100vh; }
   .colorburst-bg { opacity: 0.9; transform: none; transition: none; }
-  .colorburst-headline .char { opacity: 1; transform: none; }
+  .hero-wordmark { opacity: 1; transform: none; }
+  .hero-subhead { opacity: 1; }
   .colorburst-batch { opacity: 0.85; transform: translate(-50%, 0); }
   /* main.js paints the final (fully-dyed) frame directly and skips the
      scroll-scrub tween entirely when this is set — nothing to override

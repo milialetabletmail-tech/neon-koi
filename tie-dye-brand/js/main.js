@@ -11,28 +11,6 @@
   const FRAME_PATH = (i) => `assets/video-frames/frame-${String(i).padStart(3, '0')}.jpg`;
 
   /* ------------------------------------------------------------
-     Split the headline into per-character spans for a stagger-in
-     reveal. Done manually so we don't pull in the paid SplitText
-     plugin for one headline.
-     ------------------------------------------------------------ */
-  function splitHeadline(el) {
-    const lines = el.querySelectorAll('.line');
-    const chars = [];
-    lines.forEach((line) => {
-      const text = line.textContent;
-      line.textContent = '';
-      [...text].forEach((ch) => {
-        const span = document.createElement('span');
-        span.className = 'char';
-        span.textContent = ch === ' ' ? ' ' : ch;
-        line.appendChild(span);
-        chars.push(span);
-      });
-    });
-    return chars;
-  }
-
-  /* ------------------------------------------------------------
      Preload the dye-reveal frame sequence. Resolves with an array
      of loaded <img> elements ready to draw to canvas — native
      video.currentTime scrubbing is throttled/keyframe-limited and
@@ -113,7 +91,8 @@
     const garmentStage = document.querySelector('.garment-stage');
     const canvas = document.querySelector('.dye-canvas');
     const ctx = canvas.getContext('2d');
-    const headlineChars = splitHeadline(document.querySelector('[data-split]'));
+    const wordmark = document.querySelector('.hero-wordmark');
+    const subhead = document.querySelector('.hero-subhead');
     const label = document.querySelector('.colorburst-label');
     const batch = document.querySelector('.colorburst-batch');
 
@@ -136,7 +115,7 @@
 
     gsap.registerPlugin(ScrollTrigger);
 
-    gsap.set(garmentStage, { scale: 1, rotate: 0, transformOrigin: '50% 50%' });
+    gsap.set(garmentStage, { scale: 1 });
 
     const tl = gsap.timeline({
       defaults: { ease: 'power2.out' },
@@ -170,40 +149,28 @@
     tl.addLabel('saturate', 0.45);
     tl.to(bg, { opacity: 0.32, filter: 'blur(140px) saturate(0.95)', duration: 0.25 }, 'saturate');
     tl.to(label, { opacity: 0, y: -10, duration: 0.12 }, 'saturate');
-    tl.to(headlineChars, {
+    tl.to(subhead, { opacity: 0.85, duration: 0.2, ease: 'sine.out' }, 'saturate');
+    // SMN lands as one unified "stamp" (scale + fade), not a per-letter
+    // stagger — a 3-letter logotype reads as a mark, not a sentence, and
+    // this also sidesteps a real bug the stagger version had: splitting
+    // the word into child <span> letters broke the gradient background-
+    // clip:text effect, since only the element that owns the background
+    // can clip to its own glyphs.
+    tl.to(wordmark, {
       opacity: 1,
-      y: 0,
-      rotate: 0,
-      duration: 0.3,
-      stagger: { each: 0.012, from: 'center' },
-    }, 'saturate+=0.02');
+      scale: 1,
+      duration: 0.22,
+      ease: 'back.out(1.6)',
+    }, 'saturate+=0.03');
     tl.to(batch, { opacity: 0.9, y: 0, duration: 0.2 }, 'saturate+=0.15');
 
     // --- State 3 (70% - 100%): release into next section ---
+    // Scale only — no rotate/tilt anywhere on the garment stage or canvas,
+    // the footage box stays perfectly flat throughout the whole scroll.
     tl.addLabel('release', 0.7);
-    tl.to(garmentStage, { scale: 0.92, rotate: -2, duration: 0.3 }, 'release');
+    tl.to(garmentStage, { scale: 0.92, duration: 0.3 }, 'release');
     tl.to(bg, { opacity: 0.16, scale: 1.15, duration: 0.3 }, 'release');
-    tl.to([headlineChars, batch], { opacity: 0, duration: 0.2 }, 'release+=0.1');
-
-    /* --- subtle mouse-parallax on garment, state0 only --- */
-    const tiltX = gsap.quickTo(garmentStage, 'rotateY', { duration: 0.6, ease: 'power2.out' });
-    const tiltY = gsap.quickTo(garmentStage, 'rotateX', { duration: 0.6, ease: 'power2.out' });
-    let parallaxActive = true;
-
-    ScrollTrigger.create({
-      trigger: '.colorburst',
-      start: 'top top',
-      end: '+=15%',
-      onUpdate: (self) => { parallaxActive = self.progress <= 0; },
-    });
-
-    window.addEventListener('mousemove', (e) => {
-      if (!parallaxActive) return;
-      const relX = (e.clientX / window.innerWidth) - 0.5;
-      const relY = (e.clientY / window.innerHeight) - 0.5;
-      tiltX(relX * 6);
-      tiltY(relY * -6);
-    });
+    tl.to([wordmark, subhead, batch], { opacity: 0, duration: 0.2 }, 'release+=0.1');
   }
 
   /* ------------------------------------------------------------
