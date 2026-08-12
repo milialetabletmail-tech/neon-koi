@@ -36,22 +36,14 @@
   --font-display: 'Fraunces', Georgia, serif;
 
   /* Hand-painted brush artwork (assets/wordmark/smn.png), used as a mask
-     for the solid-black marks — see .hero-wordmark / .preloader-mark.
-     Native 1312x636. */
+     for the solid marks — see .hero-wordmark / .preloader-mark. Native
+     1312x636. */
   --mark-ratio: 1312 / 636;
 
   /* The header mark (assets/wordmark/smn-color.png) is a separate piece
      of artwork with its own baked-in multicolor paint-splash — shown as
-     a plain image rather than a recolored mask. Native 1364x858. */
-  --mark-ratio-color: 1364 / 858;
-
-  --gradient-acid:
-    linear-gradient(115deg,
-      var(--acid-pink) 0%,
-      var(--acid-pink) 20%,
-      var(--electric-blue) 45%,
-      var(--sunset-orange) 72%,
-      var(--sunset-gold) 100%);
+     a plain image rather than a recolored mask. Native 640x403. */
+  --mark-ratio-color: 640 / 403;
 
   /* --- Motion / scale --- */
   --ease-burst: cubic-bezier(.16, 1, .3, 1);
@@ -141,8 +133,9 @@ body.preloading { overflow: hidden; height: 100vh; }
   aspect-ratio: var(--mark-ratio-color);
 
   /* The compact colorway mark — real multicolor paint-splash artwork
-     (assets/wordmark/smn-color.png), shown as-is rather than through the
-     mask+gradient technique, since the color already lives in the file. */
+     (assets/wordmark/smn-color.png) with the brush letters themselves
+     recolored white, shown as-is rather than through the mask+gradient
+     technique so the splash colors stay exactly as painted. */
   background-image: url('../assets/wordmark/smn-color.png');
   background-repeat: no-repeat;
   background-size: contain;

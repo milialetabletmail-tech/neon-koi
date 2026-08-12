@@ -9,12 +9,15 @@ Freepik-derived version this replaced.
 - `smn.png` — solid black brush strokes on a transparent background.
   Used as a `mask-image` in `css/style.css` for `.hero-wordmark` and
   `#preloader .preloader-mark`, so it can be filled with the glossy
-  liquid-black gradient at those two placements.
-- `smn-color.png` — the same style of brush lettering with a baked-in
-  multicolor paint-splash (pink/blue/orange). Used directly as a plain
-  image (`background-image`, not a mask) for the header `.wordmark`,
-  since its color is part of the artwork itself rather than something
-  CSS should recolor.
+  liquid-white gradient at those two placements.
+- `smn-color.png` — the same brush lettering with a baked-in multicolor
+  paint-splash (pink/blue/orange) left untouched, but with the brush
+  letters themselves recolored from black to white (isolated by RGB
+  channel spread — grayscale/black pixels vs. saturated color pixels —
+  and repainted white without touching alpha, so the anti-aliased edges
+  stay soft). Used directly as a plain image (`background-image`, not a
+  mask) for the header `.wordmark`, since the splash color is part of
+  the artwork itself rather than something CSS should recolor.
 
 Both files had their white background removed (unpremultiplied against
 white, not just alpha-thresholded, so there's no white fringe on dark
