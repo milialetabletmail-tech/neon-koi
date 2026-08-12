@@ -20,6 +20,9 @@
      continuous coffee-ash room instead of a gray video box floating on a
      dark page. */
   --ink: #2a2625;
+  /* Near-black, not pure #000 — a hair warmer so the brush lettering still
+     reads as part of the coffee-ash palette rather than a flat cutout. */
+  --ink-letter: #0f0c0b;
   --paper: #f4eee1;
   --paper-dim: #e8dfcd;
   --acid-pink: #ff3d81;
@@ -37,15 +40,11 @@
   --font-ui: 'Space Grotesk', 'Helvetica Neue', Arial, sans-serif;
   --font-display: 'Fraunces', Georgia, serif;
 
-  /* Hand-painted brush artwork (assets/wordmark/smn.png), used as a mask
-     for the solid marks — see .hero-wordmark / .preloader-mark. Native
-     1312x636. */
-  --mark-ratio: 1312 / 636;
-
-  /* The header mark (assets/wordmark/smn-color.png) is a separate piece
-     of artwork with its own baked-in multicolor paint-splash — shown as
-     a plain image rather than a recolored mask. Native 640x403. */
-  --mark-ratio-color: 640 / 403;
+  /* Brush-lettering artwork (assets/wordmark/ln-team.png) — solid black
+     strokes on a transparent background, used as a mask for all three
+     mark placements: .wordmark (header), .hero-wordmark, and
+     #preloader .preloader-mark. Native 892x344. */
+  --mark-ratio: 892 / 344;
 
   /* --- Motion / scale --- */
   --ease-burst: cubic-bezier(.16, 1, .3, 1);
@@ -109,8 +108,8 @@ img { max-width: 100%; display: block; }
   width: clamp(9rem, 20vw, 13rem);
   aspect-ratio: var(--mark-ratio);
   background: var(--paper);
-  -webkit-mask-image: url('../assets/wordmark/smn.png');
-  mask-image: url('../assets/wordmark/smn.png');
+  -webkit-mask-image: url('../assets/wordmark/ln-team.png');
+  mask-image: url('../assets/wordmark/ln-team.png');
   -webkit-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
   -webkit-mask-size: contain;
@@ -132,17 +131,26 @@ body.preloading { overflow: hidden; height: 100vh; }
   left: 1.75rem;
   z-index: 50;
   width: clamp(5.5rem, 8vw, 7.5rem);
-  aspect-ratio: var(--mark-ratio-color);
+  aspect-ratio: var(--mark-ratio);
+  background: var(--ink-letter);
+  -webkit-mask-image: url('../assets/wordmark/ln-team.png');
+  mask-image: url('../assets/wordmark/ln-team.png');
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-position: center;
+  mask-position: center;
 
-  /* The compact colorway mark — real multicolor paint-splash artwork
-     (assets/wordmark/smn-color.png) with the brush letters themselves
-     recolored white, shown as-is rather than through the mask+gradient
-     technique so the splash colors stay exactly as painted. */
-  background-image: url('../assets/wordmark/smn-color.png');
-  background-repeat: no-repeat;
-  background-size: contain;
-  background-position: center;
-  filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.55));
+  /* Solid black letters need their own light behind them to read against
+     the Hero's dark coffee-ash backdrop — a soft paper-colored halo (the
+     same trick as .hero-subhead's stacked text-shadow) plus a tight dark
+     shadow for edge definition against lighter, busier patches of the
+     video underneath. */
+  filter:
+    drop-shadow(0 0 3px rgba(244, 238, 225, 0.8))
+    drop-shadow(0 0 10px rgba(244, 238, 225, 0.45))
+    drop-shadow(0 2px 6px rgba(0, 0, 0, 0.5));
 }
 
 /* ------------------------------------------------------------
@@ -179,7 +187,7 @@ body.preloading { overflow: hidden; height: 100vh; }
 }
 
 /* --- brand wordmark (dominant) + collection tag (demoted) ---
-   SMN is the primary identity on screen — large, glossy liquid-black
+   LN-team is the primary identity on screen — large, solid-black brush
    type. "Color Burst" is now just the edition/collection name, styled
    as a small italic editorial tag underneath so it reads as a detail,
    not a competing headline. */
@@ -202,13 +210,15 @@ body.preloading { overflow: hidden; height: 100vh; }
   transform: scale(0.9);
   will-change: transform, opacity, filter;
 
-  /* Glossy liquid-white: a gradient fill (not a flat color) reads as an
-     inked, reflective surface; the drop-shadows ground it against the
-     lighter parts of the dyed garment instead of letting it wash out.
-     The real brush artwork is the mask; this element supplies the color. */
-  background: linear-gradient(152deg, #ffffff 0%, #f1f1f1 28%, #ffffff 48%, #e4e4e4 64%, #ffffff 82%, #f3f3f3 100%);
-  -webkit-mask-image: url('../assets/wordmark/smn.png');
-  mask-image: url('../assets/wordmark/smn.png');
+  /* Solid ink black, not the old glossy-white gradient. Flat black over a
+     busy dyed garment would flatten out against its own darkest patches,
+     so the halo drop-shadows do the work the white fill used to do for
+     free: a soft paper-colored glow keeps the strokes readable over dark
+     video and studio-gray alike, and the tight dark shadow underneath
+     still grounds the edge where the letters cross lighter fabric. */
+  background: var(--ink-letter);
+  -webkit-mask-image: url('../assets/wordmark/ln-team.png');
+  mask-image: url('../assets/wordmark/ln-team.png');
   -webkit-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
   -webkit-mask-size: contain;
@@ -216,8 +226,9 @@ body.preloading { overflow: hidden; height: 100vh; }
   -webkit-mask-position: center;
   mask-position: center;
   filter:
-    drop-shadow(0 14px 30px rgba(0, 0, 0, 0.6))
-    drop-shadow(0 1px 0 rgba(0, 0, 0, 0.2));
+    drop-shadow(0 0 6px rgba(244, 238, 225, 0.85))
+    drop-shadow(0 0 22px rgba(244, 238, 225, 0.5))
+    drop-shadow(0 10px 24px rgba(0, 0, 0, 0.55));
 }
 
 .hero-subhead {
@@ -369,18 +380,19 @@ body.preloading { overflow: hidden; height: 100vh; }
   background: var(--ink);
 
   /* Sinks the footage's neutral studio-gray into the site's coffee-ash:
-     raising contrast + lowering brightness pushes the gray backdrop down
-     toward black, while saturate() keeps the pastel dye reading as color
-     rather than fading toward the same gray. This backdrop is a genuine
-     light-to-mid gray (not near-black), and shares its low saturation
-     with the white tee itself — there's no pixel-color rule that can
-     tell "gray wall" from "white fabric" apart, so this is a tasteful
-     grade, not a clean key: it reads as moodier studio lighting rather
-     than a seam-free color swap. No blend mode against the page
-     background: multiply/darken read the *whole* frame against the
-     backdrop color, so the white tee would multiply down to that same
-     dark coffee instead of staying bright. */
-  filter: brightness(0.7) contrast(1.35) saturate(1.35);
+     contrast pushes the gray backdrop down toward black while brightness
+     stays high enough to keep the tee light, sepia() pulls the whole
+     grade toward a warm brown instead of a cold gray-black, and
+     saturate() puts the vibrance sepia() flattens back into the pastel
+     dye. This backdrop is a genuine light-to-mid gray (not near-black),
+     and shares its low saturation with the white tee itself — there's no
+     pixel-color rule that can tell "gray wall" from "white fabric" apart,
+     so this is a tasteful grade, not a clean key: it reads as moodier,
+     warmer studio lighting rather than a seam-free color swap. No blend
+     mode against the page background: multiply/darken read the *whole*
+     frame against the backdrop color, so the white tee would multiply
+     down to that same dark coffee instead of staying bright. */
+  filter: brightness(0.8) contrast(1.3) saturate(1.3) sepia(0.22);
 
   /* Elliptical, not circular: the studio box is landscape, so a circular
      mask either clips the side splatters early or leaves the top/bottom

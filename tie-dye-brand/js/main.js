@@ -200,12 +200,12 @@
     tl.to(bg, { opacity: 0.32, filter: 'blur(140px) saturate(0.95)', duration: 0.25 }, 'saturate');
     tl.to(label, { opacity: 0, y: -10, duration: 0.12 }, 'saturate');
     tl.to(subhead, { opacity: 0.85, duration: 0.2, ease: 'sine.out' }, 'saturate');
-    // SMN lands as one unified "stamp" (scale + fade), not a per-letter
-    // stagger — a 3-letter logotype reads as a mark, not a sentence, and
-    // this also sidesteps a real bug the stagger version had: splitting
-    // the word into child <span> letters broke the gradient background-
-    // clip:text effect, since only the element that owns the background
-    // can clip to its own glyphs.
+    // The wordmark lands as one unified "stamp" (scale + fade), not a
+    // per-letter stagger — a short logotype reads as a mark, not a
+    // sentence, and this also sidesteps a real bug the stagger version
+    // had: splitting the word into child <span> letters broke the mask-
+    // fill effect, since only the element that owns the mask can clip to
+    // its own glyphs.
     tl.to(wordmark, {
       opacity: 1,
       scale: 1,
