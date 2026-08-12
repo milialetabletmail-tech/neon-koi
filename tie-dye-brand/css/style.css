@@ -154,6 +154,7 @@ body.preloading { overflow: hidden; height: 100vh; }
   line-height: 0.96;
   letter-spacing: -0.01em;
   color: var(--paper);
+  text-shadow: 0 4px 28px rgba(0, 0, 0, 0.55), 0 1px 3px rgba(0, 0, 0, 0.45);
   pointer-events: none;
   z-index: 5;
 }
@@ -178,6 +179,7 @@ body.preloading { overflow: hidden; height: 100vh; }
   letter-spacing: 0.32em;
   text-transform: uppercase;
   color: var(--paper-dim);
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
   opacity: 0.75;
   z-index: 5;
 }
@@ -192,6 +194,7 @@ body.preloading { overflow: hidden; height: 100vh; }
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--paper);
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
   opacity: 0;
   z-index: 5;
   display: flex;
@@ -208,18 +211,18 @@ body.preloading { overflow: hidden; height: 100vh; }
   box-shadow: 0 0 12px var(--acid-pink);
 }
 
-/* --- garment stage: canvas-scrubbed filmed sequence ---
-   Landscape aspect ratio matches the source footage (864:496). Sized so
-   the displayed width rarely exceeds the source frame width (720px) —
-   scrubbing footage larger than its source resolution reads as soft. */
+/* --- garment stage: full-bleed canvas-scrubbed filmed sequence ---
+   Fills the whole pinned stage; the canvas itself handles the source
+   footage's 864:496 crop via object-fit: cover. There's no card/box
+   edge by design — the vignette mask on .dye-canvas dissolves the
+   footage's studio-gray corners into the stage's own matching gray
+   gradient, so video and page read as one continuous room instead of
+   a bordered rectangle sitting on top of the page. */
 
 .garment-stage {
-  position: relative;
-  width: min(46vw, 680px);
-  aspect-ratio: 864 / 496;
+  position: absolute;
+  inset: 0;
   z-index: 3;
-  margin-top: 7vh;
-  filter: drop-shadow(0 30px 60px rgba(0, 0, 0, 0.45));
   will-change: transform;
 }
 
@@ -228,7 +231,15 @@ body.preloading { overflow: hidden; height: 100vh; }
   inset: 0;
   width: 100%;
   height: 100%;
+  object-fit: cover;
   display: block;
+
+  -webkit-mask-image: radial-gradient(circle, rgba(0, 0, 0, 1) 40%, rgba(0, 0, 0, 0) 75%);
+  mask-image: radial-gradient(circle, rgba(0, 0, 0, 1) 40%, rgba(0, 0, 0, 0) 75%);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
 }
 
 /* ------------------------------------------------------------
