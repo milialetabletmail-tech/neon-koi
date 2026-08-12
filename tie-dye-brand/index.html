@@ -15,79 +15,6 @@
 <body class="preloading">
 
   <!-- ============================================================
-       GOOEY / LIQUID-BLEED SVG FILTER
-       Classic metaball technique: blur the source, then push the
-       alpha channel through a steep threshold via feColorMatrix so
-       overlapping blurred blobs fuse into one soft, organic shape
-       instead of just showing translucent circles stacked on top
-       of each other. Referenced via `filter: url(#liquid-bleed)`.
-       ============================================================ -->
-  <svg aria-hidden="true" focusable="false" style="position:absolute; width:0; height:0; overflow:hidden;">
-    <defs>
-      <filter id="liquid-bleed" x="-150%" y="-150%" width="400%" height="400%" color-interpolation-filters="sRGB">
-        <feGaussianBlur in="SourceGraphic" stdDeviation="18" result="blur" />
-        <feColorMatrix in="blur" mode="matrix"
-          values="1 0 0 0 0
-                  0 1 0 0 0
-                  0 0 1 0 0
-                  0 0 0 22 -10"
-          result="liquid-bleed" />
-        <feComposite in="SourceGraphic" in2="liquid-bleed" operator="atop" />
-      </filter>
-
-      <!-- On-garment variant: deliberately skips the final feComposite-atop
-           recombine step. That step is what makes the classic gooey filter
-           fuse alpha/shape while keeping each blob's original color sharp —
-           great for same-color metaballs, but it leaves a hard seam where
-           two DIFFERENT colors overlap. Here we output the blurred layer
-           directly, so pigment blurs and mixes at the overlaps too (pink
-           bleeding into blue reads as violet, not a hard pink/blue line) —
-           actual ink-bleed rather than shape-only gooeyness. -->
-      <filter id="liquid-bleed-soft" x="-150%" y="-150%" width="400%" height="400%" color-interpolation-filters="sRGB">
-        <feGaussianBlur in="SourceGraphic" stdDeviation="26" result="blur" />
-        <feColorMatrix in="blur" mode="matrix"
-          values="1 0 0 0 0
-                  0 1 0 0 0
-                  0 0 1 0 0
-                  0 0 0 8 -1.5"
-          result="liquid-bleed-soft" />
-      </filter>
-
-      <!-- ============================================================
-           SPIRAL FIBER-BLEED FILTER
-           Real spiral tie-dye is twisted fabric dyed while folded, so
-           color wicks outward along the twist in irregular fibrous
-           streaks and concentric crinkle rings — never a clean pie
-           chart. feTurbulence generates organic fractal noise; instead
-           of using it to fade opacity (blur), we use it as a
-           feDisplacementMap to physically warp the conic-gradient
-           wedges, ring texture and resist lines together, so every
-           boundary frays like fabric instead of tracing a perfect arc.
-           `scale` on the displacement map is animated from 0 (crisp,
-           freshly-applied dye) up to full (soaked-in, fully frayed)
-           by main.js.
-           ============================================================ -->
-      <filter id="spiral-fiber-bleed" x="-80%" y="-80%" width="260%" height="260%" color-interpolation-filters="sRGB">
-        <feTurbulence type="fractalNoise" baseFrequency="0.011 0.018" numOctaves="3" seed="7" result="fibers" />
-        <feDisplacementMap id="spiralDisplacement" in="SourceGraphic" in2="fibers" scale="0" xChannelSelector="R" yChannelSelector="G" result="frayed" />
-        <feGaussianBlur in="frayed" stdDeviation="1.1" />
-      </filter>
-
-      <!-- Fine speckle/overspray halo: high-frequency noise thresholded down
-           to sparse dots via feComponentTransfer, then clipped to the
-           element's own gradient via feComposite "in" — gives scattered
-           color flecks instead of a flat wash. -->
-      <filter id="dye-speckle" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">
-        <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="11" result="grain" />
-        <feComponentTransfer in="grain" result="speckle">
-          <feFuncA type="discrete" tableValues="0 0 0 0 0 0 0 0 1 0 1 0 1" />
-        </feComponentTransfer>
-        <feComposite in="SourceGraphic" in2="speckle" operator="in" />
-      </filter>
-    </defs>
-  </svg>
-
-  <!-- ============================================================
        PRELOADER
        ============================================================ -->
   <div id="preloader">
@@ -105,13 +32,6 @@
 
       <div class="colorburst-bg"></div>
 
-      <!-- Ambient background liquid — atmospheric color energy behind the garment -->
-      <div class="burst-liquid">
-        <div class="burst-blob burst-blob--pink"   data-blob="pink"></div>
-        <div class="burst-blob burst-blob--blue"   data-blob="blue"></div>
-        <div class="burst-blob burst-blob--orange" data-blob="orange"></div>
-      </div>
-
       <p class="colorburst-label">Every piece is one moment</p>
 
       <h1 class="colorburst-headline" data-split>
@@ -119,25 +39,16 @@
         <span class="line">Burst</span>
       </h1>
 
+      <!-- The dye reveal: a real filmed sequence (white tee -> paint splash ->
+           finished spiral tie-dye) scrubbed frame-by-frame against scroll
+           position via canvas, rather than a native <video>. Native
+           video.currentTime seeking is throttled/keyframe-limited and gets
+           janky under fast, repeated scroll-driven seeks — drawing
+           pre-decoded frames to canvas is instant and stays perfectly
+           locked to scroll. Frame list + preloading + draw logic in main.js. -->
       <div class="garment-stage">
-        <div class="garment-photo">
-          <img src="assets/garment/tee-front-undyed.svg" alt="Undyed cotton tee, front view">
-        </div>
-
-        <!-- The actual dye: a twisted-spiral wedge pattern (conic-gradient),
-             fiber-frayed by an SVG turbulence displacement so boundaries
-             wick and stray like real dye on twisted cotton, plus a ring
-             layer (fold-crinkle) and a speckle layer (overspray). Mask and
-             filter/blend are kept on separate elements — combining
-             mask-image + filter + blend-mode on one node clips unreliably. -->
-        <div class="dye-mask">
-          <div class="dye-liquid" data-spiral>
-            <div class="dye-spiral"></div>
-            <div class="dye-rings"></div>
-            <div class="dye-resist"></div>
-          </div>
-          <div class="dye-splatter" data-splatter></div>
-        </div>
+        <canvas class="dye-canvas" width="720" height="413"
+          aria-label="A white t-shirt splashed with pink, blue and orange dye, twisted into a spiral tie-dye pattern"></canvas>
       </div>
 
       <p class="colorburst-batch">Batch 014 — Sunset Spiral</p>
