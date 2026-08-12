@@ -7,27 +7,41 @@
 
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  const FRAME_COUNT = 152; // frame-000.jpg .. frame-151.jpg, every native frame of the source clip
+  const FRAME_PATH = (i) => `assets/video-frames/frame-${String(i).padStart(3, '0')}.jpg`;
+
   /* ------------------------------------------------------------
-     Preload the dye-reveal video. Resolves once enough of it has
-     downloaded to seek freely — 'loadeddata' guarantees duration
-     and the first frame are available, and the file is small
-     enough (~5MB) that it's realistically all in flight by then.
+     Preload the dye-reveal frame sequence. Resolves with an array
+     of loaded <img> elements ready to draw to canvas. A real
+     <video> was tried here — driving currentTime off scroll — but
+     native seeking is throttled/keyframe-limited and gets visibly
+     janky under fast, repeated scroll-driven seeks, even with a
+     short GOP. Drawing pre-decoded frames to canvas has no seek
+     step at all: each scroll update just picks the two nearest
+     already-loaded images and draws them, so it's exactly as smooth
+     as the browser's paint loop allows.
      ------------------------------------------------------------ */
-  function loadVideo(video) {
-    return new Promise((resolve) => {
-      if (video.readyState >= 2) { resolve(); return; } // HAVE_CURRENT_DATA
-      video.addEventListener('loadeddata', () => resolve(), { once: true });
-      video.addEventListener('error', () => resolve(), { once: true }); // don't block the page
-      video.load();
-    });
+  function loadFrames() {
+    const frames = new Array(FRAME_COUNT);
+    const loads = [];
+    for (let i = 0; i < FRAME_COUNT; i++) {
+      loads.push(new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => resolve();
+        img.onerror = () => resolve(); // don't block the page on one bad frame
+        img.src = FRAME_PATH(i);
+        frames[i] = img;
+      }));
+    }
+    return Promise.all(loads).then(() => frames);
   }
 
   /* ------------------------------------------------------------
      Preloader — plays a short dye-wipe, holds for a minimum
-     visible duration (and until the video is ready), then
-     releases the page and hands off to the scroll build.
+     visible duration (and until the frame sequence is ready),
+     then releases the page and hands off to the scroll build.
      ------------------------------------------------------------ */
-  function runPreloader(videoPromise, onComplete) {
+  function runPreloader(framesPromise, onComplete) {
     const preloader = document.getElementById('preloader');
     const wipe = preloader.querySelector('.preloader-wipe');
     const mark = preloader.querySelector('.preloader-mark');
@@ -53,7 +67,7 @@
       const minWait = Math.max(0, MIN_VISIBLE_MS - elapsed);
       Promise.all([
         new Promise((resolve) => window.setTimeout(resolve, minWait)),
-        videoPromise,
+        framesPromise,
       ]).then(startWipe);
     }
 
@@ -75,9 +89,13 @@
   /* ------------------------------------------------------------
      Color Burst — pinned, scroll-scrubbed hero sequence.
      ------------------------------------------------------------ */
-  function buildColorBurst(video) {
+  function buildColorBurst(frames) {
     const stage = document.querySelector('.colorburst-stage');
     const garmentStage = document.querySelector('.garment-stage');
+    const canvas = document.querySelector('.dye-canvas');
+    const ctx = canvas.getContext('2d');
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
     const wordmarkGlow = document.querySelector('.hero-wordmark-glow');
     const wordmark = document.querySelector('.hero-wordmark');
     const subhead = document.querySelector('.hero-subhead');
@@ -85,23 +103,34 @@
     const batch = document.querySelector('.colorburst-batch');
     const hint = document.querySelector('.scroll-hint');
 
-    // Video never plays on its own — currentTime is driven entirely by
-    // scroll position below, so pause it in case autoplay heuristics
-    // start it and clamp seeks to a valid, known duration.
-    video.pause();
-    const rawDuration = video.duration && isFinite(video.duration) ? video.duration : 0;
-    // Stop just short of the true end: seeking to the exact duration lands
-    // past the last decodable frame in some browsers and shows a blank one.
-    const duration = Math.max(0, rawDuration - 0.05);
+    const lastFrame = FRAME_COUNT - 1;
 
-    function seekTo(time) {
-      const clamped = Math.max(0, Math.min(duration, time));
-      // Assigning currentTime is itself the seek; guard against redundant
-      // assignments firing spurious 'seeking' work on some browsers.
-      if (Math.abs(video.currentTime - clamped) > 0.001) video.currentTime = clamped;
+    // Cross-fades between the two nearest frames instead of snapping to the
+    // nearest whole frame — at typical scroll speeds a hard frame-to-frame
+    // cut can still read as a stepped flipbook even at 152 frames. Blending
+    // on the fractional part of the scrub position doubles the perceived
+    // smoothness for free, no extra frames needed.
+    function drawFrame(index) {
+      const clamped = Math.max(0, Math.min(lastFrame, index));
+      const floor = Math.floor(clamped);
+      const ceil = Math.min(lastFrame, floor + 1);
+      const t = clamped - floor;
+
+      const imgA = frames[floor];
+      const imgB = frames[ceil];
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      if (imgA && imgA.complete && imgA.naturalWidth) {
+        ctx.globalAlpha = 1;
+        ctx.drawImage(imgA, 0, 0, canvas.width, canvas.height);
+      }
+      if (ceil !== floor && t > 0.001 && imgB && imgB.complete && imgB.naturalWidth) {
+        ctx.globalAlpha = t;
+        ctx.drawImage(imgB, 0, 0, canvas.width, canvas.height);
+        ctx.globalAlpha = 1;
+      }
     }
 
-    seekTo(0);
+    drawFrame(0);
 
     function hideScrollHint() {
       if (!hint || hint.dataset.hidden) return;
@@ -116,7 +145,7 @@
     }
 
     if (prefersReducedMotion) {
-      seekTo(duration); // land straight on the finished tie-dye
+      drawFrame(lastFrame); // land straight on the finished tie-dye
       if (hint) hint.remove();
       return;
     }
@@ -182,15 +211,15 @@
     // --- State 0 (0% - 8%): quiet hold, undyed tee (frame 0) ---
     tl.addLabel('undyed', 0);
 
-    // --- Video scrub (8% - 68%): the filmed splash -> spiral sequence,
+    // --- Frame scrub (8% - 68%): the filmed splash -> spiral sequence,
     // linearly scrubbed against scroll so it feels physically tied to the
     // scrollbar rather than autoplaying. ---
-    const scrubProxy = { time: 0 };
-    tl.to(scrubProxy, {
-      time: duration,
+    const frameProxy = { frame: 0 };
+    tl.to(frameProxy, {
+      frame: lastFrame,
       duration: 0.6,
       ease: 'none',
-      onUpdate: () => seekTo(scrubProxy.time),
+      onUpdate: () => drawFrame(frameProxy.frame),
     }, 0.08);
 
     // --- State 2 (45% - 70%): text assembles as the tee finishes dyeing ---
@@ -213,7 +242,7 @@
     tl.to(batch, { opacity: 0.9, y: 0, duration: 0.2 }, 'saturate+=0.15');
 
     // --- State 3 (70% - 100%): release into next section ---
-    // Scale only — no rotate/tilt anywhere on the garment stage or video,
+    // Scale only — no rotate/tilt anywhere on the garment stage or canvas,
     // the footage box stays perfectly flat throughout the whole scroll.
     tl.addLabel('release', 0.7);
     tl.to(garmentStage, { scale: 0.92, duration: 0.3 }, 'release');
@@ -224,11 +253,10 @@
      Boot
      ------------------------------------------------------------ */
   document.addEventListener('DOMContentLoaded', () => {
-    const video = document.querySelector('.dye-video');
-    const videoPromise = loadVideo(video);
-    runPreloader(videoPromise, () => {
-      videoPromise.then(() => {
-        buildColorBurst(video);
+    const framesPromise = loadFrames();
+    runPreloader(framesPromise, () => {
+      framesPromise.then((frames) => {
+        buildColorBurst(frames);
         if (window.ScrollTrigger) ScrollTrigger.refresh();
       });
     });

@@ -14,8 +14,8 @@
   /* Coffee-ash: hard site-wide backdrop, incl. the Hero. The filmed
      dye-reveal footage was shot on a neutral studio-gray backdrop; the
      footage itself isn't regraded (that's the pastel recolor pass, done
-     by hand on the source video), so the video is code-graded live (see
-     .dye-video) to sink that gray into this same tone, and the vignette
+     by hand on the source video), so the canvas is code-graded live (see
+     .dye-canvas) to sink that gray into this same tone, and the vignette
      mask hands off to this flat color at the footage's edges — one
      continuous coffee-ash room instead of a gray video box floating on a
      dark page. */
@@ -357,13 +357,13 @@ body.preloading { overflow: hidden; height: 100vh; }
   z-index: 7;
 }
 
-/* --- garment stage: full-bleed scroll-scrubbed filmed footage ---
-   Fills the whole pinned stage; the video itself handles the source
+/* --- garment stage: full-bleed canvas-scrubbed filmed sequence ---
+   Fills the whole pinned stage; the canvas itself handles the source
    footage's crop via object-fit: cover. There's no card/box
-   edge by design — the vignette mask on .dye-video dissolves the
+   edge by design — the vignette mask on .dye-canvas dissolves the
    footage's studio-gray corners into the stage's flat coffee-ash
-   background, so video and page read as one continuous room instead of
-   a bordered rectangle sitting on top of the page. */
+   background, so footage and page read as one continuous room instead
+   of a bordered rectangle sitting on top of the page. */
 
 .garment-stage {
   position: absolute;
@@ -372,7 +372,7 @@ body.preloading { overflow: hidden; height: 100vh; }
   will-change: transform;
 }
 
-.dye-video {
+.dye-canvas {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -425,7 +425,7 @@ body.preloading { overflow: hidden; height: 100vh; }
     background: var(--ink);
   }
 
-  .dye-video {
+  .dye-canvas {
     object-fit: contain;
     -webkit-mask-image: none;
     mask-image: none;
