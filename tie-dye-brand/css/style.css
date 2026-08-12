@@ -479,24 +479,17 @@ body.preloading { overflow: hidden; height: 100vh; }
     bottom: 8%;
   }
 
-  /* All three marks (preloader, header, Hero) reuse their desktop clamp()
-     formulas' vw term unchanged — that's the actual "proportion" — but
-     with new min/max rails sized for the 320-768px range instead of the
-     desktop ones. The desktop min was tuned assuming the vw term would
-     already have room to grow past it (true from ~1024px up); at phone
-     widths the vw term undershoots that min completely, so the min wins
-     outright and the mark renders at a fixed size that's disproportionately
-     huge against a small viewport — the Hero wordmark was hitting its
-     18rem floor at 74% of the viewport width, nearly 3x its ~27-37% share
-     on desktop. */
-  #preloader .preloader-mark {
-    width: clamp(4.5rem, 20vw, 9.5rem);
-  }
-
-  .wordmark {
-    width: clamp(2.2rem, 9vw, 4.5rem);
-  }
-
+  /* Only the Hero wordmark + the "Tie-Dye" tag under it get a mobile-
+     specific size — the preloader mark and header corner logo keep their
+     desktop clamp() as-is. Reuses the desktop formulas' vw term unchanged
+     (that's the actual "proportion") but with new min/max rails sized for
+     the 320-768px range instead of the desktop ones: the desktop min was
+     tuned assuming the vw term would already have room to grow past it
+     (true from ~1024px up), but at phone widths the vw term undershoots
+     that min completely, so the min won outright and the wordmark
+     rendered at a fixed size disproportionately huge against a small
+     viewport — 18rem was 74% of the viewport width, nearly 3x its
+     ~27-37% share on desktop. */
   .hero-wordmark {
     width: clamp(8rem, 40vw, 19rem);
   }
