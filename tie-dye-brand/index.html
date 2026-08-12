@@ -8,9 +8,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<!-- Road Rage: open-source street-art/marker face used for the SMN
-     wordmark, at both the hero and header scale. -->
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,500&family=Road+Rage&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,500;1,9..144,800&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="css/style.css">
 </head>
@@ -19,16 +17,18 @@
   <!-- ============================================================
        PRELOADER
        ============================================================ -->
-  <div id="preloader">
+  <div id="preloader" aria-hidden="true">
     <div class="preloader-wipe"></div>
-    <p class="preloader-mark">SMN</p>
+    <div class="preloader-mark"></div>
   </div>
 
-  <!-- Header mark: same Road Rage face as the hero wordmark, scaled down,
-       filled with the Sunset Spiral acid palette via a gradient
-       background-clip:text instead of the hero's solid glossy black —
-       reads as the brand's colorway, not a competing headline. -->
-  <div class="wordmark">SMN</div>
+  <!-- Header mark: original hand-painted "SMN" artwork with a baked-in
+       multicolor paint-splash and white brush letters (see
+       assets/wordmark/README) — shown as a plain image, not a recolored
+       mask, since the color already lives in the file. The text stays in
+       the DOM for accessibility/SEO but is visually hidden; the artwork is
+       what's actually shown. -->
+  <div class="wordmark"><span class="sr-only">SMN</span></div>
 
   <!-- ============================================================
        HERO — "COLOR BURST"
@@ -40,14 +40,13 @@
 
       <p class="colorburst-label">No two spirals alike</p>
 
-      <!-- SMN is the brand wordmark and the dominant visual on screen;
-           "Color Burst" is demoted to a small editorial collection tag.
-           The tag sits first/above as a small kicker so it stays clear
-           of the neckline; SMN itself is deliberately large enough to
-           read as a bold stamp across the upper garment. -->
+      <!-- SMN is the brand wordmark and the dominant visual on screen,
+           centered in the stage; "Tie-Dye" is a small editorial collection
+           tag sitting directly beneath it as a detail, not a competing
+           headline. -->
       <div class="hero-wordmark-group">
-        <p class="hero-subhead">Color Burst</p>
-        <h1 class="hero-wordmark">SMN</h1>
+        <h1 class="hero-wordmark"><span class="sr-only">SMN</span></h1>
+        <p class="hero-subhead">Tie-Dye</p>
       </div>
 
       <!-- The dye reveal: a real filmed sequence (white tee -> paint splash ->
