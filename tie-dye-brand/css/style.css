@@ -176,16 +176,6 @@ body.preloading { overflow: hidden; height: 100vh; }
   cursor: pointer;
 }
 
-.colorburst-bg {
-  position: absolute;
-  inset: -10%;
-  background: var(--gradient-spiral);
-  opacity: 0;
-  filter: blur(60px) saturate(0.6);
-  transform: scale(0.9);
-  will-change: opacity, transform;
-}
-
 /* --- brand wordmark (dominant) + collection tag (demoted) ---
    LN-team is the primary identity on screen — large, solid-black brush
    type. "Color Burst" is now just the edition/collection name, styled
@@ -379,20 +369,20 @@ body.preloading { overflow: hidden; height: 100vh; }
   display: block;
   background: var(--ink);
 
-  /* Sinks the footage's neutral studio-gray into the site's coffee-ash:
-     contrast pushes the gray backdrop down toward black while brightness
-     stays high enough to keep the tee light, sepia() pulls the whole
-     grade toward a warm brown instead of a cold gray-black, and
-     saturate() puts the vibrance sepia() flattens back into the pastel
-     dye. This backdrop is a genuine light-to-mid gray (not near-black),
-     and shares its low saturation with the white tee itself — there's no
-     pixel-color rule that can tell "gray wall" from "white fabric" apart,
-     so this is a tasteful grade, not a clean key: it reads as moodier,
-     warmer studio lighting rather than a seam-free color swap. No blend
-     mode against the page background: multiply/darken read the *whole*
-     frame against the backdrop color, so the white tee would multiply
-     down to that same dark coffee instead of staying bright. */
-  filter: brightness(0.8) contrast(1.3) saturate(1.3) sepia(0.22);
+  /* Leans light: brightness lifts the tee and the dye colors both (they
+     overlap the gray backdrop's own tonal range, so there's no way to
+     brighten one without the other), contrast is kept low so it doesn't
+     claw the lift back out of the midtones, sepia() pulls the whole grade
+     toward warm brown instead of cold gray-black, and saturate() restores
+     the vibrance sepia() flattens out of the pastel dye. The vignette
+     mask (below) still hands off to the page's flat coffee-ash at the
+     actual edges regardless of this grade, which is doing the real "melt
+     into the room" work — this filter is about the mood of the footage
+     itself, not the seam. No blend mode against the page background:
+     multiply/darken read the *whole* frame against the backdrop color, so
+     the white tee would multiply down to that same dark coffee instead of
+     staying bright. */
+  filter: brightness(1.08) contrast(1.15) saturate(1.3) sepia(0.16);
 
   /* Elliptical, not circular: the studio box is landscape, so a circular
      mask either clips the side splatters early or leaves the top/bottom
@@ -427,14 +417,6 @@ body.preloading { overflow: hidden; height: 100vh; }
     object-fit: contain;
     -webkit-mask-image: none;
     mask-image: none;
-  }
-
-  /* The atmospheric color wash spans the full viewport behind everything;
-     on desktop the full-bleed canvas covers it entirely, but on mobile
-     the letterboxed (contain-fit) canvas leaves it visible above/below,
-     tinting what's meant to be a flat, seamless gray bar. */
-  .colorburst-bg {
-    display: none;
   }
 
   /* Clear the fixed corner logo (top: 1.75rem/left: 1.75rem) — centered
@@ -476,7 +458,6 @@ body.preloading { overflow: hidden; height: 100vh; }
 @media (prefers-reduced-motion: reduce) {
   .colorburst { height: auto; }
   .colorburst-stage { height: 100vh; }
-  .colorburst-bg { opacity: 0.9; transform: none; transition: none; }
   .hero-wordmark { opacity: 1; transform: none; }
   .hero-subhead { opacity: 1; }
   .colorburst-batch { opacity: 0.85; transform: translate(-50%, 0); }

@@ -77,7 +77,6 @@
      ------------------------------------------------------------ */
   function buildColorBurst(video) {
     const stage = document.querySelector('.colorburst-stage');
-    const bg = document.querySelector('.colorburst-bg');
     const garmentStage = document.querySelector('.garment-stage');
     const wordmark = document.querySelector('.hero-wordmark');
     const subhead = document.querySelector('.hero-subhead');
@@ -193,11 +192,8 @@
       onUpdate: () => seekTo(scrubProxy.time),
     }, 0.08);
 
-    tl.to(bg, { opacity: 0.22, scale: 1, filter: 'blur(130px) saturate(0.85)', duration: 0.3, ease: 'sine.out' }, 0.12);
-
     // --- State 2 (45% - 70%): text assembles as the tee finishes dyeing ---
     tl.addLabel('saturate', 0.45);
-    tl.to(bg, { opacity: 0.32, filter: 'blur(140px) saturate(0.95)', duration: 0.25 }, 'saturate');
     tl.to(label, { opacity: 0, y: -10, duration: 0.12 }, 'saturate');
     tl.to(subhead, { opacity: 0.85, duration: 0.2, ease: 'sine.out' }, 'saturate');
     // The wordmark lands as one unified "stamp" (scale + fade), not a
@@ -219,7 +215,6 @@
     // the footage box stays perfectly flat throughout the whole scroll.
     tl.addLabel('release', 0.7);
     tl.to(garmentStage, { scale: 0.92, duration: 0.3 }, 'release');
-    tl.to(bg, { opacity: 0.16, scale: 1.15, duration: 0.3 }, 'release');
     tl.to([wordmark, subhead, batch], { opacity: 0, duration: 0.2 }, 'release+=0.1');
   }
 
