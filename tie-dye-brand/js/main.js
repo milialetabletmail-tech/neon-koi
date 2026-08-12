@@ -91,25 +91,58 @@
     const garmentStage = document.querySelector('.garment-stage');
     const canvas = document.querySelector('.dye-canvas');
     const ctx = canvas.getContext('2d');
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
     const wordmark = document.querySelector('.hero-wordmark');
     const subhead = document.querySelector('.hero-subhead');
     const label = document.querySelector('.colorburst-label');
     const batch = document.querySelector('.colorburst-batch');
+    const hint = document.querySelector('.scroll-hint');
 
     const lastFrame = FRAME_COUNT - 1;
 
+    // Cross-fades between the two nearest frames instead of snapping to the
+    // nearest whole frame — the source is only 121 stills, so at typical
+    // scroll speeds a hard frame-to-frame cut reads as a stepped flipbook.
+    // Blending on the fractional part of the scrub position doubles the
+    // perceived smoothness for free, no extra frames needed.
     function drawFrame(index) {
-      const clamped = Math.max(0, Math.min(lastFrame, Math.round(index)));
-      const img = frames[clamped];
-      if (!img || !img.complete || img.naturalWidth === 0) return;
+      const clamped = Math.max(0, Math.min(lastFrame, index));
+      const floor = Math.floor(clamped);
+      const ceil = Math.min(lastFrame, floor + 1);
+      const t = clamped - floor;
+
+      const imgA = frames[floor];
+      const imgB = frames[ceil];
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      if (imgA && imgA.complete && imgA.naturalWidth) {
+        ctx.globalAlpha = 1;
+        ctx.drawImage(imgA, 0, 0, canvas.width, canvas.height);
+      }
+      if (ceil !== floor && t > 0.001 && imgB && imgB.complete && imgB.naturalWidth) {
+        ctx.globalAlpha = t;
+        ctx.drawImage(imgB, 0, 0, canvas.width, canvas.height);
+        ctx.globalAlpha = 1;
+      }
     }
 
     drawFrame(0);
 
+    function hideScrollHint() {
+      if (!hint || hint.dataset.hidden) return;
+      hint.dataset.hidden = 'true';
+      gsap.to(hint, {
+        opacity: 0,
+        y: 8,
+        duration: 0.4,
+        ease: 'power1.in',
+        onComplete: () => hint.remove(),
+      });
+    }
+
     if (prefersReducedMotion) {
       drawFrame(lastFrame); // land straight on the finished tie-dye
+      if (hint) hint.remove();
       return;
     }
 
@@ -126,7 +159,49 @@
         scrub: 1,
         pin: stage,
         anticipatePin: 1,
+        onUpdate: (self) => {
+          if (self.progress > 0.004) hideScrollHint();
+        },
       },
+    });
+
+    const st = tl.scrollTrigger;
+
+    // --- Tap/click-to-advance: lets someone unfold the tee by tapping the
+    // screen instead of scrolling — useful on trackpad-less phones and just
+    // a nicer way to "play" with the effect. A native smooth-scroll (not a
+    // GSAP tween) is enough here since ScrollTrigger's scrub already reacts
+    // to any change in scroll position, whatever caused it. Using the
+    // 'click' event (not 'touchstart') is deliberate: browsers only fire a
+    // synthetic click for a genuine tap, not for a scroll/swipe drag, so
+    // this never fights normal touch scrolling. ---
+    function spawnTapRipple(clientX, clientY) {
+      const rect = stage.getBoundingClientRect();
+      const ripple = document.createElement('div');
+      ripple.className = 'tap-ripple';
+      ripple.style.left = `${clientX - rect.left}px`;
+      ripple.style.top = `${clientY - rect.top}px`;
+      stage.appendChild(ripple);
+      gsap.fromTo(
+        ripple,
+        { scale: 0, opacity: 0.7 },
+        {
+          scale: 1,
+          opacity: 0,
+          duration: 0.65,
+          ease: 'power2.out',
+          onComplete: () => ripple.remove(),
+        }
+      );
+    }
+
+    stage.addEventListener('click', (evt) => {
+      const progress = st.progress;
+      const target = progress >= 0.97 ? 0 : progress + 0.16;
+      const dest = st.start + (st.end - st.start) * gsap.utils.clamp(0, 1, target);
+      window.scrollTo({ top: dest, behavior: 'smooth' });
+      spawnTapRipple(evt.clientX, evt.clientY);
+      hideScrollHint();
     });
 
     // --- State 0 (0% - 8%): quiet hold, undyed tee (frame 0) ---
