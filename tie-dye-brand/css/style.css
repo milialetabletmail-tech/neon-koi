@@ -41,10 +41,16 @@
   --font-display: 'Fraunces', Georgia, serif;
 
   /* Brush-lettering artwork (assets/wordmark/ln-team.png) — solid black
-     strokes on a transparent background, used as a mask for all three
-     mark placements: .wordmark (header), .hero-wordmark, and
-     #preloader .preloader-mark. Native 892x344. */
+     strokes on a transparent background, used as a mask for two mark
+     placements: .hero-wordmark and #preloader .preloader-mark. Native
+     892x344. */
   --mark-ratio: 892 / 344;
+
+  /* The header mark (assets/wordmark/ln-team-color.png) is a separate
+     piece of artwork with its own baked-in multicolor paint-splash,
+     shown as a plain image rather than a recolored mask. Native
+     800x500. */
+  --mark-ratio-color: 800 / 500;
 
   /* --- Motion / scale --- */
   --ease-burst: cubic-bezier(.16, 1, .3, 1);
@@ -130,27 +136,23 @@ body.preloading { overflow: hidden; height: 100vh; }
   top: 1.75rem;
   left: 1.75rem;
   z-index: 50;
-  width: clamp(5.5rem, 8vw, 7.5rem);
-  aspect-ratio: var(--mark-ratio);
-  background: var(--ink-letter);
-  -webkit-mask-image: url('../assets/wordmark/ln-team.png');
-  mask-image: url('../assets/wordmark/ln-team.png');
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  -webkit-mask-size: contain;
-  mask-size: contain;
-  -webkit-mask-position: center;
-  mask-position: center;
+  width: clamp(6rem, 9vw, 8.5rem);
+  aspect-ratio: var(--mark-ratio-color);
 
-  /* Solid black letters need their own light behind them to read against
-     the Hero's dark coffee-ash backdrop — a soft paper-colored halo (the
-     same trick as .hero-subhead's stacked text-shadow) plus a tight dark
-     shadow for edge definition against lighter, busier patches of the
-     video underneath. */
-  filter:
-    drop-shadow(0 0 3px rgba(244, 238, 225, 0.8))
-    drop-shadow(0 0 10px rgba(244, 238, 225, 0.45))
-    drop-shadow(0 2px 6px rgba(0, 0, 0, 0.5));
+  /* The compact colorway mark — real multicolor paint-splash artwork
+     (assets/wordmark/ln-team-color.png, in the same lavender/cyan/sage
+     as the rest of the brand) with black brush letters, shown as-is
+     rather than through the mask+fill technique used for the other two
+     placements. A flat black mask fill (like .hero-wordmark) blended
+     into the page's dark coffee-ash background here — this mark carries
+     its own colorful backdrop instead, so the letters always have local
+     contrast no matter what's behind the fixed corner position as the
+     page scrolls, with no glow/shadow trick needed. */
+  background-image: url('../assets/wordmark/ln-team-color.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.5));
 }
 
 /* ------------------------------------------------------------
@@ -412,11 +414,19 @@ body.preloading { overflow: hidden; height: 100vh; }
 /* ------------------------------------------------------------
    MOBILE: strictly vertical/portrait — no landscape hacks. The footage
    is letterboxed (object-fit: contain) instead of cropped full-bleed,
-   so the empty space above/below it is real page background, filled
-   with a flat tone sampled from the footage's own edge gray so the
-   seam between "video" and "page" stays invisible. The desktop cover
-   vignette is dropped here since contain already shows the full frame
-   with nothing to mask.
+   so the empty space above/below it is real page background. The
+   footage's own graded studio-gray still needs to fade into that flat
+   background at its top/bottom edges, same as the desktop vignette —
+   dropping the mask entirely here was wrong, it just left a visible
+   rectangle seam where the letterboxed band met the bars. The desktop
+   ellipse can't be reused as-is (it's tuned for a full-bleed cover-fit
+   box, not a letterboxed one), so this is a straight vertical fade
+   instead, sized in vw to match the letterboxed band's own height:
+   object-fit: contain on a 1728x992 (~1.74:1) source scales to the
+   viewport's full width, so the rendered band is always ~57.4vw tall
+   and centered regardless of viewport height — the gradient stops are
+   that same math, so the fade lands right at the band's real edges on
+   any phone instead of guessing a fixed percentage.
    ------------------------------------------------------------ */
 
 @media (max-width: 768px) {
@@ -427,8 +437,28 @@ body.preloading { overflow: hidden; height: 100vh; }
 
   .dye-canvas {
     object-fit: contain;
-    -webkit-mask-image: none;
-    mask-image: none;
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent calc(50% - 29vw),
+      rgba(0, 0, 0, 1) calc(50% - 24vw),
+      rgba(0, 0, 0, 1) calc(50% + 24vw),
+      transparent calc(50% + 29vw),
+      transparent 100%
+    );
+    mask-image: linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent calc(50% - 29vw),
+      rgba(0, 0, 0, 1) calc(50% - 24vw),
+      rgba(0, 0, 0, 1) calc(50% + 24vw),
+      transparent calc(50% + 29vw),
+      transparent 100%
+    );
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
   }
 
   /* Clear the fixed corner logo (top: 1.75rem/left: 1.75rem) — centered
