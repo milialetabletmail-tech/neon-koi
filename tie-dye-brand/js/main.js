@@ -241,12 +241,16 @@
     }, 'saturate+=0.03');
     tl.to(batch, { opacity: 0.9, y: 0, duration: 0.2 }, 'saturate+=0.15');
 
-    // --- State 3 (70% - 100%): release into next section ---
-    // Scale only — no rotate/tilt anywhere on the garment stage or canvas,
-    // the footage box stays perfectly flat throughout the whole scroll.
-    tl.addLabel('release', 0.7);
-    tl.to(garmentStage, { scale: 0.92, duration: 0.3 }, 'release');
-    tl.to([wordmark, subhead, batch, wordmarkGlow], { opacity: 0, duration: 0.2 }, 'release+=0.1');
+    // Nothing after this: once the wordmark and batch line finish landing,
+    // the scroll simply stops driving anything further. There used to be
+    // a "release" state here — the garment shrinking and the text fading
+    // back out — but that made the wordmark's appearance feel like a
+    // fleeting mid-point instead of the payoff. Deleting those tweens
+    // (rather than just, say, setting their end values to a no-op) also
+    // shortens the timeline's own total duration to match, which
+    // ScrollTrigger's scrub picks up automatically: the last real tween
+    // (the batch line) now lands exactly at 100% scroll instead of 80%,
+    // so there's no dead scroll room after everything's on screen either.
   }
 
   /* ------------------------------------------------------------
