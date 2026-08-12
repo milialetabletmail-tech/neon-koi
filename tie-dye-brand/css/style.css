@@ -49,8 +49,8 @@
   /* The header mark (assets/wordmark/ln-team-color.png) is a separate
      piece of artwork with its own baked-in multicolor paint-splash,
      shown as a plain image rather than a recolored mask. Native
-     800x500. */
-  --mark-ratio-color: 800 / 500;
+     800x522. */
+  --mark-ratio-color: 800 / 522;
 
   /* --- Motion / scale --- */
   --ease-burst: cubic-bezier(.16, 1, .3, 1);
@@ -195,12 +195,19 @@ body.preloading { overflow: hidden; height: 100vh; }
   position: absolute;
   top: 50%;
   left: 50%;
-  width: min(60rem, 92vw);
-  height: 34rem;
+  width: min(66rem, 94vw);
+  height: 38rem;
   transform: translate(-50%, -50%);
-  background: radial-gradient(ellipse 50% 55% at 50% 50%, rgba(255, 250, 240, 0.55) 0%, rgba(255, 250, 240, 0.22) 40%, transparent 75%);
+  /* Pushed up from the original pass (0.55/0.22 peak alphas) — that read
+     as too subtle against the darker, shadowed parts of the tie-dye
+     right next to the wordmark. soft-light stays self-limiting even at
+     high alpha (it can't blow a dark pixel out to flat white the way
+     screen/lighten would), so cranking the alpha is safe here — it
+     brightens the dark passages a lot more without the glow itself
+     starting to read as a hard-edged patch. */
+  background: radial-gradient(ellipse 55% 60% at 50% 50%, rgba(255, 250, 240, 0.85) 0%, rgba(255, 250, 240, 0.42) 40%, transparent 75%);
   mix-blend-mode: soft-light;
-  filter: blur(50px);
+  filter: blur(60px);
   opacity: 0;
   pointer-events: none;
   z-index: 4;
@@ -470,6 +477,32 @@ body.preloading { overflow: hidden; height: 100vh; }
 
   .scroll-hint {
     bottom: 8%;
+  }
+
+  /* All three marks (preloader, header, Hero) reuse their desktop clamp()
+     formulas' vw term unchanged — that's the actual "proportion" — but
+     with new min/max rails sized for the 320-768px range instead of the
+     desktop ones. The desktop min was tuned assuming the vw term would
+     already have room to grow past it (true from ~1024px up); at phone
+     widths the vw term undershoots that min completely, so the min wins
+     outright and the mark renders at a fixed size that's disproportionately
+     huge against a small viewport — the Hero wordmark was hitting its
+     18rem floor at 74% of the viewport width, nearly 3x its ~27-37% share
+     on desktop. */
+  #preloader .preloader-mark {
+    width: clamp(4.5rem, 20vw, 9.5rem);
+  }
+
+  .wordmark {
+    width: clamp(2.2rem, 9vw, 4.5rem);
+  }
+
+  .hero-wordmark {
+    width: clamp(8rem, 40vw, 19rem);
+  }
+
+  .hero-subhead {
+    font-size: clamp(1.1rem, 2.6vw, 1.9rem);
   }
 }
 
