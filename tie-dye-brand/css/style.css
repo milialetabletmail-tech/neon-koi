@@ -11,21 +11,21 @@
 
 :root {
   /* --- Sunset Spiral palette --- */
-  --ink: #0d0c0f;
+  /* Coffee-ash: hard site-wide backdrop, incl. the Hero. The filmed
+     dye-reveal footage was shot on a neutral studio-gray backdrop; the
+     footage itself isn't regraded (that's the pastel recolor pass, done
+     by hand in the source frames), so the canvas is code-graded (see
+     .dye-canvas) to sink that gray into this same tone, and the vignette
+     mask hands off to this flat color at the footage's edges — one
+     continuous coffee-ash room instead of a gray video box floating on a
+     dark page. */
+  --ink: #2a2625;
   --paper: #f4eee1;
   --paper-dim: #e8dfcd;
   --acid-pink: #ff3d81;
   --electric-blue: #2b6dff;
   --sunset-orange: #ff7a2f;
   --sunset-gold: #ffb648;
-
-  /* Coffee-ash, matching the dye-reveal footage's recolored backdrop
-     (see assets/video-frames — background remapped from studio-gray to
-     coffee-ash via HSV recolor), so the hero stage reads as one
-     continuous room instead of a dark page with a video box floating
-     on it. */
-  --studio-gray-light: #4c4543;
-  --studio-gray-dark: #1e1b1a;
 
   --gradient-spiral:
     radial-gradient(circle at 28% 22%, var(--acid-pink) 0%, transparent 55%),
@@ -152,7 +152,7 @@ body.preloading { overflow: hidden; height: 100vh; }
 .colorburst {
   position: relative;
   height: 400vh; /* scroll distance the burst plays out over */
-  background: radial-gradient(circle at 50% 55%, var(--studio-gray-light), var(--studio-gray-dark));
+  background: var(--ink);
 }
 
 .colorburst-stage {
@@ -162,7 +162,7 @@ body.preloading { overflow: hidden; height: 100vh; }
   display: flex;
   align-items: center;
   justify-content: center;
-  background: radial-gradient(circle at 50% 55%, var(--studio-gray-light), var(--studio-gray-dark));
+  background: var(--ink);
   /* The whole stage is a tap/click target — main.js advances the reveal
      by a step on click, so the pointer should read as interactive. */
   cursor: pointer;
@@ -348,8 +348,8 @@ body.preloading { overflow: hidden; height: 100vh; }
    Fills the whole pinned stage; the canvas itself handles the source
    footage's crop via object-fit: cover. There's no card/box
    edge by design — the vignette mask on .dye-canvas dissolves the
-   footage's studio-gray corners into the stage's own matching gray
-   gradient, so video and page read as one continuous room instead of
+   footage's studio-gray corners into the stage's flat coffee-ash
+   background, so video and page read as one continuous room instead of
    a bordered rectangle sitting on top of the page. */
 
 .garment-stage {
@@ -367,13 +367,25 @@ body.preloading { overflow: hidden; height: 100vh; }
   object-fit: cover;
   display: block;
 
+  /* Sinks the footage's neutral studio-gray into the site's coffee-ash
+     without touching the garment: raising contrast + lowering brightness
+     pushes the gray backdrop (already the darkest, lowest-saturation
+     part of the frame) down toward black, while the near-white tee and
+     the saturated pastel dye stay near the top of the range and come out
+     the other side brighter, not dimmer — saturate() then restores the
+     punch contrast alone would flatten out of the pastels. No blend mode
+     against the page background: multiply/darken read the *whole* frame
+     against the backdrop color, so a white tee laid over a dark coffee
+     page would multiply down to that same dark coffee, not stay white. */
+  filter: brightness(0.85) contrast(1.28) saturate(1.2);
+
   /* Elliptical, not circular: the studio box is landscape, so a circular
      mask either clips the side splatters early or leaves the top/bottom
      corners hard. An ellipse lets the fade reach further out
      horizontally (splatters stay crisp) while still fully resolving
      vertically before the top/bottom edge (no reintroduced hard line). */
-  -webkit-mask-image: radial-gradient(ellipse 68% 92% at 50% 50%, rgba(0, 0, 0, 1) 48%, rgba(0, 0, 0, 0) 90%);
-  mask-image: radial-gradient(ellipse 68% 92% at 50% 50%, rgba(0, 0, 0, 1) 48%, rgba(0, 0, 0, 0) 90%);
+  -webkit-mask-image: radial-gradient(ellipse 66% 90% at 50% 50%, rgba(0, 0, 0, 1) 42%, rgba(0, 0, 0, 0) 86%);
+  mask-image: radial-gradient(ellipse 66% 90% at 50% 50%, rgba(0, 0, 0, 1) 42%, rgba(0, 0, 0, 0) 86%);
   -webkit-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
   -webkit-mask-size: 100% 100%;
@@ -393,7 +405,7 @@ body.preloading { overflow: hidden; height: 100vh; }
 @media (max-width: 768px) {
   .colorburst,
   .colorburst-stage {
-    background: var(--studio-gray-light);
+    background: var(--ink);
   }
 
   .dye-canvas {
