@@ -8,9 +8,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<!-- Road Rage: open-source street-art/marker face used for the SMN
-     wordmark, at both the hero and header scale. -->
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,500&family=Road+Rage&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,500&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="css/style.css">
 </head>
@@ -19,16 +17,19 @@
   <!-- ============================================================
        PRELOADER
        ============================================================ -->
-  <div id="preloader">
+  <div id="preloader" aria-hidden="true">
     <div class="preloader-wipe"></div>
-    <p class="preloader-mark">SMN</p>
+    <div class="preloader-mark"></div>
   </div>
 
-  <!-- Header mark: same Road Rage face as the hero wordmark, scaled down,
-       filled with the Sunset Spiral acid palette via a gradient
-       background-clip:text instead of the hero's solid glossy black —
-       reads as the brand's colorway, not a competing headline. -->
-  <div class="wordmark">SMN</div>
+  <!-- Header mark: the real hand-painted "SMN" artwork (extracted from a
+       licensed Freepik brush-alphabet asset — see assets/wordmark/README),
+       used as a CSS mask so it can be recolored per placement instead of a
+       flat image. Filled with the Sunset Spiral acid palette here — reads
+       as the brand's colorway, not a competing headline. The text stays in
+       the DOM for accessibility/SEO but is visually hidden; the artwork is
+       what's actually shown. -->
+  <div class="wordmark"><span class="sr-only">SMN</span></div>
 
   <!-- ============================================================
        HERO — "COLOR BURST"
@@ -47,7 +48,7 @@
            read as a bold stamp across the upper garment. -->
       <div class="hero-wordmark-group">
         <p class="hero-subhead">Color Burst</p>
-        <h1 class="hero-wordmark">SMN</h1>
+        <h1 class="hero-wordmark"><span class="sr-only">SMN</span></h1>
       </div>
 
       <!-- The dye reveal: a real filmed sequence (white tee -> paint splash ->
