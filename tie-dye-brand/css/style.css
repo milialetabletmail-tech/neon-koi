@@ -19,11 +19,13 @@
   --sunset-orange: #ff7a2f;
   --sunset-gold: #ffb648;
 
-  /* Studio gray sampled from the dye-reveal footage itself, so the hero
-     stage reads as one continuous room instead of a dark page with a
-     gray video box floating on it. */
-  --studio-gray-light: #5b636c;
-  --studio-gray-dark: #20262c;
+  /* Coffee-ash, matching the dye-reveal footage's recolored backdrop
+     (see assets/video-frames — background remapped from studio-gray to
+     coffee-ash via HSV recolor), so the hero stage reads as one
+     continuous room instead of a dark page with a video box floating
+     on it. */
+  --studio-gray-light: #4c4543;
+  --studio-gray-dark: #1e1b1a;
 
   --gradient-spiral:
     radial-gradient(circle at 28% 22%, var(--acid-pink) 0%, transparent 55%),
