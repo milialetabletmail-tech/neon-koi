@@ -3,12 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sunset Spiral — Tie-Dye Streetwear</title>
-<meta name="description" content="Custom tie-dye streetwear. Every piece is one moment, one batch, one burst of color.">
+<title>SMN — Small-Batch Hand-Dyed Streetwear</title>
+<meta name="description" content="SMN: hand-twisted, hand-dyed, one at a time. The Color Burst collection — no two pieces ever the same.">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<!-- Road Rage: open-source street-art/marker face used for the SMN
+     wordmark, at both the hero and header scale. -->
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,500&family=Road+Rage&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="css/style.css">
 </head>
@@ -19,10 +21,14 @@
        ============================================================ -->
   <div id="preloader">
     <div class="preloader-wipe"></div>
-    <p class="preloader-mark">SUNSET&nbsp;SPIRAL</p>
+    <p class="preloader-mark">SMN</p>
   </div>
 
-  <div class="wordmark">Sunset&nbsp;Spiral</div>
+  <!-- Header mark: same Road Rage face as the hero wordmark, scaled down,
+       filled with the Sunset Spiral acid palette via a gradient
+       background-clip:text instead of the hero's solid glossy black —
+       reads as the brand's colorway, not a competing headline. -->
+  <div class="wordmark">SMN</div>
 
   <!-- ============================================================
        HERO — "COLOR BURST"
@@ -32,22 +38,28 @@
 
       <div class="colorburst-bg"></div>
 
-      <div class="burst-blob burst-blob--pink"   data-blob="pink"></div>
-      <div class="burst-blob burst-blob--blue"   data-blob="blue"></div>
-      <div class="burst-blob burst-blob--orange" data-blob="orange"></div>
+      <p class="colorburst-label">No two spirals alike</p>
 
-      <p class="colorburst-label">Every piece is one moment</p>
+      <!-- SMN is the brand wordmark and the dominant visual on screen;
+           "Color Burst" is demoted to a small editorial collection tag.
+           The tag sits first/above as a small kicker so it stays clear
+           of the neckline; SMN itself is deliberately large enough to
+           read as a bold stamp across the upper garment. -->
+      <div class="hero-wordmark-group">
+        <p class="hero-subhead">Color Burst</p>
+        <h1 class="hero-wordmark">SMN</h1>
+      </div>
 
-      <h1 class="colorburst-headline" data-split>
-        <span class="line">Color</span>
-        <span class="line">Burst</span>
-      </h1>
-
+      <!-- The dye reveal: a real filmed sequence (white tee -> paint splash ->
+           finished spiral tie-dye) scrubbed frame-by-frame against scroll
+           position via canvas, rather than a native <video>. Native
+           video.currentTime seeking is throttled/keyframe-limited and gets
+           janky under fast, repeated scroll-driven seeks — drawing
+           pre-decoded frames to canvas is instant and stays perfectly
+           locked to scroll. Frame list + preloading + draw logic in main.js. -->
       <div class="garment-stage">
-        <div class="garment-photo">
-          <img src="assets/garment/tee-front-undyed.svg" alt="Undyed cotton tee, front view">
-        </div>
-        <div class="garment-dye"></div>
+        <canvas class="dye-canvas" width="864" height="496"
+          aria-label="A white t-shirt splashed with pink, blue and orange dye, twisted into a spiral tie-dye pattern"></canvas>
       </div>
 
       <p class="colorburst-batch">Batch 014 — Sunset Spiral</p>
