@@ -161,6 +161,9 @@ body.preloading { overflow: hidden; height: 100vh; }
   align-items: center;
   justify-content: center;
   background: radial-gradient(circle at 50% 55%, var(--studio-gray-light), var(--studio-gray-dark));
+  /* The whole stage is a tap/click target — main.js advances the reveal
+     by a step on click, so the pointer should read as interactive. */
+  cursor: pointer;
 }
 
 .colorburst-bg {
@@ -277,9 +280,71 @@ body.preloading { overflow: hidden; height: 100vh; }
   box-shadow: 0 0 12px var(--acid-pink);
 }
 
+/* --- interaction hint: "scroll or tap" --- */
+
+.scroll-hint {
+  position: absolute;
+  bottom: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 8;
+  display: flex;
+  align-items: center;
+  gap: 0.55em;
+  padding: 0.55em 1.05em;
+  border-radius: 999px;
+  background: rgba(13, 12, 15, 0.4);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(244, 238, 225, 0.18);
+  font-family: var(--font-ui);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--paper);
+  pointer-events: none;
+  opacity: 0;
+  animation: hint-fade-in 0.7s ease-out 1.5s forwards;
+}
+
+.scroll-hint svg {
+  width: 13px;
+  height: 13px;
+  animation: hint-bounce 1.6s ease-in-out infinite;
+}
+
+@keyframes hint-fade-in {
+  to { opacity: 0.85; }
+}
+
+@keyframes hint-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(3px); }
+}
+
+/* --- tap-to-advance ripple feedback, spawned by main.js on click --- */
+
+.tap-ripple {
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  margin-left: -45px;
+  margin-top: -45px;
+  border-radius: 50%;
+  /* Acid-pink, not the paper/cream tone used elsewhere for overlay
+     accents — the garment itself runs from near-white to saturated dye,
+     so a low-contrast light ring disappears against the lighter frames.
+     The brand accent color reads on top of anything in the sequence. */
+  border: 1.5px solid rgba(255, 61, 129, 0.9);
+  background: radial-gradient(circle, rgba(255, 61, 129, 0.28), transparent 70%);
+  pointer-events: none;
+  z-index: 7;
+}
+
 /* --- garment stage: full-bleed canvas-scrubbed filmed sequence ---
    Fills the whole pinned stage; the canvas itself handles the source
-   footage's 864:496 crop via object-fit: cover. There's no card/box
+   footage's crop via object-fit: cover. There's no card/box
    edge by design — the vignette mask on .dye-canvas dissolves the
    footage's studio-gray corners into the stage's own matching gray
    gradient, so video and page read as one continuous room instead of
@@ -343,6 +408,16 @@ body.preloading { overflow: hidden; height: 100vh; }
     display: none;
   }
 
+  /* Clear the fixed corner logo (top: 1.75rem/left: 1.75rem) — centered
+     full-width text at the same top offset runs straight through it on
+     narrow viewports. */
+  .colorburst-label {
+    top: 4.5rem;
+  }
+
+  .scroll-hint {
+    bottom: 8%;
+  }
 }
 
 /* ------------------------------------------------------------
@@ -376,6 +451,7 @@ body.preloading { overflow: hidden; height: 100vh; }
   .hero-wordmark { opacity: 1; transform: none; }
   .hero-subhead { opacity: 1; }
   .colorburst-batch { opacity: 0.85; transform: translate(-50%, 0); }
+  .scroll-hint { display: none; }
   /* main.js paints the final (fully-dyed) frame directly and skips the
      scroll-scrub tween entirely when this is set — nothing to override
      here beyond the text/background states above. */

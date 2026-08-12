@@ -57,11 +57,20 @@
            pre-decoded frames to canvas is instant and stays perfectly
            locked to scroll. Frame list + preloading + draw logic in main.js. -->
       <div class="garment-stage">
-        <canvas class="dye-canvas" width="864" height="496"
+        <canvas class="dye-canvas" width="1728" height="992"
           aria-label="A white t-shirt splashed with pink, blue and orange dye, twisted into a spiral tie-dye pattern"></canvas>
       </div>
 
       <p class="colorburst-batch">Batch 014 — Sunset Spiral</p>
+
+      <!-- Interaction hint: fades in shortly after load, fades out for
+           good on the first scroll or tap (see hideScrollHint in main.js).
+           pointer-events: none so it never steals the tap it's advertising —
+           the click listener lives on .colorburst-stage itself. -->
+      <div class="scroll-hint">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        <span>Scroll or tap</span>
+      </div>
 
     </div>
   </section>
