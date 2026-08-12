@@ -35,10 +35,15 @@
   --font-ui: 'Space Grotesk', 'Helvetica Neue', Arial, sans-serif;
   --font-display: 'Fraunces', Georgia, serif;
 
-  /* Real hand-painted brush artwork (assets/wordmark/smn.png), used as a
-     mask everywhere the SMN mark appears — see .wordmark / .hero-wordmark
-     / .preloader-mark. Native 1400x480. */
-  --mark-ratio: 1400 / 480;
+  /* Hand-painted brush artwork (assets/wordmark/smn.png), used as a mask
+     for the solid-black marks — see .hero-wordmark / .preloader-mark.
+     Native 1312x636. */
+  --mark-ratio: 1312 / 636;
+
+  /* The header mark (assets/wordmark/smn-color.png) is a separate piece
+     of artwork with its own baked-in multicolor paint-splash — shown as
+     a plain image rather than a recolored mask. Native 1364x858. */
+  --mark-ratio-color: 1364 / 858;
 
   --gradient-acid:
     linear-gradient(115deg,
@@ -133,22 +138,15 @@ body.preloading { overflow: hidden; height: 100vh; }
   left: 1.75rem;
   z-index: 50;
   width: clamp(5.5rem, 8vw, 7.5rem);
-  aspect-ratio: var(--mark-ratio);
+  aspect-ratio: var(--mark-ratio-color);
 
-  /* Multicolor acid-palette bleed, distinct from the hero's solid glossy
-     black — this is the compact colorway mark, not a competing headline.
-     The artwork is used as a mask so the acid gradient shows through only
-     where the brush strokes are. */
-  background: var(--gradient-acid);
-  background-size: 160% 160%;
-  -webkit-mask-image: url('../assets/wordmark/smn.png');
-  mask-image: url('../assets/wordmark/smn.png');
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  -webkit-mask-size: contain;
-  mask-size: contain;
-  -webkit-mask-position: center;
-  mask-position: center;
+  /* The compact colorway mark — real multicolor paint-splash artwork
+     (assets/wordmark/smn-color.png), shown as-is rather than through the
+     mask+gradient technique, since the color already lives in the file. */
+  background-image: url('../assets/wordmark/smn-color.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
   filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.55));
 }
 
@@ -190,16 +188,16 @@ body.preloading { overflow: hidden; height: 100vh; }
 
 .hero-wordmark-group {
   position: absolute;
-  top: 2%;
+  top: 50%;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%, -50%);
   text-align: center;
   pointer-events: none;
   z-index: 6;
 }
 
 .hero-wordmark {
-  margin: 0.3rem 0 0;
+  margin: 0;
   width: clamp(18rem, 40vw, 32rem);
   aspect-ratio: var(--mark-ratio);
   opacity: 0;
@@ -225,15 +223,21 @@ body.preloading { overflow: hidden; height: 100vh; }
 }
 
 .hero-subhead {
-  margin: 0;
+  margin: 0.7rem 0 0;
   font-family: var(--font-display);
   font-style: italic;
   font-weight: 500;
   font-size: clamp(0.82rem, 1.25vw, 1.05rem);
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--paper);
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  color: var(--ink);
+  /* Stacked glow (not a single soft blur) so the mark stays legible
+     sitting directly over the busy dyed garment, not just a plain
+     background. */
+  text-shadow:
+    0 0 3px rgba(244, 238, 225, 0.95),
+    0 0 8px rgba(244, 238, 225, 0.8),
+    0 0 16px rgba(244, 238, 225, 0.55);
   opacity: 0;
 }
 
@@ -346,12 +350,6 @@ body.preloading { overflow: hidden; height: 100vh; }
     display: none;
   }
 
-  /* Clear the fixed corner wordmark (top: 2rem/left: 2rem) — at narrow
-     widths the centered SMN/Color Burst group sits close enough to
-     read as a collision rather than two separate marks. */
-  .hero-wordmark-group {
-    top: 4.5rem;
-  }
 }
 
 /* ------------------------------------------------------------
