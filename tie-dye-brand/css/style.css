@@ -90,8 +90,10 @@ img { max-width: 100%; display: block; }
   z-index: 999;
   background: var(--ink);
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 1.5rem;
   overflow: hidden;
 }
 
@@ -101,6 +103,24 @@ img { max-width: 100%; display: block; }
   background: var(--gradient-spiral);
   clip-path: circle(0% at 50% 50%);
   will-change: clip-path;
+}
+
+#preloader .preloader-icon {
+  position: relative;
+  z-index: 1;
+  width: clamp(6rem, 13vw, 8rem);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  opacity: 0;
+  /* Circular vignette so the square footage crop dissolves into the
+     preloader's own background instead of showing a hard-edged tile —
+     same fade-to-nothing trick used on the hero canvas. */
+  -webkit-mask-image: radial-gradient(circle, rgba(0, 0, 0, 1) 55%, rgba(0, 0, 0, 0) 88%);
+  mask-image: radial-gradient(circle, rgba(0, 0, 0, 1) 55%, rgba(0, 0, 0, 0) 88%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #preloader .preloader-icon { display: none; }
 }
 
 #preloader .preloader-mark {
