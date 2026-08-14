@@ -4,8 +4,8 @@
    ============================================================ */
 
 @font-face {
-  font-family: 'Space Grotesk';
-  src: local('Space Grotesk');
+  font-family: 'Manrope';
+  src: local('Manrope');
   font-display: swap;
 }
 
@@ -46,8 +46,15 @@
     radial-gradient(circle at 48% 88%, var(--sage) 0%, transparent 62%),
     var(--stone);
 
-  /* --- Type --- */
-  --font-ui: 'Space Grotesk', 'Helvetica Neue', Arial, sans-serif;
+  /* --- Type ---
+     Manrope, not Space Grotesk: the brand is Russian-first now and Space
+     Grotesk has no Cyrillic glyphs at all, so every ru string in the UI
+     font would've silently fallen back to the browser's default sans and
+     visually split from the brand type. Manrope covers Cyrillic at the
+     same weights (400/500/600) and sits close enough to Space Grotesk's
+     geometric-grotesk proportions that the swap doesn't reads as a
+     different typeface family, just the same one now able to set ru. */
+  --font-ui: 'Manrope', 'Helvetica Neue', Arial, sans-serif;
   --font-display: 'Fraunces', Georgia, serif;
 
   /* Brush-lettering artwork (assets/wordmark/ln-team.png) — solid black
@@ -138,32 +145,442 @@ img { max-width: 100%; display: block; }
 body.preloading { overflow: hidden; height: 100vh; }
 
 /* ------------------------------------------------------------
-   MINIMAL WORDMARK (placeholder — full nav arrives in a later phase)
+   SITE HEADER / NAVIGATION
+
+   Two states, toggled by adding/removing `.nav-solid` on `.site-header`:
+
+   - default (no `.nav-solid`): transparent bar, only the logo + icon
+     cluster (account / cart / burger) show, text drop-shadowed for
+     contrast over whatever's playing behind it. This is the state
+     the Color Burst hero starts in — a horizontal bar laid over the
+     cinematic dye-reveal footage would either need to be see-through
+     (contrast swings wildly as light/dark frames scrub past) or a
+     solid color (a hard edge cutting across the footage) — the icon
+     cluster sidesteps both by staying tiny and letting the burger
+     open the full link list on demand instead.
+   - `.nav-solid`: solid ink bar, and — desktop only, see the min-width
+     media query below — the text links replace the burger inline,
+     since there's no footage left to protect once the header has a
+     flat backdrop of its own.
+
+   Pages with no Color Burst hero (every page but index.html) render
+   straight into `.nav-solid` from first paint (class is in the HTML,
+   no JS needed). index.html starts without it and main.js flips it
+   on/off as the hero's end scrolls in/out of view (see the
+   `.hero-end-sentinel` IntersectionObserver there). Mobile always
+   collapses to the icon cluster regardless of `.nav-solid` — see the
+   max-width query — there just isn't room for inline text links next
+   to two icons at phone widths.
    ------------------------------------------------------------ */
 
-.wordmark {
+.site-header {
   position: fixed;
-  top: 1.75rem;
-  left: 1.75rem;
-  z-index: 50;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1.75rem;
+  background: transparent;
+  border-bottom: 1px solid transparent;
+  transition: background-color 0.35s ease, border-color 0.35s ease, backdrop-filter 0.35s ease;
+}
+
+.site-header.nav-solid {
+  background: rgba(42, 38, 37, 0.88);
+  border-bottom-color: rgba(244, 238, 225, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* --- logo: same artwork/sizing as before, just laid out by the header
+   flex row now instead of being independently position: fixed --- */
+
+.wordmark {
+  flex: none;
   width: clamp(6rem, 9vw, 8.5rem);
   aspect-ratio: var(--mark-ratio-color);
-
-  /* The compact colorway mark — real multicolor paint-splash artwork
-     (assets/wordmark/ln-team-color.png, in the same lavender/cyan/sage
-     as the rest of the brand) with black brush letters, shown as-is
-     rather than through the mask+fill technique used for the other two
-     placements. A flat black mask fill (like .hero-wordmark) blended
-     into the page's dark coffee-ash background here — this mark carries
-     its own colorful backdrop instead, so the letters always have local
-     contrast no matter what's behind the fixed corner position as the
-     page scrolls, with no glow/shadow trick needed. */
   background-image: url('../assets/wordmark/ln-team-color.png');
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
   filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.5));
 }
+
+/* --- inline text links: hidden until `.nav-solid` on desktop, always
+   hidden on mobile (see max-width query) --- */
+
+.nav-links {
+  display: none;
+  align-items: center;
+  gap: 2.2rem;
+  margin: 0 auto 0 2.5rem;
+}
+
+.nav-link {
+  font-family: var(--font-ui);
+  font-size: 0.9rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--paper);
+  text-decoration: none;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+  padding-bottom: 0.3rem;
+  border-bottom: 1.5px solid transparent;
+  transition: border-color 0.2s ease, opacity 0.2s ease;
+  opacity: 0.85;
+}
+
+.nav-link:hover,
+.nav-link:focus-visible {
+  opacity: 1;
+}
+
+/* One accent per link, cycling through the three brand dye colors —
+   a small, tasteful echo of the multicolor splash the wordmark itself
+   carries, without putting a block of color anywhere in the nav. */
+.nav-link[data-accent="lavender"]:hover,
+.nav-link[data-accent="lavender"]:focus-visible { border-bottom-color: var(--lavender); }
+.nav-link[data-accent="teal"]:hover,
+.nav-link[data-accent="teal"]:focus-visible { border-bottom-color: var(--teal); }
+.nav-link[data-accent="sage"]:hover,
+.nav-link[data-accent="sage"]:focus-visible { border-bottom-color: var(--sage); }
+
+@media (min-width: 769px) {
+  .site-header.nav-solid .nav-links { display: flex; }
+  .site-header.nav-solid .burger-btn { display: none; }
+}
+
+/* --- icon cluster: account, cart, burger — always present --- */
+
+.nav-icons {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.icon-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: var(--paper);
+  cursor: pointer;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.4));
+  transition: background-color 0.2s ease;
+}
+
+.icon-btn:hover,
+.icon-btn:focus-visible {
+  background: rgba(244, 238, 225, 0.12);
+}
+
+.icon-btn svg {
+  width: 1.3rem;
+  height: 1.3rem;
+}
+
+/* --- cart badge --- */
+
+.cart-count {
+  position: absolute;
+  top: 0.25rem;
+  right: 0.25rem;
+  min-width: 1.05rem;
+  height: 1.05rem;
+  padding: 0 0.25rem;
+  border-radius: 999px;
+  background: var(--sage);
+  color: var(--ink-letter);
+  font-family: var(--font-ui);
+  font-size: 0.62rem;
+  font-weight: 600;
+  line-height: 1.05rem;
+  text-align: center;
+}
+
+.cart-count[hidden] { display: none; }
+
+/* --- account dropdown --- */
+
+.nav-account { position: relative; }
+
+/* Warm ink instead of a near-black rgba(13,12,15) card — that tone sat
+   noticeably colder than everything else on the site, which all keys
+   off the coffee-ash --ink. A faint lavender wash in one corner (same
+   ambient-blob device as .nav-overlay, just smaller/subtler) keeps it
+   from reading as a flat default-dark-mode dropdown. */
+.account-dropdown {
+  position: absolute;
+  top: calc(100% + 0.6rem);
+  right: 0;
+  z-index: 10;
+  min-width: 13rem;
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem;
+  border-radius: 0.9rem;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(155, 152, 187, 0.16) 0%, transparent 55%),
+    rgba(42, 38, 37, 0.96);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(244, 238, 225, 0.14);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+}
+
+.account-dropdown[hidden] { display: none; }
+
+.account-dropdown a {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.7rem 0.8rem;
+  border-radius: 0.55rem;
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--paper);
+  text-decoration: none;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.account-dropdown a svg {
+  width: 1.05rem;
+  height: 1.05rem;
+  flex: none;
+  opacity: 0.75;
+  transition: opacity 0.2s ease;
+}
+
+.account-dropdown a + a {
+  margin-top: 0.15rem;
+  border-top: 1px solid rgba(244, 238, 225, 0.1);
+  padding-top: 0.75rem;
+}
+
+.account-dropdown a[data-accent="teal"]:hover,
+.account-dropdown a[data-accent="teal"]:focus-visible {
+  background: rgba(110, 170, 169, 0.14);
+  color: var(--teal);
+}
+
+.account-dropdown a[data-accent="sage"]:hover,
+.account-dropdown a[data-accent="sage"]:focus-visible {
+  background: rgba(156, 161, 108, 0.14);
+  color: var(--sage);
+}
+
+.account-dropdown a:hover svg,
+.account-dropdown a:focus-visible svg {
+  opacity: 1;
+}
+
+/* --- burger icon: three lines -> X while the overlay is open --- */
+
+.burger-icon {
+  position: relative;
+  width: 1.1rem;
+  height: 0.75rem;
+}
+
+.burger-icon span {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 1.5px;
+  background: currentColor;
+  transition: transform 0.25s ease, opacity 0.25s ease, top 0.25s ease;
+}
+
+.burger-icon span:nth-child(1) { top: 0; }
+.burger-icon span:nth-child(2) { top: 50%; margin-top: -0.75px; }
+.burger-icon span:nth-child(3) { top: 100%; margin-top: -1.5px; }
+
+.burger-btn[aria-expanded="true"] .burger-icon span:nth-child(1) {
+  top: 50%; margin-top: -0.75px; transform: rotate(45deg);
+}
+.burger-btn[aria-expanded="true"] .burger-icon span:nth-child(2) { opacity: 0; }
+.burger-btn[aria-expanded="true"] .burger-icon span:nth-child(3) {
+  top: 50%; margin-top: -0.75px; transform: rotate(-45deg);
+}
+
+/* ------------------------------------------------------------
+   FULLSCREEN NAV OVERLAY (opened by the burger, any breakpoint)
+   ------------------------------------------------------------ */
+
+.nav-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3rem;
+  background: var(--ink);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.35s ease;
+}
+
+/* Ambient dye-splash backdrop — the same three brand blobs used in the
+   preloader's `--gradient-spiral`, just spread into the corners here
+   instead of one central burst, heavily blurred and low-opacity so
+   they read as atmosphere behind the links, not as shapes competing
+   with them. Fixes the overlay feeling like a bare list on flat ink;
+   it's the same dye motif carried into a screen that otherwise has no
+   footage or artwork of its own. */
+.nav-overlay::before {
+  content: '';
+  position: absolute;
+  inset: -10%;
+  background:
+    radial-gradient(circle at 12% 18%, var(--lavender) 0%, transparent 34%),
+    radial-gradient(circle at 88% 12%, var(--teal) 0%, transparent 32%),
+    radial-gradient(circle at 82% 88%, var(--sage) 0%, transparent 36%),
+    radial-gradient(circle at 15% 85%, var(--lavender) 0%, transparent 28%);
+  opacity: 0.28;
+  filter: blur(70px);
+  pointer-events: none;
+}
+
+.nav-overlay:not([hidden]) {
+  opacity: 1;
+  visibility: visible;
+}
+
+.nav-overlay[hidden] {
+  /* kept in the layout (not display:none) while fading out, then the
+     hidden attribute finishes the job — see nav.js */
+  display: flex;
+  pointer-events: none;
+}
+
+.nav-overlay-close {
+  position: absolute;
+  top: 1.75rem;
+  right: 1.75rem;
+}
+
+.nav-overlay-links {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.4rem;
+}
+
+/* Two affordance layers, one static and one animated, so the cue works
+   on touch (no hover to reveal anything) as well as it does with a
+   mouse — no numbering, no dot bullet, no boxes, no arrow:
+
+   - Static, visible on every device from first paint: the underline
+     itself already carries its link's accent color at rest (not a
+     neutral gray rule), a small, permanent dose of the brand's
+     multicolor dye motif — Каталог/О бренде/Контакты read as three
+     distinctly-colored destinations before anyone touches anything.
+   - Animated, mouse/keyboard only: the rule thickens and gets a soft
+     glow in the same color on hover/focus, and the text itself
+     switches to that color — an intensification of what's already
+     there rather than a reveal-from-nothing. */
+.nav-overlay-link {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 0.2em;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 600;
+  font-size: clamp(2rem, 6vw, 3.2rem);
+  color: var(--paper);
+  text-decoration: none;
+  transition: color 0.25s ease;
+}
+
+.nav-overlay-link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1.5px;
+  height: 2px;
+  opacity: 0.55;
+  transition: opacity 0.25s ease, height 0.25s ease, box-shadow 0.25s ease;
+}
+
+.nav-overlay-link[data-accent="lavender"]::after { background: var(--lavender); }
+.nav-overlay-link[data-accent="teal"]::after { background: var(--teal); }
+.nav-overlay-link[data-accent="sage"]::after { background: var(--sage); }
+
+.nav-overlay-link[data-accent="lavender"]:hover,
+.nav-overlay-link[data-accent="lavender"]:focus-visible { color: var(--lavender); }
+.nav-overlay-link[data-accent="teal"]:hover,
+.nav-overlay-link[data-accent="teal"]:focus-visible { color: var(--teal); }
+.nav-overlay-link[data-accent="sage"]:hover,
+.nav-overlay-link[data-accent="sage"]:focus-visible { color: var(--sage); }
+
+.nav-overlay-link:hover::after,
+.nav-overlay-link:focus-visible::after {
+  opacity: 1;
+  height: 3px;
+}
+
+.nav-overlay-link[data-accent="lavender"]:hover::after,
+.nav-overlay-link[data-accent="lavender"]:focus-visible::after { box-shadow: 0 0 10px var(--lavender); }
+.nav-overlay-link[data-accent="teal"]:hover::after,
+.nav-overlay-link[data-accent="teal"]:focus-visible::after { box-shadow: 0 0 10px var(--teal); }
+.nav-overlay-link[data-accent="sage"]:hover::after,
+.nav-overlay-link[data-accent="sage"]:focus-visible::after { box-shadow: 0 0 10px var(--sage); }
+
+/* Secondary actions (Корзина / Личный кабинет) — a boxed pill button
+   here read as a cheap default-UI-kit button, out of step with the
+   rest of the site's restraint. Icon + label instead: the icon is the
+   affordance (same glyphs as the header, so it's a language visitors
+   already recognize by this point), text underlines on hover like the
+   primary links, no box. */
+.nav-overlay-secondary {
+  display: flex;
+  align-items: center;
+  gap: 2.2rem;
+}
+
+.nav-overlay-secondary a {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--paper-dim);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  padding-bottom: 0.2rem;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.nav-overlay-secondary a svg {
+  width: 1.1rem;
+  height: 1.1rem;
+  flex: none;
+}
+
+.nav-overlay-secondary a:hover,
+.nav-overlay-secondary a:focus-visible {
+  color: var(--paper);
+  border-bottom-color: rgba(244, 238, 225, 0.5);
+}
+
+body.nav-open { overflow: hidden; }
 
 /* ------------------------------------------------------------
    COLOR BURST HERO
@@ -290,14 +707,19 @@ body.preloading { overflow: hidden; height: 100vh; }
 
 .colorburst-batch {
   position: absolute;
-  bottom: 8%;
+  /* Lower than the 8% it used to sit at, clear of the garment's hem —
+     which also means it's no longer reliably over light fabric, so the
+     color/shadow below switch to the same light-text-over-photo
+     treatment `.colorburst-label` uses instead of solid dark ink. */
+  bottom: 3%;
   left: 50%;
   transform: translate(-50%, 12px);
   font-family: var(--font-ui);
   font-size: 0.75rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--ink-letter);
+  color: var(--paper-dim);
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
   opacity: 0;
   z-index: 5;
   display: flex;
@@ -327,10 +749,10 @@ body.preloading { overflow: hidden; height: 100vh; }
   gap: 0.55em;
   padding: 0.55em 1.05em;
   border-radius: 999px;
-  background: rgba(13, 12, 15, 0.4);
+  background: rgba(13, 12, 15, 0.72);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
-  border: 1px solid rgba(244, 238, 225, 0.18);
+  border: 1px solid rgba(244, 238, 225, 0.16);
   font-family: var(--font-ui);
   font-size: 0.68rem;
   font-weight: 500;
@@ -478,11 +900,31 @@ body.preloading { overflow: hidden; height: 100vh; }
     mask-size: 100% 100%;
   }
 
-  /* Clear the fixed corner logo (top: 1.75rem/left: 1.75rem) — centered
-     full-width text at the same top offset runs straight through it on
-     narrow viewports. */
+  /* Tighter header on phones: smaller icon targets and padding bring
+     its total height down from ~7.4rem to ~5.6rem, so the label below
+     can sit close under it — reading as "on the video, near the top"
+     the same way the desktop label does — instead of stranded in a
+     gap partway down the screen. */
+  .site-header {
+    padding: 1.15rem 1.15rem;
+  }
+
+  .icon-btn {
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+
+  .icon-btn svg {
+    width: 1.15rem;
+    height: 1.15rem;
+  }
+
+  .nav-icons {
+    gap: 0.3rem;
+  }
+
   .colorburst-label {
-    top: 4.5rem;
+    top: 5.9rem;
   }
 
   .scroll-hint {
@@ -507,6 +949,88 @@ body.preloading { overflow: hidden; height: 100vh; }
   .hero-subhead {
     font-size: clamp(1.1rem, 2.6vw, 1.9rem);
   }
+}
+
+.hero-end-sentinel {
+  height: 1px;
+}
+
+.nav-link[aria-current="page"] {
+  opacity: 1;
+  border-bottom-color: var(--paper);
+}
+
+.nav-overlay-link[aria-current="page"] {
+  color: var(--paper-dim);
+}
+
+/* ------------------------------------------------------------
+   PAGE STUB — placeholder content for the pages that get their real
+   layout in later phases (Catalog, О бренде, Контакты, Корзина,
+   Личный кабинет). Written as an intentional "coming soon" beat in
+   the brand's own voice rather than a bare dev TODO, since it's what
+   real visitors following a live nav link will actually see between
+   now and the next phase.
+   ------------------------------------------------------------ */
+
+.page-stub {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 1.1rem;
+  padding: 9rem 1.5rem 5rem;
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.page-stub-eyebrow {
+  font-family: var(--font-ui);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--paper-dim);
+  opacity: 0.75;
+}
+
+.page-stub-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 700;
+  font-size: clamp(2.2rem, 6vw, 3.6rem);
+}
+
+.page-stub-copy {
+  max-width: 32rem;
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--paper-dim);
+}
+
+.page-stub-back {
+  margin-top: 1rem;
+  padding: 0.75rem 1.6rem;
+  border-radius: 999px;
+  border: 1px solid rgba(244, 238, 225, 0.25);
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--paper);
+  text-decoration: none;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.page-stub-back:hover,
+.page-stub-back:focus-visible {
+  border-color: var(--lavender);
+  background: rgba(155, 152, 187, 0.12);
 }
 
 /* ------------------------------------------------------------

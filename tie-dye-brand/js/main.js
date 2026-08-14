@@ -164,7 +164,11 @@
         pin: stage,
         anticipatePin: 1,
         onUpdate: (self) => {
-          if (self.progress > 0.004) hideScrollHint();
+          // Stays up through the first 20% of the hero's scroll distance
+          // instead of vanishing at the first pixel of movement — long
+          // enough that someone who scrolls a little, pauses, and looks
+          // back still finds it there.
+          if (self.progress > 0.2) hideScrollHint();
         },
       },
     });
@@ -254,9 +258,34 @@
   }
 
   /* ------------------------------------------------------------
+     Header solid-bar toggle — only this page starts with a transparent
+     `.site-header` (see css/style.css), because only this page has
+     hero footage underneath it worth protecting. `.hero-end-sentinel`
+     is a zero-height marker placed right after `.colorburst`; once it
+     scrolls into view the hero is fully behind us, so the header gets
+     its solid backdrop and inline text links. Scrolling back up past
+     it reverses that — matches the hero itself, which also resets to
+     frame 0 rather than staying dyed forever.
+     ------------------------------------------------------------ */
+  function buildNavSolidToggle() {
+    const header = document.getElementById('site-header');
+    const sentinel = document.querySelector('.hero-end-sentinel');
+    if (!header || !sentinel || !('IntersectionObserver' in window)) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        header.classList.toggle('nav-solid', entry.isIntersecting || entry.boundingClientRect.top < 0);
+      },
+      { threshold: 0 }
+    );
+    observer.observe(sentinel);
+  }
+
+  /* ------------------------------------------------------------
      Boot
      ------------------------------------------------------------ */
   document.addEventListener('DOMContentLoaded', () => {
+    buildNavSolidToggle();
     const framesPromise = loadFrames();
     runPreloader(framesPromise, () => {
       framesPromise.then((frames) => {

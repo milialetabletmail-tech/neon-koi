@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +8,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,500;1,9..144,800&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,500;1,9..144,800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="css/style.css">
 </head>
@@ -22,13 +22,59 @@
     <div class="preloader-mark"></div>
   </div>
 
-  <!-- Header mark: original hand-painted "LN-team" artwork with a baked-in
-       multicolor paint-splash and black brush letters (see
-       assets/wordmark/README) — shown as a plain image, not a recolored
-       mask, since the color already lives in the file. The text stays in
-       the DOM for accessibility/SEO but is visually hidden; the artwork is
-       what's actually shown. -->
-  <div class="wordmark"><span class="sr-only">LN-team</span></div>
+  <!-- ============================================================
+       SITE HEADER — see the "SITE HEADER / NAVIGATION" block in
+       css/style.css for how the transparent-over-hero vs. solid-bar
+       states work, and js/nav.js for the interaction wiring shared by
+       every page. This page is the one that starts transparent — the
+       .hero-end-sentinel further down is what main.js watches to flip
+       on `.nav-solid` once the Color Burst hero has scrolled past.
+       ============================================================ -->
+  <header class="site-header" id="site-header">
+    <a href="index.html" class="wordmark" aria-label="LN-team — на главную"><span class="sr-only">LN-team</span></a>
+
+    <nav class="nav-links" aria-label="Основная навигация">
+      <a href="catalog.html" class="nav-link" data-accent="lavender">Каталог</a>
+      <a href="about.html" class="nav-link" data-accent="teal">О бренде</a>
+      <a href="contacts.html" class="nav-link" data-accent="sage">Контакты</a>
+    </nav>
+
+    <div class="nav-icons">
+      <div class="nav-account">
+        <button type="button" class="icon-btn" id="account-toggle" aria-haspopup="true" aria-expanded="false" aria-controls="account-dropdown" aria-label="Аккаунт">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5"/><circle cx="12" cy="7" r="3.5"/></svg>
+        </button>
+        <div class="account-dropdown" id="account-dropdown" hidden>
+          <a href="account.html" data-accent="teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg><span>Войти</span></a>
+          <a href="account.html" data-accent="sage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg><span>Регистрация</span></a>
+        </div>
+      </div>
+
+      <a href="cart.html" class="icon-btn" id="cart-link" aria-label="Корзина">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <span class="cart-count" id="cart-count" hidden>0</span>
+      </a>
+
+      <button type="button" class="icon-btn burger-btn" id="burger-toggle" aria-haspopup="true" aria-expanded="false" aria-controls="nav-overlay" aria-label="Меню">
+        <span class="burger-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+      </button>
+    </div>
+  </header>
+
+  <div class="nav-overlay" id="nav-overlay" hidden>
+    <button type="button" class="icon-btn nav-overlay-close" id="nav-overlay-close" aria-label="Закрыть меню">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <nav class="nav-overlay-links" aria-label="Полное меню">
+      <a href="catalog.html" class="nav-overlay-link" data-accent="lavender">Каталог</a>
+      <a href="about.html" class="nav-overlay-link" data-accent="teal">О бренде</a>
+      <a href="contacts.html" class="nav-overlay-link" data-accent="sage">Контакты</a>
+    </nav>
+    <div class="nav-overlay-secondary">
+      <a href="cart.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span>Корзина</span></a>
+      <a href="account.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5"/><circle cx="12" cy="7" r="3.5"/></svg><span>Личный кабинет</span></a>
+    </div>
+  </div>
 
   <!-- ============================================================
        HERO — "COLOR BURST"
@@ -36,7 +82,7 @@
   <section class="colorburst">
     <div class="colorburst-stage">
 
-      <p class="colorburst-label">No two spirals alike</p>
+      <p class="colorburst-label">В природе не существует двух одинаковых спиралей</p>
 
       <!-- Both marks are solid black now (see css/style.css), which reads
            fine over the lighter/pastel patches of the dyed garment but
@@ -67,10 +113,10 @@
            updates. Frame list + preloading + draw logic in main.js. -->
       <div class="garment-stage">
         <canvas class="dye-canvas" width="1728" height="992"
-          aria-label="A white t-shirt splashed with lavender, cyan and sage dye, twisted into a spiral tie-dye pattern"></canvas>
+          aria-label="Белая футболка в брызгах лавандового, бирюзового и оливкового красителя, скрученная в спиральный узор тай-дай"></canvas>
       </div>
 
-      <p class="colorburst-batch">Batch 014 — Закатная спираль</p>
+      <p class="colorburst-batch">LN-team / Tie-Dye Laboratory</p>
 
       <!-- Interaction hint: fades in shortly after load, fades out for
            good on the first scroll or tap (see hideScrollHint in main.js).
@@ -78,17 +124,24 @@
            the click listener lives on .colorburst-stage itself. -->
       <div class="scroll-hint">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
-        <span>Scroll or tap</span>
+        <span>Листайте или нажимайте</span>
       </div>
 
     </div>
   </section>
+
+  <!-- Watched by main.js to flip .site-header into its solid state once
+       the hero has fully scrolled past — see the IntersectionObserver
+       in buildNavSolidToggle(). Zero-height and inert, exists purely as
+       a scroll-position marker. -->
+  <div class="hero-end-sentinel" aria-hidden="true"></div>
 
   <!-- Placeholder — full Manifesto block builds out in the next phase -->
   <section class="next-stub">Manifesto block — Phase 2</section>
 
   <script src="js/vendor/gsap.min.js"></script>
   <script src="js/vendor/ScrollTrigger.min.js"></script>
+  <script src="js/nav.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

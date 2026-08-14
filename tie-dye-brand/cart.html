@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Корзина — LN-team</title>
+<meta name="description" content="LN-team: ваша корзина.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,500;1,9..144,800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header class="site-header nav-solid" id="site-header">
+    <a href="index.html" class="wordmark" aria-label="LN-team — на главную"><span class="sr-only">LN-team</span></a>
+
+    <nav class="nav-links" aria-label="Основная навигация">
+      <a href="catalog.html" class="nav-link" data-accent="lavender">Каталог</a>
+      <a href="about.html" class="nav-link" data-accent="teal">О бренде</a>
+      <a href="contacts.html" class="nav-link" data-accent="sage">Контакты</a>
+    </nav>
+
+    <div class="nav-icons">
+      <div class="nav-account">
+        <button type="button" class="icon-btn" id="account-toggle" aria-haspopup="true" aria-expanded="false" aria-controls="account-dropdown" aria-label="Аккаунт">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5"/><circle cx="12" cy="7" r="3.5"/></svg>
+        </button>
+        <div class="account-dropdown" id="account-dropdown" hidden>
+          <a href="account.html" data-accent="teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg><span>Войти</span></a>
+          <a href="account.html" data-accent="sage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg><span>Регистрация</span></a>
+        </div>
+      </div>
+
+      <a href="cart.html" class="icon-btn" id="cart-link" aria-label="Корзина" aria-current="page">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <span class="cart-count" id="cart-count" hidden>0</span>
+      </a>
+
+      <button type="button" class="icon-btn burger-btn" id="burger-toggle" aria-haspopup="true" aria-expanded="false" aria-controls="nav-overlay" aria-label="Меню">
+        <span class="burger-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+      </button>
+    </div>
+  </header>
+
+  <div class="nav-overlay" id="nav-overlay" hidden>
+    <button type="button" class="icon-btn nav-overlay-close" id="nav-overlay-close" aria-label="Закрыть меню">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <nav class="nav-overlay-links" aria-label="Полное меню">
+      <a href="catalog.html" class="nav-overlay-link" data-accent="lavender">Каталог</a>
+      <a href="about.html" class="nav-overlay-link" data-accent="teal">О бренде</a>
+      <a href="contacts.html" class="nav-overlay-link" data-accent="sage">Контакты</a>
+    </nav>
+    <div class="nav-overlay-secondary">
+      <a href="cart.html" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span>Корзина</span></a>
+      <a href="account.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5"/><circle cx="12" cy="7" r="3.5"/></svg><span>Личный кабинет</span></a>
+    </div>
+  </div>
+
+  <main>
+    <section class="page-stub">
+      <p class="page-stub-eyebrow">Корзина</p>
+      <h1 class="page-stub-title">Ваша корзина пуста</h1>
+      <p class="page-stub-copy">Полноценная корзина с оформлением заказа появится в одном из следующих этапов.</p>
+      <a href="catalog.html" class="page-stub-back">В каталог</a>
+    </section>
+  </main>
+
+  <script src="js/nav.js"></script>
+</body>
+</html>
