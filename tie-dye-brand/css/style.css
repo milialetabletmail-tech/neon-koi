@@ -1321,6 +1321,12 @@ body.nav-open { overflow: hidden; }
   margin: 0 auto;
 }
 
+.process-connector svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
 .process-connector--flip {
   transform: scaleX(-1);
 }
