@@ -1101,6 +1101,14 @@ body.nav-open { overflow: hidden; }
   .dye-ambient {
     background-image: url('../assets/backgrounds/dye-splash-sides-mobile.jpg');
     background-size: 100% auto;
+    /* At 100%-width sizing the image renders ~693px tall on a typical
+       phone, taller than the section itself (~500-600px) — anchoring
+       to the top instead of the inherited center means that full
+       height covers the section from its very first pixel (right as
+       the hero hands off) rather than leaving a gap before the first
+       splash. The overflow this pushes to the bottom is invisible
+       anyway (cropped by `overflow: hidden` on `.dye-ambient`). */
+    background-position: center top;
   }
 }
 
