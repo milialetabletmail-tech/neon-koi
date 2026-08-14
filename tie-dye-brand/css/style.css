@@ -1067,57 +1067,25 @@ body.nav-open { overflow: hidden; }
    they're built). A flat --ink fill read as generic/templated once
    the hero's own motion and color stopped.
 
-   Real photography, not a CSS gradient standing in for one: the same
-   frame-055 splash still used by the hero's own scrub sequence
-   (assets/video-frames), cropped to a strip at each edge and masked
-   with a radial fade so it dissolves into --ink well before reaching
-   the centered text — recognizable paint, not an abstract blob, but
-   still reading as atmosphere rather than a competing photo.
+   assets/backgrounds/dye-splash-sides.jpg is a purpose-made asset (not
+   cropped from the hero footage): lavender/teal/sage splashes flowing
+   in from all four corners, fading to flat #2b2726 toward the middle
+   — a near-exact match for --ink (#2a2625), so the image's own fade
+   already dissolves into the section without any mask/gradient work
+   on our end. `background-size: 100% auto` keeps the splashes pinned
+   to the left/right edges at any section width — a `cover` fit would
+   center-crop them away on narrow/tall mobile sections; letting the
+   height over/underflow instead just crops or exposes flat color,
+   both of which read as seamless given the matching tone.
    ------------------------------------------------------------ */
 
 .dye-ambient {
   position: relative;
   overflow: hidden;
-}
-
-.dye-ambient::before,
-.dye-ambient::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: min(34vw, 460px);
-  z-index: 0;
-  background-image: url('../assets/video-frames/frame-055.jpg');
+  background-image: url('../assets/backgrounds/dye-splash-sides.jpg');
   background-repeat: no-repeat;
-  background-size: auto 145%;
-  /* Darkened and desaturated toward the coffee-ash mood rather than
-     shown at the source photo's full studio-lit brightness — same
-     brightness/saturate/sepia recipe as .dye-canvas, pushed further
-     since this only needs to read as color at a glance, not as a
-     detailed image. */
-  filter: brightness(0.5) saturate(1.3) sepia(0.12);
-  opacity: 0.65;
-  pointer-events: none;
-}
-
-.dye-ambient::before {
-  left: 0;
-  background-position: left center;
-  -webkit-mask-image: radial-gradient(ellipse 78% 85% at 0% 50%, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.5) 45%, transparent 78%);
-  mask-image: radial-gradient(ellipse 78% 85% at 0% 50%, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.5) 45%, transparent 78%);
-}
-
-.dye-ambient::after {
-  right: 0;
-  background-position: right center;
-  -webkit-mask-image: radial-gradient(ellipse 78% 85% at 100% 50%, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.5) 45%, transparent 78%);
-  mask-image: radial-gradient(ellipse 78% 85% at 100% 50%, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.5) 45%, transparent 78%);
-}
-
-.dye-ambient > * {
-  position: relative;
-  z-index: 1;
+  background-position: center center;
+  background-size: 100% auto;
 }
 
 /* ------------------------------------------------------------
@@ -1130,7 +1098,11 @@ body.nav-open { overflow: hidden; }
    ------------------------------------------------------------ */
 
 .manifesto {
-  background: var(--ink);
+  /* background-color, not the `background` shorthand — this section
+     also carries `.dye-ambient`, and the shorthand would reset that
+     class's background-image back to none since both selectors have
+     equal specificity and this rule comes later in the cascade. */
+  background-color: var(--ink);
   color: var(--paper);
   padding: clamp(5rem, 14vw, 9rem) 1.5rem;
   display: flex;
