@@ -1186,11 +1186,11 @@ body.nav-open { overflow: hidden; }
 }
 
 /* ------------------------------------------------------------
-   PROCESS — the real technique (ice-dye), laid out as a connected
-   flow diagram: five steps in a vertical zigzag (image left/right
-   alternating), each pair joined by a custom-drawn curved-arrow
-   connector (an S-curve into a chevron — see the inline SVGs in
-   index.html) instead of a plain "→" character.
+   PROCESS — the real technique (ice-dye), laid out as a winding
+   "snake" path: five compact cards alternating left/right down the
+   page, each pair joined by a wide S-curve connector into a chevron
+   (see the inline SVGs in index.html) instead of a plain "→"
+   character.
 
    background-attachment: fixed on desktop only — the dye-splash
    backdrop stays pinned to the viewport while the steps scroll past
@@ -1233,56 +1233,65 @@ body.nav-open { overflow: hidden; }
   text-align: center;
 }
 
+/* Winding "snake" path: each step is a compact self-contained card
+   (small placeholder on top, text below, all centered) that alternates
+   left/right down the page, joined by a wide S-curve connector. The
+   connector is one SVG reused for every gap — `.process-connector--
+   flip` just mirrors it with scaleX(-1) for the gaps running right-to-
+   left, rather than needing a second hand-drawn path. */
+
 .process-steps {
-  max-width: 60rem;
+  max-width: 30rem;
   margin: 0 auto;
   padding: 0 1.5rem;
 }
 
 .process-step {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: clamp(2rem, 5vw, 4rem);
+  gap: 0.9rem;
+  width: clamp(11rem, 34vw, 14rem);
+  text-align: center;
 }
 
 .process-step:nth-of-type(even) {
-  flex-direction: row-reverse;
+  margin-left: auto;
+}
+
+.process-step:nth-of-type(odd) {
+  margin-right: auto;
 }
 
 .process-step-media {
-  flex: none;
-  width: clamp(9rem, 24vw, 13.5rem);
-  aspect-ratio: 4 / 5;
+  width: 100%;
+  aspect-ratio: 4 / 3;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.6rem;
+  gap: 0.4rem;
   border: 1.5px dashed rgba(244, 238, 225, 0.22);
-  border-radius: 0.9rem;
+  border-radius: 0.75rem;
   color: var(--paper-dim);
   opacity: 0.55;
 }
 
 .process-step-media svg {
-  width: 2.1rem;
-  height: 2.1rem;
+  width: 1.6rem;
+  height: 1.6rem;
 }
 
 .process-step-media-label {
   font-family: var(--font-ui);
-  font-size: 0.62rem;
+  font-size: 0.56rem;
   font-weight: 500;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 
-.process-step-text {
-  flex: 1;
-}
-
 .process-step-number {
-  margin: 0 0 0.3rem;
+  margin: 0;
   font-family: var(--font-ui);
   font-size: 0.75rem;
   font-weight: 600;
@@ -1291,31 +1300,29 @@ body.nav-open { overflow: hidden; }
 }
 
 .process-step-heading {
-  margin: 0 0 0.5rem;
+  margin: 0;
   font-family: var(--font-display);
   font-style: italic;
   font-weight: 600;
-  font-size: clamp(1.25rem, 2.6vw, 1.7rem);
+  font-size: clamp(1.15rem, 2.4vw, 1.4rem);
 }
 
 .process-step-caption {
   margin: 0;
-  max-width: 28rem;
   font-family: var(--font-ui);
-  font-size: 0.92rem;
-  line-height: 1.6;
+  font-size: 0.85rem;
+  line-height: 1.55;
   color: var(--paper-dim);
 }
 
 .process-connector {
-  display: flex;
-  justify-content: center;
-  padding: 0.4rem 0;
+  width: 100%;
+  max-width: 19rem;
+  margin: 0 auto;
 }
 
-.process-connector svg {
-  width: 2.4rem;
-  height: 4.8rem;
+.process-connector--flip {
+  transform: scaleX(-1);
 }
 
 .process-connector[data-accent="lavender"] { color: var(--lavender); }
@@ -1324,18 +1331,15 @@ body.nav-open { overflow: hidden; }
 
 @media (max-width: 768px) {
   .process-step,
-  .process-step:nth-of-type(even) {
-    flex-direction: column;
-    text-align: center;
-    gap: 1.4rem;
-  }
-
-  .process-step-media {
+  .process-step:nth-of-type(even),
+  .process-step:nth-of-type(odd) {
+    margin-left: auto;
+    margin-right: auto;
     width: 60vw;
   }
 
-  .process-step-caption {
-    margin: 0 auto;
+  .process-connector {
+    max-width: 8rem;
   }
 }
 

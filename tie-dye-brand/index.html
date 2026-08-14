@@ -163,6 +163,13 @@
     <p class="process-eyebrow">Процесс</p>
     <h2 class="process-title">Спираль, рождённая льдом</h2>
 
+    <!-- A winding "snake" path instead of a straight zigzag: each node
+         is a compact card (small photo placeholder + number + heading
+         + caption), alternating left/right down the page via CSS
+         (.process-step:nth-of-type(even) — see style.css), joined by
+         one wide S-curve connector SVG reused as-is each time and just
+         mirrored with `transform: scaleX(-1)` on the alternating ones,
+         rather than hand-drawing a separate flipped path per gap. -->
     <div class="process-steps">
       <article class="process-step">
         <div class="process-step-media" aria-hidden="true">
@@ -176,11 +183,8 @@
         </div>
       </article>
 
-      <!-- Custom drawn connector — a flowing S-curve into a chevron, not
-           a keyboard arrow character — cycling through the three brand
-           accents down the sequence. -->
       <div class="process-connector" data-accent="lavender" aria-hidden="true">
-        <svg viewBox="0 0 48 88" fill="none"><path d="M24 4C6 24 42 44 24 62" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M15 54L24 64L33 54" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg viewBox="0 0 300 100" fill="none" preserveAspectRatio="none"><path d="M24 6C24 47 276 47 276 88" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M260 78L276 92L292 78" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
 
       <article class="process-step">
@@ -195,8 +199,8 @@
         </div>
       </article>
 
-      <div class="process-connector" data-accent="teal" aria-hidden="true">
-        <svg viewBox="0 0 48 88" fill="none"><path d="M24 4C42 24 6 44 24 62" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M15 54L24 64L33 54" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div class="process-connector process-connector--flip" data-accent="teal" aria-hidden="true">
+        <svg viewBox="0 0 300 100" fill="none" preserveAspectRatio="none"><path d="M24 6C24 47 276 47 276 88" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M260 78L276 92L292 78" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
 
       <article class="process-step">
@@ -212,7 +216,7 @@
       </article>
 
       <div class="process-connector" data-accent="sage" aria-hidden="true">
-        <svg viewBox="0 0 48 88" fill="none"><path d="M24 4C6 24 42 44 24 62" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M15 54L24 64L33 54" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg viewBox="0 0 300 100" fill="none" preserveAspectRatio="none"><path d="M24 6C24 47 276 47 276 88" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M260 78L276 92L292 78" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
 
       <article class="process-step">
@@ -227,8 +231,8 @@
         </div>
       </article>
 
-      <div class="process-connector" data-accent="lavender" aria-hidden="true">
-        <svg viewBox="0 0 48 88" fill="none"><path d="M24 4C42 24 6 44 24 62" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M15 54L24 64L33 54" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div class="process-connector process-connector--flip" data-accent="lavender" aria-hidden="true">
+        <svg viewBox="0 0 300 100" fill="none" preserveAspectRatio="none"><path d="M24 6C24 47 276 47 276 88" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M260 78L276 92L292 78" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
 
       <article class="process-step">
