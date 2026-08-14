@@ -1088,6 +1088,22 @@ body.nav-open { overflow: hidden; }
   background-size: 100% auto;
 }
 
+/* dye-splash-sides.jpg is ~1.8:1 landscape — on a tall narrow phone,
+   100%-width sizing runs out of image height long before the section
+   does, leaving only a short band of it visible. dye-splash-sides-
+   mobile.jpg is a separate, portrait-built asset (splashes repeating
+   down both edges) so the same width-driven sizing covers the
+   section's full height instead. Placed after the base rule above —
+   not inside the earlier shared mobile @media block — since a plain
+   rule appearing later in the cascade would otherwise win over a
+   same-specificity one declared earlier, media query or not. */
+@media (max-width: 768px) {
+  .dye-ambient {
+    background-image: url('../assets/backgrounds/dye-splash-sides-mobile.jpg');
+    background-size: 100% auto;
+  }
+}
+
 /* ------------------------------------------------------------
    MANIFESTO — quiet, text-only beat right after the hero's motion.
    Three lines, each animated in on its own as it crosses into view
