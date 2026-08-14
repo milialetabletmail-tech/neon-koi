@@ -282,10 +282,40 @@
   }
 
   /* ------------------------------------------------------------
+     Manifesto reveal — each `.manifesto-line` gets `.is-visible` the
+     first time it crosses into the lower part of the viewport, then
+     is unobserved (a one-way reveal, not something that re-triggers
+     scrolling back up). `rootMargin` pulls the trigger line up from
+     the very bottom edge so a line finishes most of its fade before
+     it's fully on screen, rather than starting the animation right at
+     the edge where it'd still be half-cropped.
+     ------------------------------------------------------------ */
+  function buildManifestoReveal() {
+    const lines = document.querySelectorAll('.manifesto-line');
+    if (!lines.length || !('IntersectionObserver' in window)) {
+      lines.forEach((line) => line.classList.add('is-visible'));
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        });
+      },
+      { rootMargin: '0px 0px -15% 0px', threshold: 0.2 }
+    );
+    lines.forEach((line) => observer.observe(line));
+  }
+
+  /* ------------------------------------------------------------
      Boot
      ------------------------------------------------------------ */
   document.addEventListener('DOMContentLoaded', () => {
     buildNavSolidToggle();
+    buildManifestoReveal();
     const framesPromise = loadFrames();
     runPreloader(framesPromise, () => {
       framesPromise.then((frames) => {

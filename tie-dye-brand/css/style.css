@@ -694,6 +694,13 @@ body.nav-open { overflow: hidden; }
   top: 2.2rem;
   left: 50%;
   transform: translateX(-50%);
+  /* Shrink-to-fit up to this cap (not full container width) and
+     text-align: center together are both needed once the string
+     wraps to multiple lines — width alone still left-aligns the
+     wrapped lines inside an oversized box. */
+  width: max-content;
+  max-width: min(90vw, 34rem);
+  text-align: center;
   font-family: var(--font-ui);
   font-size: 0.7rem;
   font-weight: 500;
@@ -923,8 +930,29 @@ body.nav-open { overflow: hidden; }
     gap: 0.3rem;
   }
 
+  /* Both labels move from fixed rem offsets to positions keyed off the
+     letterboxed video band itself (the same `calc(50% ± Nvw)` math the
+     band's own mask gradient uses, see .dye-canvas above) — object-fit:
+     contain centers that band vertically and sizes it off viewport
+     width, so a rem-based offset drifts in and out of the band across
+     phone sizes while this stays locked to its actual edges. The
+     `max()` on the label is just a floor so it can never creep back up
+     under the header on unusually short viewports. */
   .colorburst-label {
-    top: 5.9rem;
+    /* Extra fixed buffer beyond the band's own top edge (not just
+       26vw) — the garment itself, not only the fade, occupies real
+       height inside the band (the collar sits well up into it), so
+       hugging the literal edge still overlapped the collar. */
+    top: max(6.5rem, calc(50% - 28vw - 2.4rem));
+    font-size: 0.58rem;
+    letter-spacing: 0.22em;
+  }
+
+  .colorburst-batch {
+    top: calc(50% + 18vw);
+    bottom: auto;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
   }
 
   .scroll-hint {
@@ -1034,23 +1062,131 @@ body.nav-open { overflow: hidden; }
 }
 
 /* ------------------------------------------------------------
-   PLACEHOLDER NEXT SECTION (stub — Manifesto block lands in Phase 2)
+   DYE-AMBIENT — reusable background texture for the flat-ink sections
+   below the hero (Манифест now; Процесс/Превью/Футер get it too as
+   they're built). A flat --ink fill read as generic/templated once
+   the hero's own motion and color stopped.
+
+   Real photography, not a CSS gradient standing in for one: the same
+   frame-055 splash still used by the hero's own scrub sequence
+   (assets/video-frames), cropped to a strip at each edge and masked
+   with a radial fade so it dissolves into --ink well before reaching
+   the centered text — recognizable paint, not an abstract blob, but
+   still reading as atmosphere rather than a competing photo.
    ------------------------------------------------------------ */
 
-.next-stub {
+.dye-ambient {
   position: relative;
-  height: 60vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--stone);
+  overflow: hidden;
+}
+
+.dye-ambient::before,
+.dye-ambient::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: min(34vw, 460px);
+  z-index: 0;
+  background-image: url('../assets/video-frames/frame-055.jpg');
+  background-repeat: no-repeat;
+  background-size: auto 145%;
+  /* Darkened and desaturated toward the coffee-ash mood rather than
+     shown at the source photo's full studio-lit brightness — same
+     brightness/saturate/sepia recipe as .dye-canvas, pushed further
+     since this only needs to read as color at a glance, not as a
+     detailed image. */
+  filter: brightness(0.5) saturate(1.3) sepia(0.12);
+  opacity: 0.65;
+  pointer-events: none;
+}
+
+.dye-ambient::before {
+  left: 0;
+  background-position: left center;
+  -webkit-mask-image: radial-gradient(ellipse 78% 85% at 0% 50%, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.5) 45%, transparent 78%);
+  mask-image: radial-gradient(ellipse 78% 85% at 0% 50%, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.5) 45%, transparent 78%);
+}
+
+.dye-ambient::after {
+  right: 0;
+  background-position: right center;
+  -webkit-mask-image: radial-gradient(ellipse 78% 85% at 100% 50%, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.5) 45%, transparent 78%);
+  mask-image: radial-gradient(ellipse 78% 85% at 100% 50%, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.5) 45%, transparent 78%);
+}
+
+.dye-ambient > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ------------------------------------------------------------
+   MANIFESTO — quiet, text-only beat right after the hero's motion.
+   Three lines, each animated in on its own as it crosses into view
+   (see buildManifestoReveal in main.js, which toggles `.is-visible`
+   per line via IntersectionObserver) rather than the section fading
+   in as one block — reads as the text arriving one thought at a time
+   while scrolling, not a single reveal.
+   ------------------------------------------------------------ */
+
+.manifesto {
+  background: var(--ink);
   color: var(--paper);
+  padding: clamp(5rem, 14vw, 9rem) 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.4rem;
+}
+
+.manifesto-eyebrow {
+  margin: 0;
   font-family: var(--font-ui);
-  letter-spacing: 0.08em;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.32em;
   text-transform: uppercase;
-  font-size: 0.85rem;
+  color: var(--paper-dim);
+  opacity: 0.7;
+}
+
+.manifesto-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  max-width: 46rem;
+}
+
+.manifesto-line {
+  margin: 0;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(1.4rem, 3.4vw, 2.3rem);
+  line-height: 1.4;
   text-align: center;
-  padding: 2rem;
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s var(--ease-burst), transform 0.7s var(--ease-burst);
+}
+
+.manifesto-line.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* A small stagger in case two lines cross the reveal threshold in the
+   same scroll frame (fast scrolling, or a short viewport) — without
+   it they'd snap in together instead of reading as separate beats. */
+.manifesto-line:nth-of-type(2) { transition-delay: 0.08s; }
+.manifesto-line:nth-of-type(3) { transition-delay: 0.16s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .manifesto-line {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
 }
 
 /* ------------------------------------------------------------
