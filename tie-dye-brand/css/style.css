@@ -1186,6 +1186,160 @@ body.nav-open { overflow: hidden; }
 }
 
 /* ------------------------------------------------------------
+   PROCESS — the real technique (ice-dye), laid out as a connected
+   flow diagram: five steps in a vertical zigzag (image left/right
+   alternating), each pair joined by a custom-drawn curved-arrow
+   connector (an S-curve into a chevron — see the inline SVGs in
+   index.html) instead of a plain "→" character.
+
+   background-attachment: fixed on desktop only — the dye-splash
+   backdrop stays pinned to the viewport while the steps scroll past
+   it, rather than scrolling away with them the way it does in
+   Манифест. Skipped on mobile: iOS Safari's support for fixed
+   backgrounds is unreliable enough that it's safer to just let it
+   scroll normally there (still the same image either way).
+   ------------------------------------------------------------ */
+
+.process {
+  background-color: var(--ink);
+  color: var(--paper);
+  padding: clamp(5rem, 12vw, 8rem) 0;
+}
+
+@media (min-width: 769px) {
+  .process {
+    background-attachment: fixed;
+  }
+}
+
+.process-eyebrow {
+  margin: 0;
+  text-align: center;
+  font-family: var(--font-ui);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--paper-dim);
+  opacity: 0.7;
+}
+
+.process-title {
+  margin: 0.6rem 0 clamp(3rem, 7vw, 4.5rem);
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 600;
+  font-size: clamp(1.7rem, 3.6vw, 2.6rem);
+  text-align: center;
+}
+
+.process-steps {
+  max-width: 60rem;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.process-step {
+  display: flex;
+  align-items: center;
+  gap: clamp(2rem, 5vw, 4rem);
+}
+
+.process-step:nth-of-type(even) {
+  flex-direction: row-reverse;
+}
+
+.process-step-media {
+  flex: none;
+  width: clamp(9rem, 24vw, 13.5rem);
+  aspect-ratio: 4 / 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  border: 1.5px dashed rgba(244, 238, 225, 0.22);
+  border-radius: 0.9rem;
+  color: var(--paper-dim);
+  opacity: 0.55;
+}
+
+.process-step-media svg {
+  width: 2.1rem;
+  height: 2.1rem;
+}
+
+.process-step-media-label {
+  font-family: var(--font-ui);
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.process-step-text {
+  flex: 1;
+}
+
+.process-step-number {
+  margin: 0 0 0.3rem;
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--lavender);
+}
+
+.process-step-heading {
+  margin: 0 0 0.5rem;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 600;
+  font-size: clamp(1.25rem, 2.6vw, 1.7rem);
+}
+
+.process-step-caption {
+  margin: 0;
+  max-width: 28rem;
+  font-family: var(--font-ui);
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--paper-dim);
+}
+
+.process-connector {
+  display: flex;
+  justify-content: center;
+  padding: 0.4rem 0;
+}
+
+.process-connector svg {
+  width: 2.4rem;
+  height: 4.8rem;
+}
+
+.process-connector[data-accent="lavender"] { color: var(--lavender); }
+.process-connector[data-accent="teal"] { color: var(--teal); }
+.process-connector[data-accent="sage"] { color: var(--sage); }
+
+@media (max-width: 768px) {
+  .process-step,
+  .process-step:nth-of-type(even) {
+    flex-direction: column;
+    text-align: center;
+    gap: 1.4rem;
+  }
+
+  .process-step-media {
+    width: 60vw;
+  }
+
+  .process-step-caption {
+    margin: 0 auto;
+  }
+}
+
+/* ------------------------------------------------------------
    REDUCED MOTION FALLBACK
    ------------------------------------------------------------ */
 
