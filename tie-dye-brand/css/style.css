@@ -919,10 +919,17 @@ body.nav-open { overflow: hidden; }
      around the handoff — a mismatched patch of background right at
      the seam, which is the opposite of what this was for.
 
-     Flat --ink instead: dye-splash-sides(-mobile).jpg already fades to
-     the same --ink tone away from its corner splashes, so a plain ink
-     margin here blends into Манифест's backdrop with no seam, with
-     no dependency on background positioning surviving a transform. */
+     Splash pattern is back, but sized to this box's own dimensions
+     (no background-attachment: fixed — see above for why that never
+     really worked here) and anchored to the top, right where the
+     video's own fade-out ends, so the artwork sits closest to the
+     garment instead of in the middle of an otherwise-empty box. A
+     mask then fades the whole layer to transparent over its bottom
+     third, revealing the flat --ink .colorburst-stage background
+     behind it — dye-splash-sides-mobile.jpg fades to that same tone
+     away from its corners anyway, so by the time this box reaches
+     Манифест it's already plain ink meeting plain ink, with nothing
+     positioned against the viewport for a transform to break. */
   .hero-ambient-fill {
     display: block;
     position: absolute;
@@ -930,7 +937,12 @@ body.nav-open { overflow: hidden; }
     left: 0;
     right: 0;
     bottom: 0;
-    background: var(--ink);
+    background-image: url('../assets/backgrounds/dye-splash-sides-mobile.jpg');
+    background-repeat: no-repeat;
+    background-position: center top;
+    background-size: cover;
+    -webkit-mask-image: linear-gradient(to bottom, black 0%, black 45%, transparent 78%);
+    mask-image: linear-gradient(to bottom, black 0%, black 45%, transparent 78%);
   }
 
   /* The standalone "Хит сезона" section (.featured-item) is hidden on
