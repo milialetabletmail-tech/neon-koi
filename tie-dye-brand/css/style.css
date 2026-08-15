@@ -1063,9 +1063,9 @@ body.nav-open { overflow: hidden; }
 
 /* ------------------------------------------------------------
    DYE-AMBIENT — reusable background texture for the flat-ink sections
-   below the hero (Манифест now; Процесс/Превью/Футер get it too as
-   they're built). A flat --ink fill read as generic/templated once
-   the hero's own motion and color stopped.
+   below the hero (Манифест, Процесс, Превью — Футер gets it too as
+   it's built). A flat --ink fill read as generic/templated once the
+   hero's own motion and color stopped.
 
    assets/backgrounds/dye-splash-sides.jpg is a purpose-made asset (not
    cropped from the hero footage): lavender/teal/sage splashes flowing
@@ -1119,13 +1119,16 @@ body.nav-open { overflow: hidden; }
    per line via IntersectionObserver) rather than the section fading
    in as one block — reads as the text arriving one thought at a time
    while scrolling, not a single reveal.
+
+   Shares Процесс's background-attachment: fixed treatment (see the
+   media query below) rather than having the dye-splash image scroll
+   normally here — on desktop, both sections show the exact same
+   viewport-anchored image, so the backdrop reads as one continuous
+   fixed layer running under both instead of two separate copies of
+   the splash art meeting at a seam.
    ------------------------------------------------------------ */
 
 .manifesto {
-  /* background-color, not the `background` shorthand — this section
-     also carries `.dye-ambient`, and the shorthand would reset that
-     class's background-image back to none since both selectors have
-     equal specificity and this rule comes later in the cascade. */
   background-color: var(--ink);
   color: var(--paper);
   padding: clamp(5rem, 14vw, 9rem) 1.5rem;
@@ -1133,6 +1136,12 @@ body.nav-open { overflow: hidden; }
   flex-direction: column;
   align-items: center;
   gap: 2.4rem;
+}
+
+@media (min-width: 769px) {
+  .manifesto {
+    background-attachment: fixed;
+  }
 }
 
 .manifesto-eyebrow {
@@ -1192,12 +1201,12 @@ body.nav-open { overflow: hidden; }
    (see the inline SVGs in index.html) instead of a plain "→"
    character.
 
-   background-attachment: fixed on desktop only — the dye-splash
+   background-attachment: fixed on desktop only (same treatment as
+   Манифест right above it — see its own rule for why) — the dye-splash
    backdrop stays pinned to the viewport while the steps scroll past
-   it, rather than scrolling away with them the way it does in
-   Манифест. Skipped on mobile: iOS Safari's support for fixed
-   backgrounds is unreliable enough that it's safer to just let it
-   scroll normally there (still the same image either way).
+   it. Skipped on mobile: iOS Safari's support for fixed backgrounds is
+   unreliable enough that it's safer to just let it scroll normally
+   there (still the same image either way).
    ------------------------------------------------------------ */
 
 .process {
