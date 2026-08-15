@@ -322,6 +322,7 @@
     const track = document.getElementById('collection-preview-track');
     const prevBtn = document.getElementById('collection-preview-prev');
     const nextBtn = document.getElementById('collection-preview-next');
+    const dots = Array.from(document.querySelectorAll('.collection-preview-dot'));
     if (!track || !prevBtn || !nextBtn) return;
 
     function stepSize() {
@@ -355,18 +356,30 @@
     const cards = Array.from(track.querySelectorAll('.collection-preview-card'));
     function updateActiveCard() {
       const viewCenter = track.scrollLeft + track.clientWidth / 2;
-      let closest = null;
+      let closestIndex = 0;
       let closestDist = Infinity;
-      cards.forEach((card) => {
+      cards.forEach((card, index) => {
         const cardCenter = card.offsetLeft + card.offsetWidth / 2;
         const dist = Math.abs(cardCenter - viewCenter);
         if (dist < closestDist) {
           closestDist = dist;
-          closest = card;
+          closestIndex = index;
         }
       });
-      cards.forEach((card) => card.classList.toggle('is-active', card === closest));
+      cards.forEach((card, index) => card.classList.toggle('is-active', index === closestIndex));
+      dots.forEach((dot, index) => dot.classList.toggle('is-active', index === closestIndex));
     }
+
+    dots.forEach((dot, index) => {
+      dot.addEventListener('click', () => {
+        const card = cards[index];
+        if (!card) return;
+        track.scrollTo({
+          left: card.offsetLeft + card.offsetWidth / 2 - track.clientWidth / 2,
+          behavior: 'smooth',
+        });
+      });
+    });
 
     track.addEventListener('scroll', () => {
       updateArrowState();

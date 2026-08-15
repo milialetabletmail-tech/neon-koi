@@ -1437,6 +1437,29 @@ body.nav-open { overflow: hidden; }
   scroll-snap-align: start;
 }
 
+/* Mobile: cards snap to the track's center instead of its start edge,
+   with side padding on the track equal to half the leftover space on
+   either side of a card — that leftover space is exactly what lets a
+   sliver of the previous/next card peek in on BOTH sides while the
+   active one is centered, rather than only ever revealing what's
+   ahead like the desktop version does. Both the card width and the
+   padding are percentages of the same box (the track), so the two
+   stay in exact sync regardless of viewport — a vw/rem-capped card
+   width would drift out of sync with a percentage-based padding the
+   moment the cap kicked in. */
+@media (max-width: 768px) {
+  .collection-preview-card {
+    flex-basis: 68%;
+    max-width: none;
+    scroll-snap-align: center;
+  }
+
+  .collection-preview-grid {
+    padding-left: 16%;
+    padding-right: 16%;
+  }
+}
+
 @media (min-width: 769px) {
   .collection-preview-card {
     flex: 0 0 14rem;
@@ -1489,6 +1512,48 @@ body.nav-open { overflow: hidden; }
 
 .collection-preview-arrow--next {
   right: 0.25rem;
+}
+
+/* Dots replace the arrows on mobile — a touch carousel is already
+   driven by swipe, so side buttons are more of a desktop/mouse
+   affordance; dots read as the native "where am I" indicator instead.
+   Hidden by default (desktop), shown only under the mobile media
+   query below where the arrows themselves are hidden. This override
+   has to come after the base .collection-preview-arrow rule above —
+   a later plain rule beats an earlier media-scoped one of equal
+   specificity regardless of the media query. */
+.collection-preview-dots {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 0.9rem;
+}
+
+@media (max-width: 768px) {
+  .collection-preview-arrow {
+    display: none;
+  }
+
+  .collection-preview-dots {
+    display: flex;
+  }
+}
+
+.collection-preview-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: rgba(244, 238, 225, 0.28);
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.collection-preview-dot.is-active {
+  background: var(--paper);
+  transform: scale(1.4);
 }
 
 .collection-preview-media {
