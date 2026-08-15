@@ -948,20 +948,42 @@ body.nav-open { overflow: hidden; }
      main.js, so both margins finish "filling in" together right as
      the scrub sequence lands. Top half of the stage (top: 0 to 50%),
      mirroring .hero-ambient-fill's bottom half. Photo left, copy
-     right — same layout .featured-item uses on desktop, just at a
-     scale that fits the margin's limited height. */
+     right, at the same ~55/45 split .featured-item uses on desktop
+     (not a smaller-photo layout of its own) — just scaled down to fit
+     the margin's limited height, so it reads as the same design
+     shrunk to fit rather than a different composition.
+
+     Background is the desktop dye-splash-sides.jpg (not the mobile
+     asset the rest of this page uses) with the same fixed/cover
+     treatment .featured-item gets on desktop — this one piece is
+     meant to look identical to its desktop counterpart, not like the
+     rest of the mobile page. */
   .hero-featured-teaser {
     display: flex;
-    align-items: center;
+    /* flex-end, not center — centering left a dead gap between the
+       card and the video below it whenever the card's own content was
+       shorter than the box. Bottom-aligning instead makes it sit
+       flush against the video, whatever its height ends up being. */
+    align-items: flex-end;
     gap: 0.9rem;
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
-    bottom: 50%;
-    padding: 3.5rem 1.5rem 0;
+    /* Not bottom: 50% — the canvas's own mask (below) only actually
+       finishes fading out at 50% - 24vw, not the dead center; anything
+       bottom-aligned all the way to 50% overlapped the canvas's fully-
+       opaque, later-in-DOM pixels and got painted over/hidden behind
+       the garment instead of sitting above it. */
+    bottom: calc(50% + 24vw);
+    padding: 0 1.5rem 1rem;
     opacity: 0;
     transition: opacity 0.8s ease;
+    background-image: url('../assets/backgrounds/dye-splash-sides.jpg');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center center;
+    background-size: cover;
   }
 
   .hero-featured-teaser.is-revealed {
@@ -969,8 +991,7 @@ body.nav-open { overflow: hidden; }
   }
 
   .hero-featured-teaser-media {
-    flex: 1 1 40%;
-    max-width: 7rem;
+    flex: 1 1 55%;
     aspect-ratio: 4 / 5;
     display: flex;
     align-items: center;
@@ -986,7 +1007,13 @@ body.nav-open { overflow: hidden; }
   }
 
   .hero-featured-teaser-text {
-    flex: 1 1 60%;
+    /* align-self: center, against the row's own flex-end — the photo
+       stays bottom-aligned (flush with the video), but the text
+       column centers within that same line height instead of also
+       sitting at the very bottom, landing roughly level with the
+       photo's middle rather than its foot. */
+    align-self: center;
+    flex: 1 1 45%;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -1020,6 +1047,19 @@ body.nav-open { overflow: hidden; }
     line-height: 1.4;
     color: var(--paper-dim);
     opacity: 0.7;
+  }
+
+  .hero-featured-teaser-cta {
+    margin-top: 0.2rem;
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    border: 1px solid rgba(244, 238, 225, 0.25);
+    font-family: var(--font-ui);
+    font-size: 0.62rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: var(--paper);
+    text-decoration: none;
   }
 
   .dye-canvas {
