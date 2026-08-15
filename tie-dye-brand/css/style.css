@@ -1169,28 +1169,27 @@ body.nav-open { overflow: hidden; }
    in as one block — reads as the text arriving one thought at a time
    while scrolling, not a single reveal.
 
-   Shares Процесс's background-attachment: fixed treatment (see the
-   media query below) rather than having the dye-splash image scroll
-   normally here — on desktop, both sections show the exact same
-   viewport-anchored image, so the backdrop reads as one continuous
-   fixed layer running under both instead of two separate copies of
-   the splash art meeting at a seam.
+   Shares Процесс's background-attachment: fixed treatment rather than
+   having the dye-splash image scroll normally here — both sections
+   show the exact same viewport-anchored image, so the backdrop reads
+   as one continuous fixed layer running under both instead of two
+   separate copies of the splash art meeting at a seam. Used to be
+   desktop-only (iOS Safari's support for fixed backgrounds has a
+   history of being unreliable), but the same duplicate-seam problem
+   this solves on desktop was still visible on mobile with each
+   section scrolling its own copy, so it's on unconditionally now —
+   worth revisiting if it turns out to actually misbehave on iOS.
    ------------------------------------------------------------ */
 
 .manifesto {
   background-color: var(--ink);
+  background-attachment: fixed;
   color: var(--paper);
   padding: clamp(5rem, 14vw, 9rem) 1.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 2.4rem;
-}
-
-@media (min-width: 769px) {
-  .manifesto {
-    background-attachment: fixed;
-  }
 }
 
 .manifesto-eyebrow {
@@ -1250,24 +1249,17 @@ body.nav-open { overflow: hidden; }
    (see the inline SVGs in index.html) instead of a plain "→"
    character.
 
-   background-attachment: fixed on desktop only (same treatment as
-   Манифест right above it — see its own rule for why) — the dye-splash
-   backdrop stays pinned to the viewport while the steps scroll past
-   it. Skipped on mobile: iOS Safari's support for fixed backgrounds is
-   unreliable enough that it's safer to just let it scroll normally
-   there (still the same image either way).
+   background-attachment: fixed (same treatment as Манифест right
+   above it — see its own rule for why, including the iOS caveat) —
+   the dye-splash backdrop stays pinned to the viewport while the
+   steps scroll past it.
    ------------------------------------------------------------ */
 
 .process {
   background-color: var(--ink);
+  background-attachment: fixed;
   color: var(--paper);
   padding: clamp(5rem, 12vw, 8rem) 0;
-}
-
-@media (min-width: 769px) {
-  .process {
-    background-attachment: fixed;
-  }
 }
 
 .process-eyebrow {
@@ -1419,14 +1411,15 @@ body.nav-open { overflow: hidden; }
 }
 
 /* ------------------------------------------------------------
-   COLLECTION PREVIEW — same dye-splash backdrop and desktop fixed-
-   attachment behaviour as Процесс, so the "background pins, content
-   scrolls" effect reads as one continuous dark stretch from Процесс
-   straight through into this section rather than resetting each time.
+   COLLECTION PREVIEW — same dye-splash backdrop and fixed-attachment
+   behaviour as Процесс, so the "background pins, content scrolls"
+   effect reads as one continuous dark stretch from Процесс straight
+   through into this section rather than resetting each time.
    ------------------------------------------------------------ */
 
 .collection-preview {
   background-color: var(--ink);
+  background-attachment: fixed;
   color: var(--paper);
   padding: clamp(5rem, 12vw, 8rem) 1.5rem;
   display: flex;
@@ -1434,12 +1427,6 @@ body.nav-open { overflow: hidden; }
   align-items: center;
   gap: 1.1rem;
   text-align: center;
-}
-
-@media (min-width: 769px) {
-  .collection-preview {
-    background-attachment: fixed;
-  }
 }
 
 .collection-preview-eyebrow {
