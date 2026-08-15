@@ -102,6 +102,7 @@
     const label = document.querySelector('.colorburst-label');
     const batch = document.querySelector('.colorburst-batch');
     const hint = document.querySelector('.scroll-hint');
+    const ambientFill = document.querySelector('.hero-ambient-fill');
 
     const lastFrame = FRAME_COUNT - 1;
 
@@ -224,6 +225,13 @@
       duration: 0.6,
       ease: 'none',
       onUpdate: () => drawFrame(frameProxy.frame),
+      // Mobile-only reveal (see .hero-ambient-fill in css/style.css) —
+      // harmless no-op on desktop, where the element is display: none.
+      // onReverseComplete undoes it on scroll-back so the ambient
+      // backdrop only ever shows once the sequence has actually played
+      // through, not once and then permanently.
+      onComplete: () => { if (ambientFill) ambientFill.classList.add('is-revealed'); },
+      onReverseComplete: () => { if (ambientFill) ambientFill.classList.remove('is-revealed'); },
     }, 0.08);
 
     // --- State 2 (45% - 70%): text assembles as the tee finishes dyeing ---

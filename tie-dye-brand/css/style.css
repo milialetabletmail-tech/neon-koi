@@ -679,11 +679,14 @@ body.nav-open { overflow: hidden; }
 
 .hero-subhead {
   margin: 1rem 0 0;
-  font-family: var(--font-display);
-  font-style: italic;
-  font-weight: 800;
-  font-size: clamp(1.3rem, 2.6vw, 2.1rem);
-  letter-spacing: 0.1em;
+  /* Bebas Neue instead of the italic Fraunces used everywhere else —
+     a tall condensed sans reads as a stamped collection tag sitting
+     under the brush-script wordmark, rather than as another line of
+     the same serif body copy the rest of the site already uses. */
+  font-family: 'Bebas Neue', var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.5rem, 3vw, 2.4rem);
+  letter-spacing: 0.28em;
   text-transform: uppercase;
   color: var(--ink-letter);
   opacity: 0;
@@ -691,7 +694,7 @@ body.nav-open { overflow: hidden; }
 
 .colorburst-label {
   position: absolute;
-  top: 2.2rem;
+  top: 1.1rem;
   left: 50%;
   transform: translateX(-50%);
   /* Shrink-to-fit up to this cap (not full container width) and
@@ -714,19 +717,23 @@ body.nav-open { overflow: hidden; }
 
 .colorburst-batch {
   position: absolute;
-  /* Lower than the 8% it used to sit at, clear of the garment's hem —
-     which also means it's no longer reliably over light fabric, so the
-     color/shadow below switch to the same light-text-over-photo
-     treatment `.colorburst-label` uses instead of solid dark ink. */
-  bottom: 3%;
+  /* Clear of the garment's hem at the very bottom of the stage — black
+     ink (matching the wordmark/subhead) instead of the light paper
+     tone, with a soft light halo standing in for the dark drop-shadow
+     used elsewhere: black text needs help staying legible over the
+     fabric's own dark/shadowed patches, the same problem the wordmark
+     solves with `.hero-wordmark-glow` brightening the footage behind
+     it, just done here as a cheaper per-letter glow instead of a
+     separate blended layer. */
+  bottom: 0.9rem;
   left: 50%;
   transform: translate(-50%, 12px);
   font-family: var(--font-ui);
   font-size: 0.75rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--paper-dim);
-  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+  color: var(--ink-letter);
+  text-shadow: 0 0 10px rgba(244, 238, 225, 0.55), 0 1px 3px rgba(244, 238, 225, 0.3);
   opacity: 0;
   z-index: 5;
   display: flex;
@@ -739,8 +746,8 @@ body.nav-open { overflow: hidden; }
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: var(--lavender);
-  box-shadow: 0 0 12px var(--lavender);
+  background: var(--teal);
+  box-shadow: 0 0 12px var(--teal);
 }
 
 /* --- interaction hint: "scroll or tap" --- */
@@ -820,6 +827,10 @@ body.nav-open { overflow: hidden; }
   will-change: transform;
 }
 
+.hero-ambient-fill {
+  display: none;
+}
+
 .dye-canvas {
   position: absolute;
   inset: 0;
@@ -879,6 +890,28 @@ body.nav-open { overflow: hidden; }
   .colorburst,
   .colorburst-stage {
     background: var(--ink);
+  }
+
+  /* Same dye-splash asset Манифест/Процесс use, filling the letterbox
+     margins the canvas's own vertical mask (below) already leaves
+     transparent — invisible until main.js adds .is-revealed once the
+     frame-scrub sequence finishes (see buildColorBurst's frame tween),
+     so it reads as the ambient backdrop catching up right as the
+     reveal lands rather than competing with it from the first frame. */
+  .hero-ambient-fill {
+    display: block;
+    position: absolute;
+    inset: 0;
+    background-image: url('../assets/backgrounds/dye-splash-sides-mobile.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100% auto;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+  }
+
+  .hero-ambient-fill.is-revealed {
+    opacity: 1;
   }
 
   .dye-canvas {
@@ -949,10 +982,26 @@ body.nav-open { overflow: hidden; }
   }
 
   .colorburst-batch {
-    top: calc(50% + 18vw);
+    /* Just past the band's full-visibility edge (24vw) rather than
+       past its whole fade-out tail (29vw) too — close enough to still
+       read as sitting on the video/garment, not stranded down in the
+       flat margin below it. 18vw sat well inside the still-fully-
+       visible garment, so the line used to print directly over the
+       shirt's hem; this clears it while staying right underneath.
+       Font size drops a lot further than the label's does: at the
+       label's font-size this line still wrapped to two lines on a
+       phone-width screen, which read as a disproportionately large
+       block this far down the layout. Back to the light-text-over-
+       photo treatment (not the black ink used elsewhere) since it's
+       sitting against the fading footage/fabric here, not the flat
+       ink margin further down. */
+    top: calc(50% + 23vw);
     bottom: auto;
-    font-size: 0.6rem;
-    letter-spacing: 0.12em;
+    font-size: 0.42rem;
+    letter-spacing: 0.1em;
+    gap: 0.5em;
+    color: var(--paper-dim);
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
   }
 
   .scroll-hint {

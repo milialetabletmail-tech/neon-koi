@@ -8,7 +8,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,500;1,9..144,800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,500;1,9..144,800&family=Manrope:wght@400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="css/style.css">
 </head>
@@ -112,6 +112,16 @@
            it stays perfectly smooth under fast, repeated scroll-driven
            updates. Frame list + preloading + draw logic in main.js. -->
       <div class="garment-stage">
+        <!-- Mobile only (see css/style.css): sits behind the canvas and
+             only shows through the letterboxed margins the canvas's own
+             mask already leaves transparent above/below the video band.
+             Starts invisible and fades in once main.js marks the scrub
+             sequence done, rather than being visible from the very
+             start — the empty margins should read as "the ambient
+             backdrop catching up once the reveal has finished playing",
+             not as competing with the video for attention while it's
+             still scrubbing. -->
+        <div class="hero-ambient-fill" id="hero-ambient-fill" aria-hidden="true"></div>
         <canvas class="dye-canvas" width="1728" height="992"
           aria-label="Белая футболка в брызгах лавандового, бирюзового и оливкового красителя, скрученная в спиральный узор тай-дай"></canvas>
       </div>
