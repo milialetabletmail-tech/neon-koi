@@ -904,7 +904,17 @@ body.nav-open { overflow: hidden; }
      not the full inset — the canvas's mask fades out symmetrically
      above and below the video band, so a full-height layer showed
      through in BOTH margins; anything above the garment read as
-     splashes sitting on top of the video instead of underneath it. */
+     splashes sitting on top of the video instead of underneath it.
+
+     background-attachment: fixed + center/cover, matching Манифест
+     exactly (not its own independently-scaled copy) — this box is
+     only half the stage's height, so centering a copy sized to ITS
+     own small box showed a plain, splash-free slice from the middle
+     of the image instead of the actual splash artwork, reading as a
+     flat, out-of-place patch of background rather than a continuation
+     of it. Pinning it to the same viewport-fixed image Манифест uses
+     means this is literally a window onto the same backdrop, so the
+     two hand off with no seam at all. */
   .hero-ambient-fill {
     display: block;
     position: absolute;
@@ -914,8 +924,9 @@ body.nav-open { overflow: hidden; }
     bottom: 0;
     background-image: url('../assets/backgrounds/dye-splash-sides-mobile.jpg');
     background-repeat: no-repeat;
-    background-position: center;
-    background-size: 100% auto;
+    background-attachment: fixed;
+    background-position: center center;
+    background-size: cover;
     opacity: 0;
     transition: opacity 0.8s ease;
   }
@@ -1159,7 +1170,15 @@ body.nav-open { overflow: hidden; }
 @media (max-width: 768px) {
   .dye-ambient {
     background-image: url('../assets/backgrounds/dye-splash-sides-mobile.jpg');
-    background-size: 100% auto;
+    /* cover, not 100% auto — 100%-width sizing depends on the image's
+       own aspect ratio happening to be tall enough to clear whatever
+       the viewport's height turns out to be; on some phones it fell
+       short, leaving a flat gap at the bottom of the screen where the
+       image had already run out. cover is sized against the viewport
+       itself (this is background-attachment: fixed now) and always
+       fills it completely, at the cost of sometimes cropping a little
+       off the sides on unusually tall/narrow screens. */
+    background-size: cover;
     /* center center, not center top — these sections are all
        background-attachment: fixed now (see Манифест/Процесс/Превью's
        own rules), which resolves background-position against the
