@@ -895,15 +895,23 @@ body.nav-open { overflow: hidden; }
   }
 
   /* Same dye-splash asset Манифест/Процесс use, filling the letterbox
-     margins the canvas's own vertical mask (below) already leaves
+     margin the canvas's own vertical mask (below) already leaves
      transparent — invisible until main.js adds .is-revealed once the
      frame-scrub sequence finishes (see buildColorBurst's frame tween),
      so it reads as the ambient backdrop catching up right as the
-     reveal lands rather than competing with it from the first frame. */
+     reveal lands rather than competing with it from the first frame.
+     Bottom half of the stage only (top: 50% down to the bottom edge),
+     not the full inset — the canvas's mask fades out symmetrically
+     above and below the video band, so a full-height layer showed
+     through in BOTH margins; anything above the garment read as
+     splashes sitting on top of the video instead of underneath it. */
   .hero-ambient-fill {
     display: block;
     position: absolute;
-    inset: 0;
+    top: 50%;
+    left: 0;
+    right: 0;
+    bottom: 0;
     background-image: url('../assets/backgrounds/dye-splash-sides-mobile.jpg');
     background-repeat: no-repeat;
     background-position: center;
@@ -1152,14 +1160,16 @@ body.nav-open { overflow: hidden; }
   .dye-ambient {
     background-image: url('../assets/backgrounds/dye-splash-sides-mobile.jpg');
     background-size: 100% auto;
-    /* At 100%-width sizing the image renders ~693px tall on a typical
-       phone, taller than the section itself (~500-600px) — anchoring
-       to the top instead of the inherited center means that full
-       height covers the section from its very first pixel (right as
-       the hero hands off) rather than leaving a gap before the first
-       splash. The overflow this pushes to the bottom is invisible
-       anyway (cropped by `overflow: hidden` on `.dye-ambient`). */
-    background-position: center top;
+    /* center center, not center top — these sections are all
+       background-attachment: fixed now (see Манифест/Процесс/Превью's
+       own rules), which resolves background-position against the
+       *viewport*, not the section's own box. "top" used to mean "top
+       of this section" back when the image scrolled normally with
+       it; under fixed attachment it instead pins the image to the
+       top of the screen regardless of which section is in view —
+       reads as the backdrop having drifted away from center rather
+       than filling the screen the way the desktop image does. */
+    background-position: center center;
   }
 }
 
