@@ -1513,18 +1513,21 @@ body.nav-open { overflow: hidden; }
 }
 
 /* Mobile: cards snap to the track's center instead of its start edge,
-   with side padding on the track equal to half the leftover space on
+   with side padding on the track equal to the leftover space on
    either side of a card — that leftover space is exactly what lets a
    sliver of the previous/next card peek in on BOTH sides while the
    active one is centered, rather than only ever revealing what's
-   ahead like the desktop version does. Both the card width and the
-   padding are percentages of the same box (the track), so the two
-   stay in exact sync regardless of viewport — a vw/rem-capped card
-   width would drift out of sync with a percentage-based padding the
-   moment the cap kicked in. */
+   ahead like the desktop version does. flex-basis: 100% (not a
+   percentage matching the padding split, e.g. 68%) is deliberate:
+   percentage flex-basis resolves against the flex container's own
+   content box, which here is already narrowed by the left/right
+   padding below — asking for 68% of that already-68%-wide box would
+   double-discount it down to a much smaller card than intended. 100%
+   just fills whatever's left after the padding, so the padding
+   percentages alone control how much of a peek shows. */
 @media (max-width: 768px) {
   .collection-preview-card {
-    flex-basis: 68%;
+    flex-basis: 100%;
     max-width: none;
     scroll-snap-align: center;
   }
@@ -1535,14 +1538,24 @@ body.nav-open { overflow: hidden; }
   }
 }
 
+/* Desktop: same centered, both-sides-peeking layout as mobile now
+   (was start-aligned with only a peek of what's ahead) — percentage
+   card width + matching percentage track padding, just against a
+   wider carousel box so the cards themselves render bigger. */
 @media (min-width: 769px) {
   .collection-preview-card {
-    flex: 0 0 14rem;
-    max-width: 14rem;
+    flex-basis: 100%;
+    max-width: none;
+    scroll-snap-align: center;
   }
 
   .collection-preview-carousel {
-    max-width: 17.5rem;
+    max-width: 26rem;
+  }
+
+  .collection-preview-grid {
+    padding-left: 16%;
+    padding-right: 16%;
   }
 }
 
