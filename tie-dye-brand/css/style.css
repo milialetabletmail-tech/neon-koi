@@ -1317,8 +1317,6 @@ body.nav-open { overflow: hidden; }
 
 .process-connector {
   width: 100%;
-  max-width: 19rem;
-  margin: 0 auto;
 }
 
 .process-connector svg {
@@ -1342,10 +1340,6 @@ body.nav-open { overflow: hidden; }
     margin-left: auto;
     margin-right: auto;
     width: 60vw;
-  }
-
-  .process-connector {
-    max-width: 8rem;
   }
 }
 
