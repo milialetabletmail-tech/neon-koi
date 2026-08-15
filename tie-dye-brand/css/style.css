@@ -679,15 +679,17 @@ body.nav-open { overflow: hidden; }
 
 .hero-subhead {
   margin: 1rem 0 0;
-  /* Bebas Neue instead of the italic Fraunces used everywhere else —
-     a tall condensed sans reads as a stamped collection tag sitting
-     under the brush-script wordmark, rather than as another line of
-     the same serif body copy the rest of the site already uses. */
-  font-family: 'Bebas Neue', var(--font-display);
+  /* Condiment — a brush script, not a display sans like Bebas Neue or
+     the italic Fraunces used everywhere else. Script faces are drawn
+     to be read in mixed case with the letters connecting into each
+     other, so the heavy tracking and full-caps treatment that suited
+     Bebas Neue's condensed block letters would instead just tear this
+     one's flowing strokes apart — both are dropped here. */
+  font-family: 'Condiment', var(--font-display);
   font-weight: 400;
-  font-size: clamp(1.5rem, 3vw, 2.4rem);
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
+  font-size: clamp(2.1rem, 4.2vw, 3.2rem);
+  letter-spacing: 0.02em;
+  text-transform: none;
   color: var(--ink-letter);
   opacity: 0;
 }
