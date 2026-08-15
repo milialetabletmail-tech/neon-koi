@@ -717,23 +717,25 @@ body.nav-open { overflow: hidden; }
 
 .colorburst-batch {
   position: absolute;
-  /* Clear of the garment's hem at the very bottom of the stage — black
-     ink (matching the wordmark/subhead) instead of the light paper
-     tone, with a soft light halo standing in for the dark drop-shadow
-     used elsewhere: black text needs help staying legible over the
-     fabric's own dark/shadowed patches, the same problem the wordmark
-     solves with `.hero-wordmark-glow` brightening the footage behind
-     it, just done here as a cheaper per-letter glow instead of a
-     separate blended layer. */
-  bottom: 0.9rem;
+  /* Further off the bottom edge than the garment's hem needs on a
+     full-height viewport — a shorter browser window (not maximized/
+     fullscreen) shrinks the stage's own 100vh, and the garment doesn't
+     shrink at quite the same rate, so the old, tighter clearance could
+     still print over the hem there. Same light-paper-over-photo
+     treatment as .colorburst-label above — black ink and even the
+     teal accent both needed extra help (a glow, or just didn't read
+     as bright enough) to stay legible over the fabric's own dark
+     patches; the light tone with a dark shadow doesn't have that
+     problem regardless of what's behind it. */
+  bottom: 2.2rem;
   left: 50%;
   transform: translate(-50%, 12px);
   font-family: var(--font-ui);
   font-size: 0.75rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--ink-letter);
-  text-shadow: 0 0 10px rgba(244, 238, 225, 0.55), 0 1px 3px rgba(244, 238, 225, 0.3);
+  color: var(--paper-dim);
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
   opacity: 0;
   z-index: 5;
   display: flex;
