@@ -1018,25 +1018,28 @@ body.nav-open { overflow: hidden; }
        Using the box's own 0%/100% edges as the outer stops instead —
        not a fixed vw distance — makes the fade always span the whole
        actual margin, on any screen, with no leftover flat plateau.
-       The 10vw stop right past the opaque edge keeps an initial
-       quick falloff so the garment's own edge doesn't look hazy;
-       everything past that eases gently the rest of the way out. */
+       The 6vw stop right past the opaque edge drops to a low 0.1
+       alpha fast, so the studio backdrop reads as basically gone
+       within a short distance of the garment rather than lingering
+       as a visible mid-gray band — everything past that is already
+       close enough to the flat ink tone that the rest of the fade
+       down to fully transparent shouldn't read as a visible edge. */
     -webkit-mask-image: linear-gradient(
       to bottom,
       transparent 0%,
-      rgba(0, 0, 0, 0.35) calc(50% - 24vw - 10vw),
+      rgba(0, 0, 0, 0.1) calc(50% - 24vw - 6vw),
       rgba(0, 0, 0, 1) calc(50% - 24vw),
       rgba(0, 0, 0, 1) calc(50% + 24vw),
-      rgba(0, 0, 0, 0.35) calc(50% + 24vw + 10vw),
+      rgba(0, 0, 0, 0.1) calc(50% + 24vw + 6vw),
       transparent 100%
     );
     mask-image: linear-gradient(
       to bottom,
       transparent 0%,
-      rgba(0, 0, 0, 0.35) calc(50% - 24vw - 10vw),
+      rgba(0, 0, 0, 0.1) calc(50% - 24vw - 6vw),
       rgba(0, 0, 0, 1) calc(50% - 24vw),
       rgba(0, 0, 0, 1) calc(50% + 24vw),
-      rgba(0, 0, 0, 0.35) calc(50% + 24vw + 10vw),
+      rgba(0, 0, 0, 0.1) calc(50% + 24vw + 6vw),
       transparent 100%
     );
     -webkit-mask-repeat: no-repeat;
