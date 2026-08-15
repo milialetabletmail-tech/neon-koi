@@ -1054,22 +1054,35 @@ body.nav-open { overflow: hidden; }
 
   .dye-canvas {
     object-fit: contain;
+    /* The opaque core (±24vw) is untouched — that's where the garment
+       itself sits, and narrowing it would fade out real product, not
+       just studio backdrop. Only the fade-out itself got wider: it
+       used to reach full transparency by ±29vw, a fairly steep 5vw
+       ramp that still read as a distinct gray studio-backdrop
+       rectangle against the ink. Stretched out to ±60vw with an extra
+       low-alpha stop partway through so the curve eases rather than
+       ramping linearly — reads as the backdrop dissolving into the
+       page instead of a soft-edged box sitting on top of it. */
     -webkit-mask-image: linear-gradient(
       to bottom,
       transparent 0,
-      transparent calc(50% - 29vw),
+      transparent calc(50% - 60vw),
+      rgba(0, 0, 0, 0.08) calc(50% - 42vw),
       rgba(0, 0, 0, 1) calc(50% - 24vw),
       rgba(0, 0, 0, 1) calc(50% + 24vw),
-      transparent calc(50% + 29vw),
+      rgba(0, 0, 0, 0.08) calc(50% + 42vw),
+      transparent calc(50% + 60vw),
       transparent 100%
     );
     mask-image: linear-gradient(
       to bottom,
       transparent 0,
-      transparent calc(50% - 29vw),
+      transparent calc(50% - 60vw),
+      rgba(0, 0, 0, 0.08) calc(50% - 42vw),
       rgba(0, 0, 0, 1) calc(50% - 24vw),
       rgba(0, 0, 0, 1) calc(50% + 24vw),
-      transparent calc(50% + 29vw),
+      rgba(0, 0, 0, 0.08) calc(50% + 42vw),
+      transparent calc(50% + 60vw),
       transparent 100%
     );
     -webkit-mask-repeat: no-repeat;
