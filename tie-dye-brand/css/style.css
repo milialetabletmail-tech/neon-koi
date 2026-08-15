@@ -900,27 +900,29 @@ body.nav-open { overflow: hidden; }
     background: var(--ink);
   }
 
-  /* Same dye-splash asset Манифест/Процесс use, filling the letterbox
-     margin the canvas's own vertical mask (below) already leaves
-     transparent — invisible until main.js adds .is-revealed once the
-     frame-scrub sequence finishes (see buildColorBurst's frame tween),
-     so it reads as the ambient backdrop catching up right as the
-     reveal lands rather than competing with it from the first frame.
-     Bottom half of the stage only (top: 50% down to the bottom edge),
-     not the full inset — the canvas's mask fades out symmetrically
-     above and below the video band, so a full-height layer showed
-     through in BOTH margins; anything above the garment read as
-     splashes sitting on top of the video instead of underneath it.
+  /* Fills the letterbox margin the canvas's own vertical mask (below)
+     already leaves transparent, so the margin reads as page background
+     rather than an empty rectangle. This used to paint a copy of the
+     Манифест/Процесс dye-splash image here too (background-attachment:
+     fixed, matching their exact position/size) so the pattern would
+     appear to run continuously from hero into Манифест. That doesn't
+     actually work: this element lives inside .garment-stage, which
+     GSAP's ScrollTrigger pin keeps positioned via `transform` for as
+     long as the hero exists in the DOM (both while pinned and, with a
+     different offset, after unpinning) — and any transform on an
+     ancestor makes `background-attachment: fixed` resolve against
+     that ancestor's own box instead of the true viewport. The image
+     inside .hero-ambient-fill was therefore never actually
+     viewport-fixed; it just happened to line up with the real
+     viewport-fixed one in Манифест while the pin held the stage
+     exactly over the viewport, and visibly drifted out of alignment
+     around the handoff — a mismatched patch of background right at
+     the seam, which is the opposite of what this was for.
 
-     background-attachment: fixed + center/cover, matching Манифест
-     exactly (not its own independently-scaled copy) — this box is
-     only half the stage's height, so centering a copy sized to ITS
-     own small box showed a plain, splash-free slice from the middle
-     of the image instead of the actual splash artwork, reading as a
-     flat, out-of-place patch of background rather than a continuation
-     of it. Pinning it to the same viewport-fixed image Манифест uses
-     means this is literally a window onto the same backdrop, so the
-     two hand off with no seam at all. */
+     Flat --ink instead: dye-splash-sides(-mobile).jpg already fades to
+     the same --ink tone away from its corner splashes, so a plain ink
+     margin here blends into Манифест's backdrop with no seam, with
+     no dependency on background positioning surviving a transform. */
   .hero-ambient-fill {
     display: block;
     position: absolute;
@@ -928,17 +930,7 @@ body.nav-open { overflow: hidden; }
     left: 0;
     right: 0;
     bottom: 0;
-    background-image: url('../assets/backgrounds/dye-splash-sides-mobile.jpg');
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-position: center center;
-    background-size: cover;
-    opacity: 0;
-    transition: opacity 0.8s ease;
-  }
-
-  .hero-ambient-fill.is-revealed {
-    opacity: 1;
+    background: var(--ink);
   }
 
   /* The standalone "Хит сезона" section (.featured-item) is hidden on
@@ -1958,6 +1950,7 @@ body.nav-open { overflow: hidden; }
 
 .site-footer {
   background-color: var(--ink);
+  background-attachment: fixed;
   color: var(--paper);
   padding: clamp(3.5rem, 8vw, 5rem) 1.5rem clamp(2rem, 5vw, 3rem);
   display: flex;

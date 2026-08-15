@@ -114,20 +114,20 @@
       <div class="garment-stage">
         <!-- Mobile only (see css/style.css): sits behind the canvas and
              only shows through the letterboxed margins the canvas's own
-             mask already leaves transparent above/below the video band.
-             Starts invisible and fades in once main.js marks the scrub
-             sequence done, rather than being visible from the very
-             start — the empty margins should read as "the ambient
-             backdrop catching up once the reveal has finished playing",
-             not as competing with the video for attention while it's
-             still scrubbing. -->
-        <div class="hero-ambient-fill" id="hero-ambient-fill" aria-hidden="true"></div>
+             mask already leaves transparent above/below the video band —
+             flat --ink, same tone Манифест's backdrop fades to away from
+             its corner splashes, so the margin reads as a continuation
+             of the page background instead of an empty rectangle. -->
+        <div class="hero-ambient-fill" aria-hidden="true"></div>
 
         <!-- Mobile only: the standalone "Хит сезона" section below
              (see .featured-item) is hidden on mobile and its content
-             lives here instead, in the empty margin above the video —
-             same reveal-once-scrub-completes behavior as
-             .hero-ambient-fill, on the same toggle. -->
+             lives here instead, in the empty margin above the video.
+             Starts invisible and fades in once main.js marks the scrub
+             sequence done, rather than being visible from the very
+             start — reads as the teaser arriving once the reveal has
+             finished playing, not competing with the video for
+             attention while it's still scrubbing. -->
         <div class="hero-featured-teaser" id="hero-featured-teaser" aria-hidden="true">
           <div class="hero-featured-teaser-media">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
