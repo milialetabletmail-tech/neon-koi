@@ -694,7 +694,7 @@ body.nav-open { overflow: hidden; }
 
 .colorburst-label {
   position: absolute;
-  top: 1.1rem;
+  top: calc(1.1rem - 5px);
   left: 50%;
   transform: translateX(-50%);
   /* Shrink-to-fit up to this cap (not full container width) and
