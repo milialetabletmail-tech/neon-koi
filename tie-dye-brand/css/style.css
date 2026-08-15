@@ -727,7 +727,7 @@ body.nav-open { overflow: hidden; }
      as bright enough) to stay legible over the fabric's own dark
      patches; the light tone with a dark shadow doesn't have that
      problem regardless of what's behind it. */
-  bottom: 2.2rem;
+  bottom: 0.4rem;
   left: 50%;
   transform: translate(-50%, 12px);
   font-family: var(--font-ui);
