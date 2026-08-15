@@ -831,10 +831,6 @@ body.nav-open { overflow: hidden; }
   will-change: transform;
 }
 
-.hero-ambient-fill {
-  display: none;
-}
-
 .hero-featured-teaser {
   display: none;
 }
@@ -895,65 +891,47 @@ body.nav-open { overflow: hidden; }
    ------------------------------------------------------------ */
 
 @media (max-width: 768px) {
+  /* Shorter than the shared 400vh: that scroll distance is spent on
+     the pin, not on the video itself (object-fit: contain sizes the
+     footage off viewport width, so it's unaffected by this). Less of
+     it just means less scrolling to reach the end of the reveal, and
+     less scroll before the pinned stage releases and Манифест can
+     start coming into view — the empty margin below the video and the
+     one full viewport-height the stage still needs to slide away
+     after unpinning are unchanged (both are tied to viewport
+     dimensions, not this value), but the total scroll spent getting
+     there is meaningfully shorter. */
+  .colorburst {
+    height: 300vh;
+  }
+
   .colorburst,
   .colorburst-stage {
     background: var(--ink);
   }
 
-  /* Fills the letterbox margin the canvas's own vertical mask (below)
-     already leaves transparent, so the margin reads as page background
-     rather than an empty rectangle. This used to paint a copy of the
-     Манифест/Процесс dye-splash image here too (background-attachment:
-     fixed, matching their exact position/size) so the pattern would
-     appear to run continuously from hero into Манифест. That doesn't
-     actually work: this element lives inside .garment-stage, which
-     GSAP's ScrollTrigger pin keeps positioned via `transform` for as
-     long as the hero exists in the DOM (both while pinned and, with a
-     different offset, after unpinning) — and any transform on an
-     ancestor makes `background-attachment: fixed` resolve against
-     that ancestor's own box instead of the true viewport. The image
-     inside .hero-ambient-fill was therefore never actually
-     viewport-fixed; it just happened to line up with the real
-     viewport-fixed one in Манифест while the pin held the stage
-     exactly over the viewport, and visibly drifted out of alignment
-     around the handoff — a mismatched patch of background right at
-     the seam, which is the opposite of what this was for.
-
-     Splash pattern is back, but sized to this box's own dimensions
-     (no background-attachment: fixed — see above for why that never
-     really worked here) and anchored to the top, right where the
-     video's own fade-out ends, so the artwork sits closest to the
-     garment instead of in the middle of an otherwise-empty box. A
-     mask then fades the whole layer to transparent over its bottom
-     third, revealing the flat --ink .colorburst-stage background
-     behind it — dye-splash-sides-mobile.jpg fades to that same tone
-     away from its corners anyway, so by the time this box reaches
-     Манифест it's already plain ink meeting plain ink, with nothing
-     positioned against the viewport for a transform to break. */
-  .hero-ambient-fill {
-    display: block;
-    position: absolute;
-    top: 50%;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image: url('../assets/backgrounds/dye-splash-sides-mobile.jpg');
-    background-repeat: no-repeat;
-    background-position: center top;
-    background-size: cover;
-    -webkit-mask-image: linear-gradient(to bottom, black 0%, black 45%, transparent 78%);
-    mask-image: linear-gradient(to bottom, black 0%, black 45%, transparent 78%);
-  }
+  /* The letterbox margin below the video needs no fill of its own:
+     .colorburst-stage above already paints flat --ink across the
+     whole stage, and .garment-stage (which the margin sits inside)
+     has no background of its own, so that ink already shows straight
+     through. An earlier version of this rule painted a second,
+     separate layer here — first a copy of the Манифест/Процесс
+     dye-splash image with background-attachment: fixed, which never
+     actually resolved against the true viewport (GSAP's ScrollTrigger
+     pin keeps .garment-stage positioned via `transform`, and a
+     transformed ancestor breaks `fixed`'s viewport binding for any
+     descendant background) — then a flat-ink one once that proved
+     broken. Both were a no-op on top of the ink that was already
+     there. Removed: the shared ink is the one and only background
+     here, with nothing layered in front of it between the video and
+     Манифест. */
 
   /* The standalone "Хит сезона" section (.featured-item) is hidden on
      mobile (see its own rule) and this stands in for it instead, in
-     the same empty margin above the video that .hero-ambient-fill
-     fills below it — same reveal timing, toggled by the same class in
-     main.js, so both margins finish "filling in" together right as
-     the scrub sequence lands. Top half of the stage (top: 0 to 50%),
-     mirroring .hero-ambient-fill's bottom half. Photo left, copy
-     right — same layout .featured-item uses on desktop, just at a
-     scale that fits the margin's limited height. */
+     the empty margin above the video — same reveal timing, toggled by
+     main.js once the scrub sequence lands. Top half of the stage
+     (top: 0 to 50%), same layout .featured-item uses on desktop, just
+     at a scale that fits the margin's limited height. */
   .hero-featured-teaser {
     display: flex;
     align-items: center;
@@ -1312,6 +1290,19 @@ body.nav-open { overflow: hidden; }
   flex-direction: column;
   align-items: center;
   gap: 2.4rem;
+}
+
+/* Mobile only: a smaller top padding than the shared rule above —
+   the hero already hands off a lot of empty space (the letterboxed
+   video's own bottom margin, plus a full viewport's worth of scroll
+   for the pinned stage to slide away once it releases), so Манифест
+   doesn't need to add another 5rem+ on top of that before its own
+   text shows up. Bottom padding is untouched — it still needs to
+   separate this section from Процесс below. */
+@media (max-width: 768px) {
+  .manifesto {
+    padding-top: 2.25rem;
+  }
 }
 
 .manifesto-eyebrow {
