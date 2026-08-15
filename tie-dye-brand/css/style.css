@@ -1056,33 +1056,35 @@ body.nav-open { overflow: hidden; }
     object-fit: contain;
     /* The opaque core (±24vw) is untouched — that's where the garment
        itself sits, and narrowing it would fade out real product, not
-       just studio backdrop. Only the fade-out itself got wider: it
-       used to reach full transparency by ±29vw, a fairly steep 5vw
-       ramp that still read as a distinct gray studio-backdrop
-       rectangle against the ink. Stretched out to ±60vw with an extra
-       low-alpha stop partway through so the curve eases rather than
-       ramping linearly — reads as the backdrop dissolving into the
-       page instead of a soft-edged box sitting on top of it. */
+       just studio backdrop. The fade-out used to reach full
+       transparency by a fixed ±29vw (later widened to a still-fixed
+       ±60vw) — a vw offset, so how much of the empty margin it
+       actually covered depended on the phone's own aspect ratio: on
+       anything taller/narrower than what this was tuned against,
+       the fade finished with real flat, untouched margin still left
+       beneath it, which is exactly the "no blur" gap being seen.
+       Using the box's own 0%/100% edges as the outer stops instead —
+       not a fixed vw distance — makes the fade always span the whole
+       actual margin, on any screen, with no leftover flat plateau.
+       The 10vw stop right past the opaque edge keeps an initial
+       quick falloff so the garment's own edge doesn't look hazy;
+       everything past that eases gently the rest of the way out. */
     -webkit-mask-image: linear-gradient(
       to bottom,
-      transparent 0,
-      transparent calc(50% - 60vw),
-      rgba(0, 0, 0, 0.08) calc(50% - 42vw),
+      transparent 0%,
+      rgba(0, 0, 0, 0.35) calc(50% - 24vw - 10vw),
       rgba(0, 0, 0, 1) calc(50% - 24vw),
       rgba(0, 0, 0, 1) calc(50% + 24vw),
-      rgba(0, 0, 0, 0.08) calc(50% + 42vw),
-      transparent calc(50% + 60vw),
+      rgba(0, 0, 0, 0.35) calc(50% + 24vw + 10vw),
       transparent 100%
     );
     mask-image: linear-gradient(
       to bottom,
-      transparent 0,
-      transparent calc(50% - 60vw),
-      rgba(0, 0, 0, 0.08) calc(50% - 42vw),
+      transparent 0%,
+      rgba(0, 0, 0, 0.35) calc(50% - 24vw - 10vw),
       rgba(0, 0, 0, 1) calc(50% - 24vw),
       rgba(0, 0, 0, 1) calc(50% + 24vw),
-      rgba(0, 0, 0, 0.08) calc(50% + 42vw),
-      transparent calc(50% + 60vw),
+      rgba(0, 0, 0, 0.35) calc(50% + 24vw + 10vw),
       transparent 100%
     );
     -webkit-mask-repeat: no-repeat;
