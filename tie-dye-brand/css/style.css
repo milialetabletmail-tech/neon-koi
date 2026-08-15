@@ -1344,6 +1344,222 @@ body.nav-open { overflow: hidden; }
 }
 
 /* ------------------------------------------------------------
+   COLLECTION PREVIEW — same dye-splash backdrop and desktop fixed-
+   attachment behaviour as Процесс, so the "background pins, content
+   scrolls" effect reads as one continuous dark stretch from Процесс
+   straight through into this section rather than resetting each time.
+   ------------------------------------------------------------ */
+
+.collection-preview {
+  background-color: var(--ink);
+  color: var(--paper);
+  padding: clamp(5rem, 12vw, 8rem) 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.1rem;
+  text-align: center;
+}
+
+@media (min-width: 769px) {
+  .collection-preview {
+    background-attachment: fixed;
+  }
+}
+
+.collection-preview-eyebrow {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--paper-dim);
+  opacity: 0.7;
+}
+
+.collection-preview-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 600;
+  font-size: clamp(1.7rem, 3.6vw, 2.6rem);
+}
+
+.collection-preview-lead {
+  margin: 0 0 1.3rem;
+  max-width: 30rem;
+  font-family: var(--font-ui);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--paper-dim);
+}
+
+.collection-preview-carousel {
+  /* Deliberately narrower than the full card track (one card plus a
+     peek of the next) rather than showing nearly all three at once —
+     with barely any card left to scroll past, "closest to the visible
+     center" would sit on the same middle card the whole time and the
+     active-card scale-up would never visibly move as you scroll. */
+  position: relative;
+  width: 100%;
+  max-width: 22rem;
+}
+
+.collection-preview-grid {
+  /* Scroll containers establish their own stacking context in modern
+     browsers — without an explicit lower z-index here, the track can
+     paint above the arrow buttons despite their z-index: 1 and clip
+     their click target with whatever card is currently scrolled under
+     them. */
+  position: relative;
+  z-index: 0;
+  display: flex;
+  gap: 1.75rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  padding: 1.1rem 0.1rem 0.25rem;
+}
+
+.collection-preview-grid::-webkit-scrollbar {
+  display: none;
+}
+
+.collection-preview-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.85rem;
+  flex: 0 0 78vw;
+  max-width: 19rem;
+  scroll-snap-align: start;
+}
+
+@media (min-width: 769px) {
+  .collection-preview-card {
+    flex: 0 0 14rem;
+    max-width: 14rem;
+  }
+
+  .collection-preview-carousel {
+    max-width: 17.5rem;
+  }
+}
+
+.collection-preview-arrow {
+  position: absolute;
+  top: 38%;
+  transform: translateY(-50%);
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.3rem;
+  height: 2.3rem;
+  border-radius: 50%;
+  border: 1px solid rgba(244, 238, 225, 0.28);
+  background: rgba(42, 38, 37, 0.75);
+  color: var(--paper);
+  cursor: pointer;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.collection-preview-arrow:hover,
+.collection-preview-arrow:focus-visible {
+  border-color: var(--teal);
+  background: rgba(122, 168, 166, 0.22);
+}
+
+.collection-preview-arrow:disabled {
+  opacity: 0.35;
+  cursor: default;
+  pointer-events: none;
+}
+
+.collection-preview-arrow svg {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.collection-preview-arrow--prev {
+  left: 0.25rem;
+}
+
+.collection-preview-arrow--next {
+  right: 0.25rem;
+}
+
+.collection-preview-media {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  border: 1.5px dashed rgba(244, 238, 225, 0.22);
+  border-radius: 0.75rem;
+  color: var(--paper-dim);
+  opacity: 0.55;
+  transform: scale(1);
+  transform-origin: center bottom;
+  transition: transform 0.3s var(--ease-burst), opacity 0.3s ease;
+}
+
+/* .is-active is set in JS off scroll position — whichever card's left
+   edge is closest to the track's current scrollLeft, since cards snap
+   to the track's start edge rather than its center. */
+.collection-preview-card.is-active .collection-preview-media {
+  transform: scale(1.08);
+  opacity: 0.8;
+}
+
+.collection-preview-media svg {
+  width: 1.6rem;
+  height: 1.6rem;
+}
+
+.collection-preview-media-label {
+  font-family: var(--font-ui);
+  font-size: 0.56rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.collection-preview-name {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--paper-dim);
+}
+
+.collection-preview-cta {
+  margin-top: 0.7rem;
+  padding: 0.75rem 1.6rem;
+  border-radius: 999px;
+  border: 1px solid rgba(244, 238, 225, 0.25);
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--paper);
+  text-decoration: none;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.collection-preview-cta:hover,
+.collection-preview-cta:focus-visible {
+  border-color: var(--teal);
+  background: rgba(122, 168, 166, 0.12);
+}
+
+
+/* ------------------------------------------------------------
    REDUCED MOTION FALLBACK
    ------------------------------------------------------------ */
 

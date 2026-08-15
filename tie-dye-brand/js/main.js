@@ -311,11 +311,78 @@
   }
 
   /* ------------------------------------------------------------
+     Collection preview carousel — arrow buttons step the track by one
+     card's width (+ gap) at a time; scroll-snap on the track itself
+     already handles drag/swipe, this just gives the buttons the same
+     step size so clicking feels like advancing "one card" rather than
+     an arbitrary jump. Arrows fade out at either end via the disabled
+     attribute, driven off scroll position.
+     ------------------------------------------------------------ */
+  function buildCollectionPreviewCarousel() {
+    const track = document.getElementById('collection-preview-track');
+    const prevBtn = document.getElementById('collection-preview-prev');
+    const nextBtn = document.getElementById('collection-preview-next');
+    if (!track || !prevBtn || !nextBtn) return;
+
+    function stepSize() {
+      const card = track.querySelector('.collection-preview-card');
+      if (!card) return track.clientWidth;
+      const gap = parseFloat(getComputedStyle(track).columnGap || getComputedStyle(track).gap || '0');
+      return card.getBoundingClientRect().width + gap;
+    }
+
+    prevBtn.addEventListener('click', () => {
+      track.scrollBy({ left: -stepSize(), behavior: 'smooth' });
+    });
+    nextBtn.addEventListener('click', () => {
+      track.scrollBy({ left: stepSize(), behavior: 'smooth' });
+    });
+
+    function updateArrowState() {
+      const max = track.scrollWidth - track.clientWidth;
+      prevBtn.disabled = track.scrollLeft <= 4;
+      nextBtn.disabled = track.scrollLeft >= max - 4;
+    }
+
+    /* Whichever card's own center is currently closest to the track's
+       visible center is "active". Left-edge proximity looked like the
+       obvious metric to match scroll-snap-align: start, but with only a
+       few cards the track's total scrollable distance is shorter than
+       the gap between two cards' start offsets — scrollLeft can never
+       get closer to card 2's offset than to card 1's, so the "active"
+       card would never advance past the first one. Center-to-center
+       distance keeps shifting correctly across the whole range instead. */
+    const cards = Array.from(track.querySelectorAll('.collection-preview-card'));
+    function updateActiveCard() {
+      const viewCenter = track.scrollLeft + track.clientWidth / 2;
+      let closest = null;
+      let closestDist = Infinity;
+      cards.forEach((card) => {
+        const cardCenter = card.offsetLeft + card.offsetWidth / 2;
+        const dist = Math.abs(cardCenter - viewCenter);
+        if (dist < closestDist) {
+          closestDist = dist;
+          closest = card;
+        }
+      });
+      cards.forEach((card) => card.classList.toggle('is-active', card === closest));
+    }
+
+    track.addEventListener('scroll', () => {
+      updateArrowState();
+      updateActiveCard();
+    }, { passive: true });
+    updateArrowState();
+    updateActiveCard();
+  }
+
+  /* ------------------------------------------------------------
      Boot
      ------------------------------------------------------------ */
   document.addEventListener('DOMContentLoaded', () => {
     buildNavSolidToggle();
     buildManifestoReveal();
+    buildCollectionPreviewCarousel();
     const framesPromise = loadFrames();
     runPreloader(framesPromise, () => {
       framesPromise.then((frames) => {
