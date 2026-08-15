@@ -1354,7 +1354,24 @@ body.nav-open { overflow: hidden; }
   font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.1em;
+}
+
+/* Matches each step's own outgoing connector color (see the
+   data-accent values on .process-connector in index.html) rather
+   than a single fixed tint, so the number reads as the start of that
+   arrow's color rather than an arbitrary accent. */
+.process-step:nth-of-type(1) .process-step-number,
+.process-step:nth-of-type(4) .process-step-number {
   color: var(--lavender);
+}
+
+.process-step:nth-of-type(2) .process-step-number,
+.process-step:nth-of-type(5) .process-step-number {
+  color: var(--teal);
+}
+
+.process-step:nth-of-type(3) .process-step-number {
+  color: var(--sage);
 }
 
 .process-step-heading {
