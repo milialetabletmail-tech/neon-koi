@@ -946,10 +946,18 @@ body.nav-open { overflow: hidden; }
      shrunk to fit rather than a different composition.
 
      Background is the desktop dye-splash-sides.jpg (not the mobile
-     asset the rest of this page uses) with the same fixed/cover
-     treatment .featured-item gets on desktop — this one piece is
-     meant to look identical to its desktop counterpart, not like the
-     rest of the mobile page. */
+     asset the rest of this page uses), sized to cover the card's own
+     box — not background-attachment: fixed like .featured-item gets
+     on desktop. This card lives inside .garment-stage, which GSAP's
+     ScrollTrigger pin keeps positioned via `transform` for as long as
+     the hero exists in the DOM; a transformed ancestor makes `fixed`
+     resolve against that ancestor's box instead of the true viewport
+     (see .hero-ambient-fill above, which hit the exact same thing).
+     There's no adjacent section this card needs to line up with —
+     it's a self-contained card, not a shared continuous backdrop —
+     so a plain cover-sized image against its own box gets the same
+     "look identical to its desktop counterpart" result without
+     depending on fixed positioning that doesn't actually work here. */
   .hero-featured-teaser {
     display: flex;
     /* flex-end, not center — centering left a dead gap between the
@@ -973,7 +981,6 @@ body.nav-open { overflow: hidden; }
     transition: opacity 0.8s ease;
     background-image: url('../assets/backgrounds/dye-splash-sides.jpg');
     background-repeat: no-repeat;
-    background-attachment: fixed;
     background-position: center center;
     background-size: cover;
   }
