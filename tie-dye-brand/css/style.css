@@ -1731,6 +1731,146 @@ body.nav-open { overflow: hidden; }
   background: rgba(122, 168, 166, 0.12);
 }
 
+/* ------------------------------------------------------------
+   FOOTER — same dye-splash backdrop as Процесс/Превью (fixed on
+   desktop, cover-sized on mobile — see .dye-ambient), so it reads as
+   the tail end of the same continuous dark stretch rather than a
+   fresh section. No real social accounts or contact details exist
+   yet, so those are "coming soon" placeholders (undecorated <a>,
+   faded text) matching the "Фото скоро" pattern used elsewhere —
+   swap in real hrefs/copy once the brand has them.
+   ------------------------------------------------------------ */
+
+.site-footer {
+  background-color: var(--ink);
+  color: var(--paper);
+  padding: clamp(3.5rem, 8vw, 5rem) 1.5rem clamp(2rem, 5vw, 3rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.5rem;
+}
+
+/* Darkens toward the very bottom of the page — a plain ::after
+   overlay (not baked into the dye-ambient image itself) so it layers
+   on top of the fixed splash backdrop without having to touch that
+   shared background-image rule. Needs z-index: 0 to sit above the
+   background but still under the real content, which in turn all
+   need position: relative + a higher z-index to actually land above
+   it (an unpositioned sibling paints below any positioned one). */
+.site-footer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.55), transparent 65%);
+  pointer-events: none;
+}
+
+/* Stacked and centered at every width, not just on mobile — logo,
+   nav, then social icons, same order and alignment as the mobile
+   layout regardless of viewport. */
+.footer-top {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 64rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.75rem;
+}
+
+.footer-wordmark {
+  flex: none;
+  width: clamp(5rem, 7vw, 6.5rem);
+  aspect-ratio: var(--mark-ratio-color);
+  background-image: url('../assets/wordmark/ln-team-color.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+}
+
+.footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.75rem;
+}
+
+.footer-nav a {
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--paper-dim);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.footer-nav a[data-accent="lavender"]:hover { color: var(--lavender); }
+.footer-nav a[data-accent="teal"]:hover { color: var(--teal); }
+.footer-nav a[data-accent="sage"]:hover { color: var(--sage); }
+
+.footer-social {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.footer-social-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 50%;
+  border: 1px solid rgba(244, 238, 225, 0.2);
+  color: var(--paper-dim);
+  opacity: 0.6;
+  cursor: default;
+}
+
+.footer-social-link svg {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.footer-contacts {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem 2rem;
+}
+
+.footer-contact-line {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+  color: var(--paper-dim);
+  opacity: 0.65;
+}
+
+.footer-bottom {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 34rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(244, 238, 225, 0.12);
+  text-align: center;
+}
+
+.footer-copy {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  line-height: 1.6;
+  color: var(--paper-dim);
+  opacity: 0.55;
+}
 
 /* ------------------------------------------------------------
    REDUCED MOTION FALLBACK
