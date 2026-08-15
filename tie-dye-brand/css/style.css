@@ -835,6 +835,10 @@ body.nav-open { overflow: hidden; }
   display: none;
 }
 
+.hero-featured-teaser {
+  display: none;
+}
+
 .dye-canvas {
   position: absolute;
   inset: 0;
@@ -935,6 +939,87 @@ body.nav-open { overflow: hidden; }
 
   .hero-ambient-fill.is-revealed {
     opacity: 1;
+  }
+
+  /* The standalone "Хит сезона" section (.featured-item) is hidden on
+     mobile (see its own rule) and this stands in for it instead, in
+     the same empty margin above the video that .hero-ambient-fill
+     fills below it — same reveal timing, toggled by the same class in
+     main.js, so both margins finish "filling in" together right as
+     the scrub sequence lands. Top half of the stage (top: 0 to 50%),
+     mirroring .hero-ambient-fill's bottom half. Photo left, copy
+     right — same layout .featured-item uses on desktop, just at a
+     scale that fits the margin's limited height. */
+  .hero-featured-teaser {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 50%;
+    padding: 3.5rem 1.5rem 0;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+  }
+
+  .hero-featured-teaser.is-revealed {
+    opacity: 1;
+  }
+
+  .hero-featured-teaser-media {
+    flex: 1 1 40%;
+    max-width: 7rem;
+    aspect-ratio: 4 / 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1.5px dashed rgba(244, 238, 225, 0.3);
+    border-radius: 0.5rem;
+    color: var(--paper-dim);
+  }
+
+  .hero-featured-teaser-media svg {
+    width: 1.3rem;
+    height: 1.3rem;
+  }
+
+  .hero-featured-teaser-text {
+    flex: 1 1 60%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.35rem;
+    text-align: left;
+  }
+
+  .hero-featured-teaser-eyebrow {
+    margin: 0;
+    font-family: var(--font-ui);
+    font-size: 0.58rem;
+    font-weight: 500;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--lavender);
+  }
+
+  .hero-featured-teaser-name {
+    margin: 0;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--paper-dim);
+  }
+
+  .hero-featured-teaser-description {
+    margin: 0;
+    font-family: var(--font-ui);
+    font-size: 0.68rem;
+    line-height: 1.4;
+    color: var(--paper-dim);
+    opacity: 0.7;
   }
 
   .dye-canvas {
@@ -1135,9 +1220,9 @@ body.nav-open { overflow: hidden; }
 
 /* ------------------------------------------------------------
    DYE-AMBIENT — reusable background texture for the flat-ink sections
-   below the hero (Манифест, Процесс, Превью — Футер gets it too as
-   it's built). A flat --ink fill read as generic/templated once the
-   hero's own motion and color stopped.
+   below the hero (Манифест, Хит сезона, Процесс, Превью, Футер). A
+   flat --ink fill read as generic/templated once the hero's own
+   motion and color stopped.
 
    assets/backgrounds/dye-splash-sides.jpg is a purpose-made asset (not
    cropped from the hero footage): lavender/teal/sage splashes flowing
@@ -1272,6 +1357,136 @@ body.nav-open { overflow: hidden; }
     opacity: 1;
     transform: none;
     transition: none;
+  }
+}
+
+/* ------------------------------------------------------------
+   FEATURED ITEM — "Хит сезона": photo on the left, copy on the right
+   (not stacked/centered — that read as just another placeholder card
+   like Процесс/Превью's rather than a dedicated spotlight). Same
+   fixed dye-splash backdrop as everything else between Манифест and
+   Футер.
+   ------------------------------------------------------------ */
+
+.featured-item {
+  background-color: var(--ink);
+  background-attachment: fixed;
+  color: var(--paper);
+  padding: clamp(4rem, 10vw, 7rem) 1.5rem;
+  display: flex;
+  justify-content: center;
+}
+
+/* Content lives in .hero-featured-teaser (in the hero's own top
+   margin) on mobile instead — see index.html. */
+@media (max-width: 768px) {
+  .featured-item {
+    display: none;
+  }
+}
+
+.featured-item-inner {
+  width: 100%;
+  max-width: 56rem;
+  display: flex;
+  align-items: center;
+  gap: clamp(2rem, 5vw, 4rem);
+}
+
+.featured-item-eyebrow {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--lavender);
+  opacity: 0.9;
+}
+
+.featured-item-media {
+  flex: 1 1 55%;
+  aspect-ratio: 4 / 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  border: 1.5px dashed rgba(244, 238, 225, 0.22);
+  border-radius: 0.75rem;
+  color: var(--paper-dim);
+  opacity: 0.55;
+}
+
+.featured-item-media svg {
+  width: 2.2rem;
+  height: 2.2rem;
+}
+
+.featured-item-media-label {
+  font-family: var(--font-ui);
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.featured-item-text {
+  flex: 1 1 45%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.9rem;
+  text-align: left;
+}
+
+.featured-item-name {
+  margin: 0;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 600;
+  font-size: clamp(1.6rem, 3.4vw, 2.4rem);
+  color: var(--paper-dim);
+}
+
+.featured-item-description {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--paper-dim);
+  opacity: 0.7;
+}
+
+.featured-item-cta {
+  margin-top: 0.5rem;
+  padding: 0.75rem 1.6rem;
+  border-radius: 999px;
+  border: 1px solid rgba(244, 238, 225, 0.25);
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--paper);
+  text-decoration: none;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.featured-item-cta:hover,
+.featured-item-cta:focus-visible {
+  border-color: var(--lavender);
+  background: rgba(155, 152, 187, 0.12);
+}
+
+@media (max-width: 900px) {
+  .featured-item-inner {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .featured-item-text {
+    align-items: center;
+    text-align: center;
   }
 }
 

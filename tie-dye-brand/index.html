@@ -122,6 +122,23 @@
              not as competing with the video for attention while it's
              still scrubbing. -->
         <div class="hero-ambient-fill" id="hero-ambient-fill" aria-hidden="true"></div>
+
+        <!-- Mobile only: the standalone "Хит сезона" section below
+             (see .featured-item) is hidden on mobile and its content
+             lives here instead, in the empty margin above the video —
+             same reveal-once-scrub-completes behavior as
+             .hero-ambient-fill, on the same toggle. -->
+        <div class="hero-featured-teaser" id="hero-featured-teaser" aria-hidden="true">
+          <div class="hero-featured-teaser-media">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          </div>
+          <div class="hero-featured-teaser-text">
+            <p class="hero-featured-teaser-eyebrow">Хит сезона</p>
+            <p class="hero-featured-teaser-name">Название скоро</p>
+            <p class="hero-featured-teaser-description">Описание скоро</p>
+          </div>
+        </div>
+
         <canvas class="dye-canvas" width="1728" height="992"
           aria-label="Белая футболка в брызгах лавандового, бирюзового и оливкового красителя, скрученная в спиральный узор тай-дай"></canvas>
       </div>
@@ -158,6 +175,21 @@
       <p class="manifesto-line">Каждая вещь скручена и окрашена вручную — от первого узла до последней капли краски.</p>
       <p class="manifesto-line">Мы не работаем тиражами: одна партия — это пара десятков вещей, и ни одна не повторяет другую.</p>
       <p class="manifesto-line">Тай-дай невозможно предсказать до конца. В этом и есть весь смысл.</p>
+    </div>
+  </section>
+
+  <section class="featured-item dye-ambient" aria-label="Хит сезона">
+    <div class="featured-item-inner">
+      <div class="featured-item-media" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="featured-item-media-label">Фото скоро</span>
+      </div>
+      <div class="featured-item-text">
+        <p class="featured-item-eyebrow">Хит сезона</p>
+        <h2 class="featured-item-name">Название скоро</h2>
+        <p class="featured-item-description">Описание появится, когда мы добавим первую вещь в каталог.</p>
+        <a href="catalog.html" class="featured-item-cta">Смотреть каталог</a>
+      </div>
     </div>
   </section>
 
