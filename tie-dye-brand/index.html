@@ -173,6 +173,27 @@
     </div>
   </section>
 
+  <!-- Precedes .collection-preview in the DOM so desktop shows "Хит
+       сезона" before the carousel — mobile hides this section
+       entirely (display: none, see its own rule; content lives in
+       .hero-featured-teaser inside the hero instead), so there the
+       carousel effectively lands right after Манифест regardless of
+       this ordering. -->
+  <section class="featured-item dye-ambient" aria-label="Хит сезона">
+    <div class="featured-item-inner">
+      <div class="featured-item-media" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="featured-item-media-label">Фото скоро</span>
+      </div>
+      <div class="featured-item-text">
+        <p class="featured-item-eyebrow">Хит сезона</p>
+        <h2 class="featured-item-name">Название скоро</h2>
+        <p class="featured-item-description">Описание появится, когда мы добавим первую вещь в каталог.</p>
+        <a href="catalog.html" class="featured-item-cta">Смотреть каталог</a>
+      </div>
+    </div>
+  </section>
+
   <section class="collection-preview dye-ambient" aria-label="Превью коллекции">
     <p class="collection-preview-eyebrow">Превью коллекции</p>
     <h2 class="collection-preview-title">Скоро в каталоге</h2>
@@ -221,21 +242,6 @@
     </div>
 
     <a href="catalog.html" class="collection-preview-cta">Смотреть каталог</a>
-  </section>
-
-  <section class="featured-item dye-ambient" aria-label="Хит сезона">
-    <div class="featured-item-inner">
-      <div class="featured-item-media" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
-        <span class="featured-item-media-label">Фото скоро</span>
-      </div>
-      <div class="featured-item-text">
-        <p class="featured-item-eyebrow">Хит сезона</p>
-        <h2 class="featured-item-name">Название скоро</h2>
-        <p class="featured-item-description">Описание появится, когда мы добавим первую вещь в каталог.</p>
-        <a href="catalog.html" class="featured-item-cta">Смотреть каталог</a>
-      </div>
-    </div>
   </section>
 
   <!-- ============================================================
