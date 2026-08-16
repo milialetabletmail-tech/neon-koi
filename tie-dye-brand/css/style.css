@@ -166,11 +166,13 @@ body.preloading { overflow: hidden; height: 100vh; }
    Pages with no Color Burst hero (every page but index.html) render
    straight into `.nav-solid` from first paint (class is in the HTML,
    no JS needed). index.html starts without it and main.js flips it
-   on/off as the hero's end scrolls in/out of view (see the
-   `.hero-end-sentinel` IntersectionObserver there). Mobile always
-   collapses to the icon cluster regardless of `.nav-solid` — see the
-   max-width query — there just isn't room for inline text links next
-   to two icons at phone widths.
+   on/off as the pinned hero releases/re-engages (onLeave/onEnterBack
+   on the same ScrollTrigger that pins it — see buildColorBurst in
+   main.js), so the solid backdrop can never land while the hero is
+   still pinned on screen underneath it. Mobile always collapses to
+   the icon cluster regardless of `.nav-solid` — see the max-width
+   query — there just isn't room for inline text links next to two
+   icons at phone widths.
    ------------------------------------------------------------ */
 
 .site-header {

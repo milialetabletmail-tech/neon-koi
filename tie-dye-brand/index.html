@@ -26,9 +26,11 @@
        SITE HEADER — see the "SITE HEADER / NAVIGATION" block in
        css/style.css for how the transparent-over-hero vs. solid-bar
        states work, and js/nav.js for the interaction wiring shared by
-       every page. This page is the one that starts transparent — the
-       .hero-end-sentinel further down is what main.js watches to flip
-       on `.nav-solid` once the Color Burst hero has scrolled past.
+       every page. This page is the one that starts transparent —
+       main.js flips on `.nav-solid` once the pinned Color Burst hero
+       actually releases (see buildColorBurst's onLeave/onEnterBack).
+       The .hero-end-sentinel further down is only a fallback for the
+       prefers-reduced-motion case, which never pins the hero at all.
        ============================================================ -->
   <header class="site-header" id="site-header">
     <a href="index.html" class="wordmark" aria-label="LN-team — на главную"><span class="sr-only">LN-team</span></a>
