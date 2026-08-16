@@ -1358,16 +1358,19 @@ body.nav-open { overflow: hidden; }
    in as one block — reads as the text arriving one thought at a time
    while scrolling, not a single reveal.
 
-   Shares Процесс's background-attachment: fixed treatment rather than
-   having the dye-splash image scroll normally here — both sections
-   show the exact same viewport-anchored image, so the backdrop reads
-   as one continuous fixed layer running under both instead of two
-   separate copies of the splash art meeting at a seam. Used to be
-   desktop-only (iOS Safari's support for fixed backgrounds has a
-   history of being unreliable), but the same duplicate-seam problem
-   this solves on desktop was still visible on mobile with each
-   section scrolling its own copy, so it's on unconditionally now —
-   worth revisiting if it turns out to actually misbehave on iOS.
+   Shares background-attachment: fixed with every other dye-ambient
+   section between here and Футер (Хит сезона, Процесс, Превью) rather
+   than having the dye-splash image scroll normally — they all show
+   the exact same viewport-anchored image, so the backdrop reads as
+   one continuous fixed layer running underneath the whole stretch,
+   whatever order those sections are actually in, instead of separate
+   copies of the splash art meeting at a seam wherever two of them
+   happen to be adjacent. Used to be desktop-only (iOS Safari's
+   support for fixed backgrounds has a history of being unreliable),
+   but the same duplicate-seam problem this solves on desktop was
+   still visible on mobile with each section scrolling its own copy,
+   so it's on unconditionally now — worth revisiting if it turns out
+   to actually misbehave on iOS.
    ------------------------------------------------------------ */
 
 .manifesto {
@@ -1575,16 +1578,17 @@ body.nav-open { overflow: hidden; }
 }
 
 /* ------------------------------------------------------------
-   PROCESS — the real technique (ice-dye), laid out as a winding
-   "snake" path: five compact cards alternating left/right down the
-   page, each pair joined by a wide S-curve connector into a chevron
-   (see the inline SVGs in index.html) instead of a plain "→"
-   character.
+   PROCESS — the real technique is proprietary and deliberately not
+   disclosed (see the copy), laid out as a winding "snake" path: five
+   compact cards alternating left/right down the page, each pair
+   joined by a wide S-curve connector into a chevron (see the inline
+   SVGs in index.html) instead of a plain "→" character.
 
-   background-attachment: fixed (same treatment as Манифест right
-   above it — see its own rule for why, including the iOS caveat) —
-   the dye-splash backdrop stays pinned to the viewport while the
-   steps scroll past it.
+   background-attachment: fixed (same treatment as every other
+   dye-ambient section between Манифест and Футер — see .manifesto's
+   own rule for why, including the iOS caveat) — the dye-splash
+   backdrop stays pinned to the viewport while the steps scroll past
+   it.
    ------------------------------------------------------------ */
 
 .process {
@@ -1764,9 +1768,10 @@ body.nav-open { overflow: hidden; }
 
 /* ------------------------------------------------------------
    COLLECTION PREVIEW — same dye-splash backdrop and fixed-attachment
-   behaviour as Процесс, so the "background pins, content scrolls"
-   effect reads as one continuous dark stretch from Процесс straight
-   through into this section rather than resetting each time.
+   behaviour as every other dye-ambient section between Манифест and
+   Футер, so the "background pins, content scrolls" effect reads as
+   one continuous dark stretch running underneath that whole span
+   rather than resetting each time — see .manifesto's own comment.
    ------------------------------------------------------------ */
 
 .collection-preview {
@@ -2051,13 +2056,14 @@ body.nav-open { overflow: hidden; }
 }
 
 /* ------------------------------------------------------------
-   FOOTER — same dye-splash backdrop as Процесс/Превью (fixed on
-   desktop, cover-sized on mobile — see .dye-ambient), so it reads as
-   the tail end of the same continuous dark stretch rather than a
-   fresh section. No real social accounts or contact details exist
-   yet, so those are "coming soon" placeholders (undecorated <a>,
-   faded text) matching the "Фото скоро" pattern used elsewhere —
-   swap in real hrefs/copy once the brand has them.
+   FOOTER — same dye-splash backdrop as every other dye-ambient
+   section between Манифест and here (fixed on desktop, cover-sized on
+   mobile — see .dye-ambient), so it reads as the tail end of the same
+   continuous dark stretch rather than a fresh section. No real social
+   accounts or contact details exist yet, so those are "coming soon"
+   placeholders (undecorated <a>, faded text) matching the "Фото
+   скоро" pattern used elsewhere — swap in real hrefs/copy once the
+   brand has them.
    ------------------------------------------------------------ */
 
 .site-footer {
