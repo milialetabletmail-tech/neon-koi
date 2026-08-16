@@ -1154,20 +1154,25 @@ body.nav-open { overflow: hidden; }
   }
 
   .colorburst-batch {
-    /* Just past the band's full-visibility edge (24vw) rather than
-       past its whole fade-out tail (29vw) too — close enough to still
-       read as sitting on the video/garment, not stranded down in the
-       flat margin below it. 18vw sat well inside the still-fully-
-       visible garment, so the line used to print directly over the
-       shirt's hem; this clears it while staying right underneath.
-       Font size drops a lot further than the label's does: at the
-       label's font-size this line still wrapped to two lines on a
-       phone-width screen, which read as a disproportionately large
-       block this far down the layout. Back to the light-text-over-
-       photo treatment (not the black ink used elsewhere) since it's
-       sitting against the fading footage/fabric here, not the flat
-       ink margin further down. */
-    top: calc(44vh + 23vw);
+    /* Centered in the flat ink "tail" below the video's fade-out
+       (44vh + 29vw is where the band's fade-out actually completes —
+       see .dye-canvas above — and .colorburst-stage's own height caps
+       at that plus a further 3rem, see its mobile rule, so that 3rem
+       is the whole flat margin), not sitting on the still-fading
+       footage above it the way this line used to. Used to sit at
+       44vh + 23vw instead (just past the band's full-visibility edge
+       but well before its fade-out finished, so it still read as
+       printed on the video/garment); moving it down into the tail and
+       centering it there reads as a small standalone credit line in
+       the margin rather than a caption laid over the shot. Font size
+       drops a lot further than the label's does: at the label's
+       font-size this line still wrapped to two lines on a phone-width
+       screen, which read as a disproportionately large block this far
+       down the layout. Still the light-text-over-photo treatment (not
+       the black ink used elsewhere) since --paper-dim reads fine on
+       flat --ink too, and swapping treatments right at this boundary
+       would be a visible color jump for no reason. */
+    top: calc(44vh + 29vw + 1.5rem);
     bottom: auto;
     font-size: 0.42rem;
     letter-spacing: 0.1em;
