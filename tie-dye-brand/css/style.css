@@ -2355,7 +2355,6 @@ body.nav-open { overflow: hidden; }
      .collection-preview-card.is-active) — handled on the card's own
      transform-origin instead, not solvable from this side. */
   overflow-x: auto;
-  overflow-y: visible;
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
   scrollbar-width: none;
@@ -2382,7 +2381,7 @@ body.nav-open { overflow: hidden; }
      gap toward its (now smaller, see .is-active below) neighbors
      reads as "the star of the row" rather than a hard boundary
      between them. */
-  transform: scale(0.64);
+  transform: scale(0.85);
   /* center BOTTOM, not center — .collection-preview-grid's
      overflow-x: auto forces its overflow-y to auto too (can't mix
      visible with a non-visible axis, per spec), so anything that
@@ -2398,7 +2397,7 @@ body.nav-open { overflow: hidden; }
 }
 
 .collection-preview-card.is-active {
-  transform: scale(1.14);
+  transform: scale(1.32);
 }
 
 /* Cards snap to the track's center, with side padding on the track
