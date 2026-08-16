@@ -86,6 +86,22 @@
     if (document.readyState === 'complete') release();
   }
 
+  /* Active pin duration for the Color Burst scrub, in px — see the
+     comment above the scrollTrigger config in buildColorBurst for why
+     this is computed instead of using a separate, taller trigger
+     element with end: 'bottom bottom'. 2x/3x viewport height (phone/
+     desktop) targets roughly the same amount of scrolling the old
+     .colorburst height (300vh/400vh minus the one-viewport pin-release
+     cost baked into that formula) actually spent on the live scrub,
+     so the reveal's pacing feels about the same as before — just
+     without the dead scroll after it. Read live off window.innerWidth/
+     innerHeight (not cached) since ScrollTrigger calls this again on
+     its own resize refresh. */
+  function getScrubDistance() {
+    const vh = window.innerHeight;
+    return Math.round(vh * (window.innerWidth <= 768 ? 2 : 3));
+  }
+
   /* ------------------------------------------------------------
      Color Burst — pinned, scroll-scrubbed hero sequence.
      ------------------------------------------------------------ */
@@ -155,12 +171,32 @@
 
     gsap.set(garmentStage, { scale: 1 });
 
+    // Pinning .colorburst-stage against a *separate*, taller trigger
+    // (.colorburst, sized in CSS) with end: 'bottom bottom' was the
+    // original approach — but that combination has a fixed, unavoidable
+    // cost: pin duration is always (triggerHeight - viewportHeight),
+    // which makes triggerHeight always equal (pinDuration +
+    // viewportHeight) by definition. The "+ viewportHeight" doesn't go
+    // away no matter what triggerHeight or the pinned element's own
+    // size are set to — it's baked into the formula — so after the pin
+    // releases there's always exactly one more full viewport of scroll
+    // before the next section arrives, holding on the finished, static
+    // hero the whole time. Confirmed by testing: shrinking the pinned
+    // element's own height changed nothing about this gap.
+    //
+    // Pinning .colorburst-stage against itself instead, with an
+    // explicit end: '+=Npx', doesn't have that extra viewport baked
+    // in — the pin lasts exactly Npx and nothing more, so Манифест
+    // starts arriving the moment it releases. N is computed off the
+    // viewport height (not a fixed px count) so the scrub still takes
+    // a similar amount of scrolling, relative to the screen, as
+    // before; see getScrubDistance below.
     const tl = gsap.timeline({
       defaults: { ease: 'power2.out' },
       scrollTrigger: {
-        trigger: '.colorburst',
+        trigger: stage,
         start: 'top top',
-        end: 'bottom bottom',
+        end: () => '+=' + getScrubDistance(),
         scrub: 1,
         pin: stage,
         anticipatePin: 1,

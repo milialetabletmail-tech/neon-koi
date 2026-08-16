@@ -586,9 +586,13 @@ body.nav-open { overflow: hidden; }
    COLOR BURST HERO
    ------------------------------------------------------------ */
 
+/* No explicit height: GSAP pins .colorburst-stage against itself now
+   (see buildColorBurst in main.js), so its own pin-spacer — not this
+   element — is what reserves the scroll distance the burst plays out
+   over. .colorburst just needs to visually contain that spacer, which
+   auto height does on its own. */
 .colorburst {
   position: relative;
-  height: 400vh; /* scroll distance the burst plays out over */
   background: var(--ink);
 }
 
@@ -891,23 +895,54 @@ body.nav-open { overflow: hidden; }
    ------------------------------------------------------------ */
 
 @media (max-width: 768px) {
-  /* Shorter than the shared 400vh: that scroll distance is spent on
-     the pin, not on the video itself (object-fit: contain sizes the
-     footage off viewport width, so it's unaffected by this). Less of
-     it just means less scrolling to reach the end of the reveal, and
-     less scroll before the pinned stage releases and Манифест can
-     start coming into view — the empty margin below the video and the
-     one full viewport-height the stage still needs to slide away
-     after unpinning are unchanged (both are tied to viewport
-     dimensions, not this value), but the total scroll spent getting
-     there is meaningfully shorter. */
-  .colorburst {
-    height: 300vh;
-  }
-
   .colorburst,
   .colorburst-stage {
     background: var(--ink);
+  }
+
+  /* Shorter than 100vh: the top half (0 to 50vh) is untouched — still
+     room for the header, .colorburst-label, and .hero-featured-teaser
+     exactly as before — but the bottom half isn't a full 50vh of empty
+     margin anymore. 29vw is roughly where the garment's own visible
+     edge sits (see .dye-canvas's mask below), plus a 3rem clearance so
+     it doesn't feel flush against the very edge of the box. Since
+     main.js now pins .colorburst-stage against itself with an explicit
+     scroll duration (see getScrubDistance in main.js) instead of a
+     separate, taller trigger, the pin-spacer this height drives is
+     also what determines how long the "tail" is after the pin
+     releases and before Манифест arrives — shrinking it here is what
+     actually shortens that gap, not the old .colorburst height (which
+     never affected it — the tail was always exactly one viewport,
+     regardless of that value).
+
+     .garment-stage (and the canvas inside it, via its own inset: 0)
+     stays a fixed 100vh below — not shrunk to match — so object-fit:
+     contain keeps sizing/centering the video against the same 100vh
+     frame it's always used, and the canvas's own mask (unchanged,
+     still "50%"-based) keeps landing on the right pixels. This
+     shorter .colorburst-stage's overflow: hidden then simply crops
+     off whatever hangs below its own new edge — which is exactly the
+     dead empty margin the video and everything above it never reached
+     anyway.
+
+     Every other direct child of .colorburst-stage that positioned
+     itself off "50%" (.colorburst-label, .colorburst-batch,
+     .hero-wordmark-group/-glow, .scroll-hint — NOT .dye-canvas or
+     .hero-featured-teaser, both inside the still-100vh .garment-stage)
+     is switched to the equivalent `50vh` below — the same fixed
+     distance from the stage's top these were always tuned against,
+     just no longer expressed as a fraction of this element's own
+     height now that it's not simply "100vh" anymore. */
+  .colorburst-stage {
+    height: calc(50vh + 29vw + 3rem);
+  }
+
+  .garment-stage {
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: auto;
+    height: 100vh;
   }
 
   /* The letterbox margin below the video needs no fill of its own:
@@ -1072,21 +1107,30 @@ body.nav-open { overflow: hidden; }
   }
 
   /* Both labels move from fixed rem offsets to positions keyed off the
-     letterboxed video band itself (the same `calc(50% ± Nvw)` math the
+     letterboxed video band itself (the same `calc(50vh ± Nvw)` math the
      band's own mask gradient uses, see .dye-canvas above) — object-fit:
      contain centers that band vertically and sizes it off viewport
      width, so a rem-based offset drifts in and out of the band across
-     phone sizes while this stays locked to its actual edges. The
-     `max()` on the label is just a floor so it can never creep back up
-     under the header on unusually short viewports. */
+     phone sizes while this stays locked to its actual edges. 50vh, not
+     50% — these are direct children of .colorburst-stage, which is no
+     longer simply "100vh" (see above), so its own 50% doesn't land on
+     the video band's middle anymore; 50vh is the same fixed point
+     these were always tuned against. The `max()` on the label is just
+     a floor so it can never creep back up under the header on
+     unusually short viewports. */
   .colorburst-label {
     /* Extra fixed buffer beyond the band's own top edge (not just
        26vw) — the garment itself, not only the fade, occupies real
        height inside the band (the collar sits well up into it), so
        hugging the literal edge still overlapped the collar. */
-    top: max(6.5rem, calc(50% - 28vw - 2.4rem));
+    top: max(6.5rem, calc(50vh - 28vw - 2.4rem));
     font-size: 0.58rem;
     letter-spacing: 0.22em;
+  }
+
+  .hero-wordmark-glow,
+  .hero-wordmark-group {
+    top: 50vh;
   }
 
   .colorburst-batch {
@@ -1103,7 +1147,7 @@ body.nav-open { overflow: hidden; }
        photo treatment (not the black ink used elsewhere) since it's
        sitting against the fading footage/fabric here, not the flat
        ink margin further down. */
-    top: calc(50% + 23vw);
+    top: calc(50vh + 23vw);
     bottom: auto;
     font-size: 0.42rem;
     letter-spacing: 0.1em;
@@ -1112,8 +1156,15 @@ body.nav-open { overflow: hidden; }
     text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
   }
 
+  /* Just past the band's fade-out edge, same reference point as
+     .colorburst-batch above — was `bottom: 8%` of a 100vh stage
+     (~68px), which now that the stage hugs the video would sit almost
+     on top of the batch line instead of below the fold. Only matters
+     for the first instant anyway: main.js removes this once scroll
+     progress passes 20%. */
   .scroll-hint {
-    bottom: 8%;
+    top: calc(50vh + 29vw + 1rem);
+    bottom: auto;
   }
 
   /* Only the Hero wordmark + the "Tie-Dye" tag under it get a mobile-
