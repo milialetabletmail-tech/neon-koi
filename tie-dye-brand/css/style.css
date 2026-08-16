@@ -1514,6 +1514,196 @@ body.nav-open { overflow: hidden; }
 }
 
 /* ------------------------------------------------------------
+   ABOUT PAGE (about.html) — brand story: intro, 3 value statements,
+   a short process recap linking back to the full breakdown on
+   index.html, and a closing CTA into the catalog. Same
+   .catalog-intro-style centered header pattern as the catalog page
+   for consistency across the two.
+   ------------------------------------------------------------ */
+
+.about-page {
+  min-height: 100vh;
+  padding: clamp(7rem, 12vw, 9rem) 1.5rem clamp(5rem, 10vw, 7rem);
+  background-color: var(--ink);
+  color: var(--paper);
+}
+
+.about-intro {
+  max-width: 40rem;
+  margin: 0 auto clamp(3.5rem, 8vw, 5rem);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.about-eyebrow {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--paper-dim);
+  opacity: 0.75;
+}
+
+.about-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 700;
+  font-size: clamp(1.9rem, 4.6vw, 2.8rem);
+}
+
+.about-lead {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--paper-dim);
+}
+
+.about-values {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  max-width: 20rem;
+  margin: 0 auto clamp(4rem, 9vw, 6rem);
+}
+
+@media (min-width: 769px) {
+  .about-values {
+    flex-direction: row;
+    align-items: flex-start;
+    max-width: 64rem;
+    gap: 3rem;
+  }
+}
+
+.about-value {
+  text-align: center;
+}
+
+@media (min-width: 769px) {
+  .about-value {
+    flex: 1 1 0;
+  }
+}
+
+/* Small accent dot above each heading — same 3 dye accents used
+   throughout the site (nav underlines, .process-connector, the
+   catalog's color filter swatches), so these read as tied to the
+   same brand palette rather than a generic bullet. */
+.about-value::before {
+  content: '';
+  display: block;
+  width: 8px;
+  height: 8px;
+  margin: 0 auto 1rem;
+  border-radius: 50%;
+}
+
+.about-value[data-accent="lavender"]::before { background: var(--lavender); box-shadow: 0 0 12px var(--lavender); }
+.about-value[data-accent="teal"]::before { background: var(--teal); box-shadow: 0 0 12px var(--teal); }
+.about-value[data-accent="sage"]::before { background: var(--sage); box-shadow: 0 0 12px var(--sage); }
+
+.about-value-heading {
+  margin: 0 0 0.6rem;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+
+.about-value-copy {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: var(--paper-dim);
+}
+
+.about-process-recap {
+  max-width: 32rem;
+  margin: 0 auto clamp(4rem, 9vw, 6rem);
+  padding-top: clamp(3rem, 7vw, 4rem);
+  border-top: 1px solid rgba(244, 238, 225, 0.12);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.about-process-recap-eyebrow {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--paper-dim);
+  opacity: 0.7;
+}
+
+.about-process-recap-copy {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--paper-dim);
+}
+
+.about-process-recap-link {
+  font-family: var(--font-ui);
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--teal);
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.about-process-recap-link:hover,
+.about-process-recap-link:focus-visible {
+  opacity: 0.7;
+}
+
+.about-cta {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.1rem;
+}
+
+.about-cta-copy {
+  margin: 0;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 600;
+  font-size: clamp(1.2rem, 2.8vw, 1.5rem);
+}
+
+.about-cta-button {
+  padding: 0.75rem 1.6rem;
+  border-radius: 999px;
+  border: 1px solid rgba(244, 238, 225, 0.25);
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--paper);
+  text-decoration: none;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.about-cta-button:hover,
+.about-cta-button:focus-visible {
+  border-color: var(--lavender);
+  background: rgba(155, 152, 187, 0.12);
+}
+
+/* ------------------------------------------------------------
    DYE-AMBIENT — reusable background texture for the flat-ink sections
    below the hero (Манифест, Хит сезона, Процесс, Превью, Футер). A
    flat --ink fill read as generic/templated once the hero's own
