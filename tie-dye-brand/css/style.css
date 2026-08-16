@@ -2326,14 +2326,9 @@ body.nav-open { overflow: hidden; }
 }
 
 .collection-preview-carousel {
-  /* Deliberately narrower than the full card track (one card plus a
-     peek of the next) rather than showing nearly all three at once —
-     with barely any card left to scroll past, "closest to the visible
-     center" would sit on the same middle card the whole time and the
-     active-card scale-up would never visibly move as you scroll. */
   position: relative;
   width: 100%;
-  max-width: 22rem;
+  max-width: 34rem;
 }
 
 .collection-preview-grid {
@@ -2365,21 +2360,40 @@ body.nav-open { overflow: hidden; }
   flex: 0 0 78vw;
   max-width: 19rem;
   scroll-snap-align: start;
+  /* Scaling the *whole* card, not just its photo — text shrinks along
+     with the media instead of staying full-size and overflowing past
+     the card's own (now much narrower, see the flex-basis comment
+     below) reserved width. .is-active scales this back up to 1; see
+     .collection-preview-media for why full size rather than growing
+     past it. */
+  transform: scale(0.72);
+  transform-origin: center center;
+  transition: transform 0.3s var(--ease-burst);
 }
 
-/* Mobile: cards snap to the track's center instead of its start edge,
-   with side padding on the track equal to the leftover space on
-   either side of a card — that leftover space is exactly what lets a
-   sliver of the previous/next card peek in on BOTH sides while the
-   active one is centered, rather than only ever revealing what's
-   ahead like the desktop version does. flex-basis: 100% (not a
-   percentage matching the padding split, e.g. 68%) is deliberate:
-   percentage flex-basis resolves against the flex container's own
-   content box, which here is already narrowed by the left/right
-   padding below — asking for 68% of that already-68%-wide box would
-   double-discount it down to a much smaller card than intended. 100%
-   just fills whatever's left after the padding, so the padding
-   percentages alone control how much of a peek shows. */
+.collection-preview-card.is-active {
+  transform: scale(1);
+}
+
+/* Cards snap to the track's center, with side padding on the track
+   equal to the leftover space on either side of a card — that
+   leftover space is what shows the previous/next card beside the
+   active one. flex-basis: 100% (not a percentage matching the padding
+   split) is deliberate: percentage flex-basis resolves against the
+   flex container's own content box, which here is already narrowed by
+   the left/right padding below — asking for e.g. 32% of that
+   already-32%-wide box would double-discount it down to a much
+   smaller card than intended. 100% just fills whatever's left after
+   the padding, so the padding percentage alone controls card width.
+
+   36% padding on each side (only 28% content/card width) is what
+   makes the peeking neighbor cards show *in full* rather than just a
+   sliver: at 28% card width, the 36% leftover on either side is wider
+   than the neighbor card itself, so it fits with room to spare
+   instead of being cropped by the carousel's edge. The neighbor still
+   reads as secondary despite being fully visible: see
+   .collection-preview-card:not(.is-active) below, which scales it
+   down instead of relying on cropping to imply "not the main one". */
 @media (max-width: 768px) {
   .collection-preview-card {
     flex-basis: 100%;
@@ -2388,15 +2402,11 @@ body.nav-open { overflow: hidden; }
   }
 
   .collection-preview-grid {
-    padding-left: 16%;
-    padding-right: 16%;
+    padding-left: 36%;
+    padding-right: 36%;
   }
 }
 
-/* Desktop: same centered, both-sides-peeking layout as mobile now
-   (was start-aligned with only a peek of what's ahead) — percentage
-   card width + matching percentage track padding, just against a
-   wider carousel box so the cards themselves render bigger. */
 @media (min-width: 769px) {
   .collection-preview-card {
     flex-basis: 100%;
@@ -2405,12 +2415,12 @@ body.nav-open { overflow: hidden; }
   }
 
   .collection-preview-carousel {
-    max-width: 26rem;
+    max-width: 38rem;
   }
 
   .collection-preview-grid {
-    padding-left: 16%;
-    padding-right: 16%;
+    padding-left: 36%;
+    padding-right: 36%;
   }
 }
 
@@ -2449,12 +2459,17 @@ body.nav-open { overflow: hidden; }
   height: 1.1rem;
 }
 
+/* Percentage, not a fixed rem offset — the carousel is now wide
+   enough (see .collection-preview-carousel) that a small fixed offset
+   left the arrows sitting out near its bare edges, far from the
+   actual card cluster in the middle. A percentage keeps them close to
+   the visible cards regardless of the carousel's own width. */
 .collection-preview-arrow--prev {
-  left: 0.25rem;
+  left: 6%;
 }
 
 .collection-preview-arrow--next {
-  right: 0.25rem;
+  right: 6%;
 }
 
 /* Dots replace the arrows on mobile — a touch carousel is already
@@ -2511,25 +2526,24 @@ body.nav-open { overflow: hidden; }
   border-radius: 0.75rem;
   color: var(--paper-dim);
   opacity: 0.55;
-  transform: scale(1);
-  transform-origin: center bottom;
-  transition: transform 0.3s var(--ease-burst), opacity 0.3s ease;
+  transition: opacity 0.3s ease;
 }
 
-/* .is-active is set in JS off scroll position — whichever card's left
-   edge is closest to the track's current scrollLeft, since cards snap
-   to the track's start edge rather than its center. */
+/* .is-active is set in JS off scroll position — whichever card's own
+   center is currently closest to the track's visible center. The size
+   difference lives on .collection-preview-card itself now (see its
+   own comment) — this just dims the placeholder icon a bit less once
+   it's the centered one. */
 .collection-preview-card.is-active .collection-preview-media {
-  transform: scale(1.08);
   opacity: 0.8;
 }
 
 /* Real product photos: no dashed placeholder border, and full opacity
    in both the resting and .is-active states (the 0.55/0.8 dimming
-   above was only ever meant to soften the empty placeholder icon,
-   not a real photo) — the scale-up transform on .is-active still
-   applies, same "this is the centered card" cue for photos as for
-   placeholders. */
+   above was only ever meant to soften the empty placeholder icon, not
+   a real photo) — the whole-card resting-vs-active scale
+   (.collection-preview-card, above) still applies to photos too, same
+   "this is the centered card" cue it gives placeholders. */
 .collection-preview-media.has-photo {
   border: none;
   opacity: 1;
