@@ -1320,10 +1320,42 @@ body.nav-open { overflow: hidden; }
    ------------------------------------------------------------ */
 
 .catalog-page {
+  position: relative;
+  overflow: hidden;
   min-height: 100vh;
   padding: clamp(7rem, 12vw, 9rem) 1.5rem clamp(5rem, 10vw, 7rem);
   background-color: var(--ink);
   color: var(--paper);
+}
+
+/* Same dimmed, heavily-blurred brand-blob backdrop as .nav-overlay
+   (which itself reuses the preloader's --gradient-spiral colors, just
+   spread into corners instead of one central burst) — not the
+   sharper dye-splash photo texture .dye-ambient gives every other
+   section. A grid full of dashed placeholder cards needs a calmer
+   backdrop than visible paint droplets competing with the grid
+   lines; same on mobile and desktop, no media query needed since
+   this is sized off the element itself, not the viewport. */
+.catalog-page::before {
+  content: '';
+  position: absolute;
+  inset: -10%;
+  z-index: 0;
+  background:
+    radial-gradient(circle at 12% 18%, var(--lavender) 0%, transparent 34%),
+    radial-gradient(circle at 88% 12%, var(--teal) 0%, transparent 32%),
+    radial-gradient(circle at 82% 88%, var(--sage) 0%, transparent 36%),
+    radial-gradient(circle at 15% 85%, var(--lavender) 0%, transparent 28%);
+  opacity: 0.28;
+  filter: blur(70px);
+  pointer-events: none;
+}
+
+.catalog-intro,
+.catalog-filters,
+.catalog-grid {
+  position: relative;
+  z-index: 1;
 }
 
 .catalog-intro {
@@ -1525,6 +1557,19 @@ body.nav-open { overflow: hidden; }
   min-height: 100vh;
   padding: clamp(7rem, 12vw, 9rem) 1.5rem clamp(5rem, 10vw, 7rem);
   background-color: var(--ink);
+  /* background-attachment: fixed — every other .dye-ambient section
+     (Манифест, Процесс, Хит сезона, Превью, Футер) sets this on
+     itself; missing it here silently broke the mobile splash
+     backdrop entirely. .dye-ambient's mobile override sizes the
+     image with `cover` specifically assuming fixed attachment (see
+     its own comment) — cover resolves against the *viewport* only
+     when attachment is fixed; left at the default `scroll`, it was
+     covering this page's own much-taller box instead, and the result
+     was cropped down to nothing visible. Desktop wasn't broken (the
+     base rule uses `100% auto`, not `cover`), but setting this
+     unconditionally instead of just inside the mobile query matches
+     how every other section does it. */
+  background-attachment: fixed;
   color: var(--paper);
 }
 
