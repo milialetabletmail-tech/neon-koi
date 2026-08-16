@@ -61,11 +61,107 @@
   </div>
 
   <main>
-    <section class="page-stub">
-      <p class="page-stub-eyebrow">Каталог</p>
-      <h1 class="page-stub-title">Коллекция готовится</h1>
-      <p class="page-stub-copy">Batch 014 «Закатная спираль» — каждая вещь окрашена вручную и существует в единственном экземпляре. Витрина откроется в следующем этапе.</p>
-      <a href="index.html" class="page-stub-back">На главную</a>
+    <section class="catalog-page dye-ambient">
+      <div class="catalog-intro">
+        <p class="catalog-eyebrow">Каталог</p>
+        <h1 class="catalog-title">Коллекция готовится</h1>
+        <p class="catalog-lead">LN-Team — каждая вещь окрашена вручную и существует в единственном экземпляре. Ниже — то, что скоро появится в продаже.</p>
+      </div>
+
+      <!-- Filters aren't wired up yet — there's nothing to filter
+           until real products exist — so every control here is
+           disabled. Kept visible (not just a "скоро" label) so the
+           layout this'll slot into is already right once they go
+           live. -->
+      <div class="catalog-filters" aria-label="Фильтры (появятся вместе с товарами)">
+        <div class="catalog-filter-group">
+          <span class="catalog-filter-label">Цвет</span>
+          <div class="catalog-filter-swatches">
+            <button type="button" class="catalog-filter-swatch" data-accent="lavender" disabled aria-label="Лавандовый"></button>
+            <button type="button" class="catalog-filter-swatch" data-accent="teal" disabled aria-label="Бирюзовый"></button>
+            <button type="button" class="catalog-filter-swatch" data-accent="sage" disabled aria-label="Оливковый"></button>
+          </div>
+        </div>
+
+        <div class="catalog-filter-group">
+          <span class="catalog-filter-label">Цена</span>
+          <button type="button" class="catalog-filter-pill" disabled>Скоро</button>
+        </div>
+      </div>
+
+      <div class="catalog-grid">
+        <article class="catalog-card">
+          <div class="catalog-card-media" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+            <span class="catalog-card-media-label">Фото скоро</span>
+          </div>
+          <div class="catalog-card-text">
+            <p class="catalog-card-name">Название скоро</p>
+            <p class="catalog-card-price">Цена скоро</p>
+          </div>
+          <button type="button" class="catalog-card-cta" disabled>Подробнее</button>
+        </article>
+
+        <article class="catalog-card">
+          <div class="catalog-card-media" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+            <span class="catalog-card-media-label">Фото скоро</span>
+          </div>
+          <div class="catalog-card-text">
+            <p class="catalog-card-name">Название скоро</p>
+            <p class="catalog-card-price">Цена скоро</p>
+          </div>
+          <button type="button" class="catalog-card-cta" disabled>Подробнее</button>
+        </article>
+
+        <article class="catalog-card">
+          <div class="catalog-card-media" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+            <span class="catalog-card-media-label">Фото скоро</span>
+          </div>
+          <div class="catalog-card-text">
+            <p class="catalog-card-name">Название скоро</p>
+            <p class="catalog-card-price">Цена скоро</p>
+          </div>
+          <button type="button" class="catalog-card-cta" disabled>Подробнее</button>
+        </article>
+
+        <article class="catalog-card">
+          <div class="catalog-card-media" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+            <span class="catalog-card-media-label">Фото скоро</span>
+          </div>
+          <div class="catalog-card-text">
+            <p class="catalog-card-name">Название скоро</p>
+            <p class="catalog-card-price">Цена скоро</p>
+          </div>
+          <button type="button" class="catalog-card-cta" disabled>Подробнее</button>
+        </article>
+
+        <article class="catalog-card">
+          <div class="catalog-card-media" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+            <span class="catalog-card-media-label">Фото скоро</span>
+          </div>
+          <div class="catalog-card-text">
+            <p class="catalog-card-name">Название скоро</p>
+            <p class="catalog-card-price">Цена скоро</p>
+          </div>
+          <button type="button" class="catalog-card-cta" disabled>Подробнее</button>
+        </article>
+
+        <article class="catalog-card">
+          <div class="catalog-card-media" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+            <span class="catalog-card-media-label">Фото скоро</span>
+          </div>
+          <div class="catalog-card-text">
+            <p class="catalog-card-name">Название скоро</p>
+            <p class="catalog-card-price">Цена скоро</p>
+          </div>
+          <button type="button" class="catalog-card-cta" disabled>Подробнее</button>
+        </article>
+      </div>
     </section>
   </main>
 
