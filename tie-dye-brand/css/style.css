@@ -934,20 +934,11 @@ body.nav-open { overflow: hidden; }
      just no longer expressed as a fraction of this element's own
      height now that it's not simply "100vh" anymore. */
   .colorburst-stage {
-    height: calc(44vh + 29vw + 3rem);
+    height: calc(50vh + 29vw + 3rem);
   }
 
-  /* top: -6vh, not 0 — shifts .garment-stage's whole 100vh frame up,
-     which moves the video's center (fixed at its own internal 50%,
-     i.e. 50vh of ITS OWN box) from 50vh down to 44vh measured from
-     .colorburst-stage's top, trimming 6vh of otherwise-empty space
-     that used to sit between the header/label/teaser and the video
-     with nothing in it. .hero-featured-teaser (below) gets a matching
-     top: 6vh so its own box still starts exactly at .colorburst-stage's
-     visible top instead of having its first 6vh clipped off by the
-     shift. */
   .garment-stage {
-    top: -6vh;
+    top: 0;
     right: 0;
     left: 0;
     bottom: auto;
@@ -1002,15 +993,7 @@ body.nav-open { overflow: hidden; }
     align-items: flex-end;
     gap: 0.9rem;
     position: absolute;
-    /* top: 6vh, not 0 — .garment-stage shifted up by that much (see
-       its top: -6vh above) to trim empty space above the video, and
-       without a matching shift here this card's own top 6vh would be
-       clipped off by .colorburst-stage's shorter overflow: hidden
-       box instead of sitting flush against it. bottom stays at 50%
-       (of .garment-stage's own unchanged 100vh) since that's still
-       the video's own edge — the card's box is 6vh shorter now,
-       which is exactly the point. */
-    top: 6vh;
+    top: 0;
     left: 0;
     right: 0;
     /* Not bottom: 50% — the canvas's own mask (below) only actually
@@ -1172,31 +1155,30 @@ body.nav-open { overflow: hidden; }
   }
 
   /* Both labels move from fixed rem offsets to positions keyed off the
-     letterboxed video band itself (the same `calc(44vh ± Nvw)` math the
+     letterboxed video band itself (the same `calc(50vh ± Nvw)` math the
      band's own mask gradient uses, see .dye-canvas above) — object-fit:
      contain centers that band vertically and sizes it off viewport
      width, so a rem-based offset drifts in and out of the band across
-     phone sizes while this stays locked to its actual edges. 44vh, not
+     phone sizes while this stays locked to its actual edges. 50vh, not
      50% — these are direct children of .colorburst-stage, which is no
      longer simply "100vh" (see above), so its own 50% doesn't land on
-     the video band's middle anymore; 44vh is the same fixed point
-     these were always tuned against (see .garment-stage's top: -6vh
-     above for where that number comes from). The `max()` on the label
-     is just a floor so it can never creep back up under the header on
+     the video band's middle anymore; 50vh is the same fixed point
+     these were always tuned against. The `max()` on the label is just
+     a floor so it can never creep back up under the header on
      unusually short viewports. */
   .colorburst-label {
     /* Extra fixed buffer beyond the band's own top edge (not just
        26vw) — the garment itself, not only the fade, occupies real
        height inside the band (the collar sits well up into it), so
        hugging the literal edge still overlapped the collar. */
-    top: max(6.5rem, calc(44vh - 28vw - 2.4rem));
+    top: max(6.5rem, calc(50vh - 28vw - 2.4rem));
     font-size: 0.58rem;
     letter-spacing: 0.22em;
   }
 
   .hero-wordmark-glow,
   .hero-wordmark-group {
-    top: 44vh;
+    top: 50vh;
   }
 
   .colorburst-batch {
@@ -1213,7 +1195,7 @@ body.nav-open { overflow: hidden; }
        photo treatment (not the black ink used elsewhere) since it's
        sitting against the fading footage/fabric here, not the flat
        ink margin further down. */
-    top: calc(44vh + 23vw);
+    top: calc(50vh + 23vw);
     bottom: auto;
     font-size: 0.42rem;
     letter-spacing: 0.1em;
@@ -1229,7 +1211,7 @@ body.nav-open { overflow: hidden; }
      for the first instant anyway: main.js removes this once scroll
      progress passes 20%. */
   .scroll-hint {
-    top: calc(44vh + 29vw + 1rem);
+    top: calc(50vh + 29vw + 1rem);
     bottom: auto;
   }
 
