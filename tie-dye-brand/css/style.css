@@ -1172,8 +1172,19 @@ body.nav-open { overflow: hidden; }
        the black ink used elsewhere) since --paper-dim reads fine on
        flat --ink too, and swapping treatments right at this boundary
        would be a visible color jump for no reason. */
-    top: calc(44vh + 29vw + 1.5rem);
+    /* 1.5rem is half of the tail's own 3rem height (true center of
+       the gap), minus another ~3.5px — half this line's own rendered
+       box height — so it's the *box's* center landing on the tail's
+       center, not its top edge. */
+    top: calc(44vh + 29vw + 1.5rem - 3.5px);
     bottom: auto;
+    /* margin: 0 — this is a <p>, and the UA default margin-block: 1em
+       (relative to this rule's own 0.42rem font-size, so ~6-7px) was
+       quietly padding the top: value above with extra space, landing
+       the actual text lower than intended. Base rule (desktop) leaves
+       it alone since that's bottom-anchored, not part of this
+       centering. */
+    margin: 0;
     font-size: 0.42rem;
     letter-spacing: 0.1em;
     gap: 0.5em;
