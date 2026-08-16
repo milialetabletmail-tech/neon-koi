@@ -107,6 +107,7 @@
      ------------------------------------------------------------ */
   function buildColorBurst(frames) {
     const stage = document.querySelector('.colorburst-stage');
+    const header = document.getElementById('site-header');
     const garmentStage = document.querySelector('.garment-stage');
     const canvas = document.querySelector('.dye-canvas');
     const ctx = canvas.getContext('2d');
@@ -164,6 +165,10 @@
     if (prefersReducedMotion) {
       drawFrame(lastFrame); // land straight on the finished tie-dye
       if (hint) hint.remove();
+      // No pin exists in this branch, so the pin-synced onLeave/onEnterBack
+      // toggle below never runs — fall back to the plain scroll-position
+      // sentinel instead, which is accurate here since nothing is pinned.
+      buildNavSolidToggle();
       return;
     }
 
@@ -207,6 +212,19 @@
           // back still finds it there.
           if (self.progress > 0.2) hideScrollHint();
         },
+        // Solid header exactly when the pin is released, not a moment
+        // before — a separate .hero-end-sentinel + IntersectionObserver
+        // used to drive this off scroll position instead, which reads
+        // right on a normal-height page but desyncs from the pin on a
+        // short/compressed one: the sentinel can scroll into view (and
+        // flip the header solid) while the hero is still pinned on
+        // screen underneath it, so the solid header ends up painted
+        // straight over whatever's still showing up there — the mobile
+        // "Хит сезона" teaser card included. onLeave/onEnterBack fire
+        // exactly at this trigger's own pin boundary, so they can't
+        // drift out of sync with it the way a separate element can.
+        onLeave: () => header && header.classList.add('nav-solid'),
+        onEnterBack: () => header && header.classList.remove('nav-solid'),
       },
     });
 
@@ -306,10 +324,16 @@
   }
 
   /* ------------------------------------------------------------
-     Header solid-bar toggle — only this page starts with a transparent
-     `.site-header` (see css/style.css), because only this page has
-     hero footage underneath it worth protecting. `.hero-end-sentinel`
-     is a zero-height marker placed right after `.colorburst`; once it
+     Header solid-bar toggle, `prefers-reduced-motion` fallback only —
+     only this page starts with a transparent `.site-header` (see
+     css/style.css), because only this page has hero footage underneath
+     it worth protecting. When the hero is actively pinned (the normal
+     case), buildColorBurst's own ScrollTrigger drives this directly via
+     onLeave/onEnterBack, which can't drift out of sync with the pin.
+     But the reduced-motion branch never creates that pin — the hero
+     just sits static and the page scrolls normally past it — so this
+     `.hero-end-sentinel` + IntersectionObserver fallback (a zero-height
+     marker placed right after `.colorburst`) covers that case: once it
      scrolls into view the hero is fully behind us, so the header gets
      its solid backdrop and inline text links. Scrolling back up past
      it reverses that — matches the hero itself, which also resets to
@@ -441,7 +465,6 @@
      Boot
      ------------------------------------------------------------ */
   document.addEventListener('DOMContentLoaded', () => {
-    buildNavSolidToggle();
     buildManifestoReveal();
     buildCollectionPreviewCarousel();
     const framesPromise = loadFrames();
