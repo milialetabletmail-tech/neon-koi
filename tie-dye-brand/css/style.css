@@ -2340,8 +2340,22 @@ body.nav-open { overflow: hidden; }
   position: relative;
   z-index: 0;
   display: flex;
-  gap: 1.75rem;
+  /* Tighter than it looks in the CSS — every card but the active one
+     is scaled well below its own reserved flex space (see
+     .collection-preview-card), so the real visual gap between a
+     shrunk neighbor and the active card ends up noticeably bigger
+     than this value alone. */
+  gap: 1rem;
+  /* overflow-x: auto here forces overflow-y to auto too (setting only
+     one axis to non-visible makes the UA compute the other the same
+     way — they can't be mixed with `visible`, per spec; overflow-y:
+     visible here would just get silently coerced back), which clips
+     anything taller than the grid's own unscaled row height. The
+     active card scales up past that (see
+     .collection-preview-card.is-active) — handled on the card's own
+     transform-origin instead, not solvable from this side. */
   overflow-x: auto;
+  overflow-y: visible;
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
   scrollbar-width: none;
@@ -2363,16 +2377,28 @@ body.nav-open { overflow: hidden; }
   /* Scaling the *whole* card, not just its photo — text shrinks along
      with the media instead of staying full-size and overflowing past
      the card's own (now much narrower, see the flex-basis comment
-     below) reserved width. .is-active scales this back up to 1; see
-     .collection-preview-media for why full size rather than growing
-     past it. */
-  transform: scale(0.72);
-  transform-origin: center center;
+     below) reserved width. .is-active scales this up further, past
+     its own reserved flex space — a bit of visual overlap into the
+     gap toward its (now smaller, see .is-active below) neighbors
+     reads as "the star of the row" rather than a hard boundary
+     between them. */
+  transform: scale(0.64);
+  /* center BOTTOM, not center — .collection-preview-grid's
+     overflow-x: auto forces its overflow-y to auto too (can't mix
+     visible with a non-visible axis, per spec), so anything that
+     grows past the row's own unscaled height gets silently clipped
+     instead of just spilling out. Anchoring growth to the bottom
+     edge — right where the name text sits, the last thing in the
+     card — keeps that edge (and the text) roughly in place as the
+     card scales, so the growth on .is-active happens upward into the
+     row's own top padding instead of pushing the text down into the
+     clipped zone below. */
+  transform-origin: center bottom;
   transition: transform 0.3s var(--ease-burst);
 }
 
 .collection-preview-card.is-active {
-  transform: scale(1);
+  transform: scale(1.14);
 }
 
 /* Cards snap to the track's center, with side padding on the track
