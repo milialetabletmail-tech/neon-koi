@@ -1800,20 +1800,31 @@ body.nav-open { overflow: hidden; }
   background-size: 100% auto;
 }
 
-/* Flat on mobile — no dye-splash image at all, just each section's
-   own flat --ink fill (see .manifesto/.about-page/etc.'s own
-   background-color). Went through a couple of iterations here: first
-   dye-splash-sides-mobile.jpg at `cover`, then at `100% auto` after
-   `cover` turned out to crop both edge-splashes away on tall sections
-   — but mobile ended up simpler without the photo texture at all, so
-   this now just switches it off. Desktop is untouched (still the
-   full dye-splash-sides.jpg via the base rule above); this is
-   mobile-only, and has to come after that base rule for the same
-   reason as always — a plain rule later in the cascade beats an
-   earlier one of equal specificity regardless of media query. */
+/* dye-splash-sides.jpg is ~1.8:1 landscape — on a tall narrow phone,
+   100%-width sizing runs out of image height long before the section
+   does, leaving only a short band of it visible. dye-splash-sides-
+   mobile.jpg is a separate, portrait-built asset (splashes repeating
+   down both edges) so the same width-driven sizing covers the
+   section's full height instead. Placed after the base rule above —
+   not inside the earlier shared mobile @media block — since a plain
+   rule appearing later in the cascade would otherwise win over a
+   same-specificity one declared earlier, media query or not. */
 @media (max-width: 768px) {
   .dye-ambient {
-    background-image: none;
+    background-image: url('../assets/backgrounds/dye-splash-sides-mobile.jpg');
+    /* 100% auto, not cover — cover sizes against each section's own
+       box under plain `scroll` attachment (see the fixed→scroll
+       override at the end of this file — mobile doesn't use `fixed`
+       here, that's what caused the backdrop to jump during fast
+       scroll), and tall boxes like .about-page's real content blew
+       the image up enough with `cover` to crop both edge-splashes out
+       entirely, leaving only its flat-faded middle in view. 100% auto
+       keeps the image's full width (both edge splashes) always in
+       frame; any leftover height below it just shows flat --ink,
+       which the image already fades into at its own far edge, so the
+       seam doesn't read as a seam. */
+    background-size: 100% auto;
+    background-position: center center;
   }
 }
 
