@@ -1557,18 +1557,18 @@ body.nav-open { overflow: hidden; }
   min-height: 100vh;
   padding: clamp(7rem, 12vw, 9rem) 1.5rem clamp(5rem, 10vw, 7rem);
   background-color: var(--ink);
-  /* background-attachment: fixed — every other .dye-ambient section
-     (Манифест, Процесс, Хит сезона, Превью, Футер) sets this on
-     itself; missing it here silently broke the mobile splash
-     backdrop entirely. .dye-ambient's mobile override sizes the
-     image with `cover` specifically assuming fixed attachment (see
-     its own comment) — cover resolves against the *viewport* only
-     when attachment is fixed; left at the default `scroll`, it was
-     covering this page's own much-taller box instead, and the result
-     was cropped down to nothing visible. Desktop wasn't broken (the
-     base rule uses `100% auto`, not `cover`), but setting this
-     unconditionally instead of just inside the mobile query matches
-     how every other section does it. */
+  /* background-attachment: fixed — same treatment every other
+     .dye-ambient section (Манифест, Процесс, Хит сезона, Превью,
+     Футер) uses on desktop: the backdrop stays pinned to the viewport
+     as the page scrolls past it, instead of scrolling away with the
+     (fairly tall) content the way a normal background would. This
+     page has no dye-ambient sibling to line up with — it's the only
+     one on about.html — so it's purely a "same polished pinned-
+     backdrop feel as the rest of the site" choice, not a seam fix.
+     fixed→scroll on mobile (see the override at the end of this
+     file) applies here too, same as every other section — mobile
+     browsers jump/lag a fixed background during fast scrolling, so
+     this only actually stays fixed on desktop. */
   background-attachment: fixed;
   color: var(--paper);
 }
@@ -1797,24 +1797,21 @@ body.nav-open { overflow: hidden; }
 @media (max-width: 768px) {
   .dye-ambient {
     background-image: url('../assets/backgrounds/dye-splash-sides-mobile.jpg');
-    /* cover, not 100% auto — 100%-width sizing depends on the image's
-       own aspect ratio happening to be tall enough to clear whatever
-       the viewport's height turns out to be; on some phones it fell
-       short, leaving a flat gap at the bottom of the screen where the
-       image had already run out. cover is sized against the viewport
-       itself (this is background-attachment: fixed now) and always
-       fills it completely, at the cost of sometimes cropping a little
-       off the sides on unusually tall/narrow screens. */
-    background-size: cover;
-    /* center center, not center top — these sections are all
-       background-attachment: fixed now (see Манифест/Процесс/Превью's
-       own rules), which resolves background-position against the
-       *viewport*, not the section's own box. "top" used to mean "top
-       of this section" back when the image scrolled normally with
-       it; under fixed attachment it instead pins the image to the
-       top of the screen regardless of which section is in view —
-       reads as the backdrop having drifted away from center rather
-       than filling the screen the way the desktop image does. */
+    /* 100% auto, not cover — this used to be `cover`, sized against
+       the *viewport*, back when every section using this also had
+       background-attachment: fixed unconditionally. That's mobile-
+       only now (see the fixed→scroll override at the very end of this
+       file, and its own comment for why); under plain `scroll`,
+       `cover` sizes against each section's own box instead, and nice
+       and tall boxes (.about-page's real content easily clears a
+       couple screens) made `cover` blow the image up enough to crop
+       both edge-splashes out entirely, leaving only its flat-faded
+       middle in view — which is what an "invisible" backdrop actually
+       was. 100% auto keeps the image's full width (both edge
+       splashes) always in frame; any leftover height below it just
+       shows flat --ink, which the image already fades into at its own
+       far edge, so the seam doesn't read as a seam. */
+    background-size: 100% auto;
     background-position: center center;
   }
 }
@@ -1834,12 +1831,15 @@ body.nav-open { overflow: hidden; }
    one continuous fixed layer running underneath the whole stretch,
    whatever order those sections are actually in, instead of separate
    copies of the splash art meeting at a seam wherever two of them
-   happen to be adjacent. Used to be desktop-only (iOS Safari's
-   support for fixed backgrounds has a history of being unreliable),
-   but the same duplicate-seam problem this solves on desktop was
-   still visible on mobile with each section scrolling its own copy,
-   so it's on unconditionally now — worth revisiting if it turns out
-   to actually misbehave on iOS.
+   happen to be adjacent. Desktop only, in effect: it did run
+   unconditionally (mobile included) for a while, since the
+   duplicate-seam problem this solves shows up on mobile too, but
+   fixed backgrounds visibly jump/lag behind scroll content on mobile
+   browsers (confirmed, not just the anticipated iOS risk this
+   comment used to flag) — see the mobile override right above this
+   block, which reverts to `scroll` there and leans on
+   dye-splash-sides-mobile.jpg's own fade-to-ink edges to avoid the
+   seam instead.
    ------------------------------------------------------------ */
 
 .manifesto {
@@ -2682,4 +2682,42 @@ body.nav-open { overflow: hidden; }
   /* main.js paints the final (fully-dyed) frame directly and skips the
      scroll-scrub tween entirely when this is set — nothing to override
      here beyond the text/background states above. */
+}
+
+/* ------------------------------------------------------------
+   MOBILE: DISABLE FIXED DYE-SPLASH BACKDROPS
+   ------------------------------------------------------------
+   .manifesto, .featured-item, .process, .collection-preview,
+   .site-footer, and .about-page all set background-attachment: fixed
+   unconditionally on themselves, for the "one continuous backdrop"
+   effect described in .manifesto's own comment — deliberately, so it
+   applies on mobile too. In practice, mobile browsers don't repaint a
+   fixed background in step with scrolling, especially under momentum/
+   fast-flick scroll, so the backdrop visibly jumped a beat behind the
+   rest of the page instead of just holding still.
+
+   Reverting to the default `scroll` here fixes that; desktop is
+   untouched (keeps `fixed`, which never had this problem). The seam
+   this was meant to prevent doesn't reappear on mobile either:
+   dye-splash-sides-mobile.jpg already fades to flat, near-`--ink`
+   color at its own edges (see .dye-ambient's own comment), so two
+   independently-scrolling copies still meet without a visible line
+   between them.
+
+   Placed at the very end of the stylesheet, after every rule above
+   that sets `background-attachment: fixed` unconditionally on these
+   same selectors — for equal-specificity rules the one declared later
+   wins, media query or not, so this has to come after all of them to
+   actually take effect on mobile instead of being silently overridden
+   by whichever of those rules happens to appear further down the
+   file. */
+@media (max-width: 768px) {
+  .manifesto,
+  .featured-item,
+  .process,
+  .collection-preview,
+  .site-footer,
+  .about-page {
+    background-attachment: scroll;
+  }
 }
