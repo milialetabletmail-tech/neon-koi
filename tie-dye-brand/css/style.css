@@ -1336,6 +1336,214 @@ body.nav-open { overflow: hidden; }
 }
 
 /* ------------------------------------------------------------
+   CATALOG PAGE (catalog.html) — real product grid, once there are
+   real products. Same dashed-placeholder-card language as
+   .collection-preview-card/.featured-item on the homepage, but laid
+   out as a proper grid instead of a spotlight or a swipeable
+   carousel — a catalog's job is showing everything at once, not
+   teasing a few pieces.
+
+   Filters (color swatches, price) are visible but every control is
+   `disabled` — there's nothing to actually filter until real
+   products exist, but the layout they'll slot into is already in
+   place rather than being bolted on later.
+   ------------------------------------------------------------ */
+
+.catalog-page {
+  min-height: 100vh;
+  padding: clamp(7rem, 12vw, 9rem) 1.5rem clamp(5rem, 10vw, 7rem);
+  background-color: var(--ink);
+  color: var(--paper);
+}
+
+.catalog-intro {
+  max-width: 40rem;
+  margin: 0 auto clamp(2.5rem, 6vw, 3.5rem);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.catalog-eyebrow {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--paper-dim);
+  opacity: 0.75;
+}
+
+.catalog-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 700;
+  font-size: clamp(2rem, 5vw, 3rem);
+}
+
+.catalog-lead {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--paper-dim);
+}
+
+.catalog-filters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  margin: 0 auto clamp(3rem, 7vw, 4rem);
+  padding-bottom: clamp(1.5rem, 4vw, 2rem);
+  max-width: 40rem;
+  border-bottom: 1px solid rgba(244, 238, 225, 0.12);
+}
+
+.catalog-filter-group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.catalog-filter-label {
+  font-family: var(--font-ui);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--paper-dim);
+  opacity: 0.7;
+}
+
+.catalog-filter-swatches {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* Same 3 dye accents used everywhere else on the site (nav underlines,
+   the hero's radial glow, .process-connector) — reusing them here
+   means these swatches already show real brand colors instead of
+   generic gray placeholders, even though clicking them does nothing
+   yet. */
+.catalog-filter-swatch {
+  width: 1.3rem;
+  height: 1.3rem;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(244, 238, 225, 0.35);
+  opacity: 0.6;
+}
+
+.catalog-filter-swatch[data-accent="lavender"] { background: var(--lavender); }
+.catalog-filter-swatch[data-accent="teal"] { background: var(--teal); }
+.catalog-filter-swatch[data-accent="sage"] { background: var(--sage); }
+
+.catalog-filter-pill {
+  padding: 0.5rem 1.2rem;
+  border-radius: 999px;
+  border: 1px solid rgba(244, 238, 225, 0.25);
+  background: transparent;
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--paper-dim);
+  opacity: 0.7;
+}
+
+.catalog-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.75rem 1.25rem;
+  max-width: 72rem;
+  margin: 0 auto;
+}
+
+@media (min-width: 769px) {
+  .catalog-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.5rem;
+  }
+}
+
+.catalog-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  text-align: center;
+}
+
+.catalog-card-media {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  border: 1.5px dashed rgba(244, 238, 225, 0.22);
+  border-radius: 0.75rem;
+  color: var(--paper-dim);
+  opacity: 0.55;
+}
+
+.catalog-card-media svg {
+  width: 1.6rem;
+  height: 1.6rem;
+}
+
+.catalog-card-media-label {
+  font-family: var(--font-ui);
+  font-size: 0.56rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.catalog-card-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.catalog-card-name {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--paper);
+}
+
+.catalog-card-price {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  color: var(--paper-dim);
+  opacity: 0.75;
+}
+
+.catalog-card-cta {
+  margin-top: 0.15rem;
+  padding: 0.6rem 1.4rem;
+  border-radius: 999px;
+  border: 1px solid rgba(244, 238, 225, 0.25);
+  background: transparent;
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--paper-dim);
+  opacity: 0.7;
+}
+
+/* ------------------------------------------------------------
    DYE-AMBIENT — reusable background texture for the flat-ink sections
    below the hero (Манифест, Хит сезона, Процесс, Превью, Футер). A
    flat --ink fill read as generic/templated once the hero's own
