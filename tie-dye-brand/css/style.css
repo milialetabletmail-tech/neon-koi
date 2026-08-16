@@ -1672,6 +1672,26 @@ body.nav-open { overflow: hidden; }
   text-transform: uppercase;
 }
 
+/* Real studio photos, once we have them, replace the dashed
+   placeholder box entirely — no border, no card fill, no rectangular
+   frame. The photos themselves are already cut out (transparent PNG,
+   no backdrop), so they just float over .process's flat --ink same as
+   the placeholder icon did, at full opacity instead of the
+   placeholder's dimmed 0.55. object-fit: contain (not cover) because
+   the point is to see the whole cutout, not crop into it — the box's
+   own 4/3 frame is invisible now, just a layout slot. */
+.process-step-media.has-photo {
+  border: none;
+  border-radius: 0;
+  opacity: 1;
+}
+
+.process-step-media.has-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
 .process-step-number {
   margin: 0;
   font-family: var(--font-ui);
