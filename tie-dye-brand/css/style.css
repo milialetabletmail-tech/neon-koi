@@ -2717,40 +2717,16 @@ body.nav-open { overflow: hidden; }
      here beyond the text/background states above. */
 }
 
-/* ------------------------------------------------------------
-   MOBILE: DISABLE FIXED DYE-SPLASH BACKDROPS
-   ------------------------------------------------------------
-   .manifesto, .featured-item, .process, .collection-preview,
+/* .manifesto, .featured-item, .process, .collection-preview,
    .site-footer, and .about-page all set background-attachment: fixed
-   unconditionally on themselves, for the "one continuous backdrop"
-   effect described in .manifesto's own comment — deliberately, so it
-   applies on mobile too. In practice, mobile browsers don't repaint a
-   fixed background in step with scrolling, especially under momentum/
-   fast-flick scroll, so the backdrop visibly jumped a beat behind the
-   rest of the page instead of just holding still.
-
-   Reverting to the default `scroll` here fixes that; desktop is
-   untouched (keeps `fixed`, which never had this problem). The seam
-   this was meant to prevent doesn't reappear on mobile either:
-   dye-splash-sides-mobile.jpg already fades to flat, near-`--ink`
-   color at its own edges (see .dye-ambient's own comment), so two
-   independently-scrolling copies still meet without a visible line
-   between them.
-
-   Placed at the very end of the stylesheet, after every rule above
-   that sets `background-attachment: fixed` unconditionally on these
-   same selectors — for equal-specificity rules the one declared later
-   wins, media query or not, so this has to come after all of them to
-   actually take effect on mobile instead of being silently overridden
-   by whichever of those rules happens to appear further down the
-   file. */
-@media (max-width: 768px) {
-  .manifesto,
-  .featured-item,
-  .process,
-  .collection-preview,
-  .site-footer,
-  .about-page {
-    background-attachment: scroll;
-  }
-}
+   unconditionally on themselves (not gated to desktop) — mobile
+   included, deliberately: same "static backdrop, scrolling content"
+   system as desktop, so the whole Манифест-to-Футер stretch (plus
+   About) reads as one continuous pinned backdrop rather than the
+   splash art scrolling normally with each section and re-appearing
+   fresh every time. A `scroll`-on-mobile override lived here briefly
+   to fix mobile browsers repainting a fixed background out of step
+   with fast/momentum scroll — reverted, since the fixed backdrop is
+   what was actually wanted; revisit with a position: fixed backdrop
+   layer instead of background-attachment: fixed if the jump turns out
+   to matter more than the pinned look. */
