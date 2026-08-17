@@ -1229,7 +1229,7 @@ body.nav-open { overflow: hidden; }
      for the first instant anyway: main.js removes this once scroll
      progress passes 20%. */
   .scroll-hint {
-    top: calc(50vh + 29vw + 1rem);
+    top: calc(50vh + 29vw + 0.4rem);
     bottom: auto;
   }
 
