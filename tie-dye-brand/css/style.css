@@ -1812,18 +1812,29 @@ body.nav-open { overflow: hidden; }
 @media (max-width: 768px) {
   .dye-ambient {
     background-image: url('../assets/backgrounds/dye-splash-sides-mobile.jpg');
-    /* 100% auto, not cover — cover sizes against each section's own
-       box under plain `scroll` attachment (see the fixed→scroll
-       override at the end of this file — mobile doesn't use `fixed`
-       here, that's what caused the backdrop to jump during fast
-       scroll), and tall boxes like .about-page's real content blew
-       the image up enough with `cover` to crop both edge-splashes out
-       entirely, leaving only its flat-faded middle in view. 100% auto
-       keeps the image's full width (both edge splashes) always in
-       frame; any leftover height below it just shows flat --ink,
-       which the image already fades into at its own far edge, so the
-       seam doesn't read as a seam. */
-    background-size: 100% auto;
+    /* cover — every .dye-ambient section keeps background-attachment:
+       fixed on mobile too (see .manifesto's own comment for why, and
+       for the "static backdrop, scrolling content" system this is
+       part of), which means background-size/-position resolve against
+       the *viewport*, not each section's own box. That matters here:
+       100% auto (width-driven) sizes the 941×1672 mobile asset to
+       ~732px tall on a 412px-wide phone — shorter than a typical
+       ~800-915px viewport — so centering it in the viewport left a
+       real flat gap above and below the image itself, not just past
+       its own bottom edge. On a section that happened to land in that
+       gap (confirmed on a real device: the footer), the "backdrop"
+       was just flat --ink, no splashes at all. cover sizes against
+       the viewport instead and always fills it completely — the
+       tradeoff is some cropping off the sides on unusually tall/
+       narrow phones, same as it always was, just without ever leaving
+       bare gaps top-to-bottom. This is safe now specifically because
+       attachment is fixed (sizing resolves against the bounded
+       viewport, not an unbounded section) — cover was reverted away
+       from once before when mobile briefly used `scroll` instead,
+       because sizing against a very tall section's own box (like
+       .about-page's real content) blew the image up enough to crop
+       both edge-splashes out entirely. */
+    background-size: cover;
     background-position: center center;
   }
 }
