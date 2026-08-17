@@ -2328,7 +2328,16 @@ body.nav-open { overflow: hidden; }
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
   scrollbar-width: none;
-  padding: 1.1rem 0.1rem 0.25rem;
+  /* padding-top has to clear how far .is-active's scale(1.32) grows
+     above the row's own unscaled top — with transform-origin: center
+     bottom (see .collection-preview-card) the bottom edge stays put
+     and 100% of the growth goes upward, so the active card's real top
+     sits roughly (scale - 1) × the card's own unscaled height above
+     where it'd otherwise be. Too little padding here and that extra
+     height gets clipped by this element's own overflow (see the
+     comment on overflow-x below) — confirmed by testing: the shirt's
+     collar/shoulders were getting cut off at the top before this. */
+  padding: 4rem 0.1rem 0.25rem;
 }
 
 .collection-preview-grid::-webkit-scrollbar {
