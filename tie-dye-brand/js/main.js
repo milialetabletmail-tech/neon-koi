@@ -7,6 +7,35 @@
 
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  /* ------------------------------------------------------------
+     Hash-link landing lock — e.g. about.html's "Смотреть весь
+     процесс" linking to index.html#process. The browser's own native
+     jump-to-anchor can fire as soon as the target exists in the DOM,
+     which is well before buildColorBurst has pinned .colorburst-stage
+     and GSAP has inserted its pin-spacer — landing at the target's
+     *pre-pin* position, which the pin-spacer's later insertion then
+     shifts away from, leaving the page sitting on whatever's now at
+     that stale offset (the still-pinned hero) instead of the actual
+     target. Worse, that native jump isn't a single event at a
+     predictable time — it can re-fire more than once during load — so
+     a one-shot "correct it after things settle" fix (tried first) was
+     flaky: the browser's own jump sometimes landed *after* the
+     correction. Snapping straight back to 0 on every scroll event
+     blocks all of that, native jump included, until unlockHashScroll()
+     runs once the real layout (pin-spacer and all) has settled — see
+     the boot sequence at the bottom of this file. */
+  let hashScrollLocked = !!location.hash;
+  function relockHashScroll() {
+    if (hashScrollLocked) window.scrollTo(0, 0);
+  }
+  if (hashScrollLocked) {
+    window.addEventListener('scroll', relockHashScroll);
+  }
+  function unlockHashScroll() {
+    hashScrollLocked = false;
+    window.removeEventListener('scroll', relockHashScroll);
+  }
+
   const FRAME_COUNT = 152; // frame-000.jpg .. frame-151.jpg, every native frame of the source clip
   const FRAME_PATH = (i) => `assets/video-frames/frame-${String(i).padStart(3, '0')}.jpg`;
 
@@ -461,6 +490,30 @@
     updateActiveCard();
   }
 
+  /* Releases the lock above and performs the one real scroll — once
+     the pin-spacer has actually settled, so this lands on the real
+     target instead of whatever the pre-pin layout put there. Also
+     accounts for the fixed header (position: fixed, so it doesn't
+     take up document space that scrolling naturally clears past) —
+     without the offset, the target's own top would land exactly at
+     the header's bottom edge, with the header painting straight over
+     its eyebrow/heading. */
+  function scrollToHashTarget() {
+    unlockHashScroll();
+    if (!location.hash) return;
+    let target;
+    try {
+      target = document.querySelector(location.hash);
+    } catch (err) {
+      return; // location.hash isn't guaranteed to be a valid selector
+    }
+    if (!target) return;
+    const header = document.getElementById('site-header');
+    const headerHeight = header ? header.getBoundingClientRect().height : 0;
+    const targetY = target.getBoundingClientRect().top + window.scrollY - headerHeight - 16;
+    window.scrollTo({ top: Math.max(0, targetY), behavior: 'auto' });
+  }
+
   /* ------------------------------------------------------------
      Boot
      ------------------------------------------------------------ */
@@ -472,6 +525,7 @@
       framesPromise.then((frames) => {
         buildColorBurst(frames);
         if (window.ScrollTrigger) ScrollTrigger.refresh();
+        requestAnimationFrame(() => requestAnimationFrame(scrollToHashTarget));
       });
     });
   });
