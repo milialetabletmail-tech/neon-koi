@@ -694,7 +694,7 @@ body.nav-open { overflow: hidden; }
      assets/wordmark/README.md): the supplied "Тай-Дай" artwork is
      solid black strokes on a transparent background, recolored via
      background + mask-image rather than set as live type. */
-  width: clamp(9rem, 19vw, 14.5rem);
+  width: clamp(8rem, 17vw, 13rem);
   aspect-ratio: var(--tie-dye-mark-ratio);
   background: var(--ink-letter);
   -webkit-mask-image: url('../assets/wordmark/tie-dye.png');
@@ -1261,7 +1261,8 @@ body.nav-open { overflow: hidden; }
   }
 
   .hero-subhead {
-    width: clamp(5.5rem, 24vw, 9rem);
+    width: clamp(4.8rem, 21vw, 7.8rem);
+    margin-top: 0.5rem;
   }
 }
 
