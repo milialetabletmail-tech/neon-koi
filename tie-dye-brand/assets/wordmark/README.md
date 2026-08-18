@@ -43,3 +43,13 @@ Supersedes `smn.png` / `smn-color.png` (SMN brand, retired) and the
 first version of `ln-team-color.png` (an earlier LN-team draft that
 still carried visible grain/noise, first added in "Add LN-team wordmark
 assets (not yet wired in)").
+
+## tie-dye.png
+
+"Тай-Дай" brush-lettering artwork, supplied by the site owner as a
+transparent-background PNG (solid black strokes, alpha already carrying
+the ink shape — no background removal needed) and cropped tight to
+content. Used as a `mask-image` for `.hero-subhead`, the same technique
+as `ln-team.png` above, filled with `--ink-letter`. Replaces the old
+`.hero-subhead` treatment of live-set type in the Condiment webfont.
+Native 1035x367.

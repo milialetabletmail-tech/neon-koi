@@ -69,6 +69,11 @@
      800x522. */
   --mark-ratio-color: 800 / 522;
 
+  /* Brush-lettering artwork (assets/wordmark/tie-dye.png) — solid black
+     "Тай-Дай" strokes on a transparent background, used as a mask for
+     .hero-subhead. Native 1035x367. */
+  --tie-dye-mark-ratio: 1035 / 367;
+
   /* --- Motion / scale --- */
   --ease-burst: cubic-bezier(.16, 1, .3, 1);
 }
@@ -684,19 +689,22 @@ body.nav-open { overflow: hidden; }
 }
 
 .hero-subhead {
-  margin: 1rem 0 0;
-  /* Condiment — a brush script, not a display sans like Bebas Neue or
-     the italic Fraunces used everywhere else. Script faces are drawn
-     to be read in mixed case with the letters connecting into each
-     other, so the heavy tracking and full-caps treatment that suited
-     Bebas Neue's condensed block letters would instead just tear this
-     one's flowing strokes apart — both are dropped here. */
-  font-family: 'Condiment', var(--font-display);
-  font-weight: 400;
-  font-size: clamp(2.1rem, 4.2vw, 3.2rem);
-  letter-spacing: 0.02em;
-  text-transform: none;
-  color: var(--ink-letter);
+  margin: 1rem auto 0;
+  /* Same brush-lettering-as-mask technique as .hero-wordmark (see
+     assets/wordmark/README.md): the supplied "Тай-Дай" artwork is
+     solid black strokes on a transparent background, recolored via
+     background + mask-image rather than set as live type. */
+  width: clamp(9rem, 19vw, 14.5rem);
+  aspect-ratio: var(--tie-dye-mark-ratio);
+  background: var(--ink-letter);
+  -webkit-mask-image: url('../assets/wordmark/tie-dye.png');
+  mask-image: url('../assets/wordmark/tie-dye.png');
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-position: center;
+  mask-position: center;
   opacity: 0;
 }
 
@@ -1253,7 +1261,7 @@ body.nav-open { overflow: hidden; }
   }
 
   .hero-subhead {
-    font-size: clamp(1.1rem, 2.6vw, 1.9rem);
+    width: clamp(5.5rem, 24vw, 9rem);
   }
 }
 
