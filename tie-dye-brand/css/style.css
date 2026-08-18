@@ -788,6 +788,10 @@ body.nav-open { overflow: hidden; }
   animation: hint-fade-in 0.7s ease-out 1.5s forwards;
 }
 
+.scroll-hint span {
+  text-align: center;
+}
+
 .scroll-hint svg {
   width: 13px;
   height: 13px;
