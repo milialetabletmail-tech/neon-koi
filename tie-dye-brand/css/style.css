@@ -317,6 +317,36 @@ body.preloading { overflow: hidden; height: 100vh; }
 
 .cart-count[hidden] { display: none; }
 
+/* Landing pulse on the header cart icon — the payoff moment for the
+   "fly to cart" animation in js/catalog.js (see .cart-fly-clone
+   below), triggered once the flying product image reaches it. */
+@keyframes cart-icon-bump {
+  0% { transform: scale(1); }
+  35% { transform: scale(1.24); }
+  62% { transform: scale(0.92); }
+  100% { transform: scale(1); }
+}
+
+.icon-btn.cart-bump {
+  animation: cart-icon-bump 0.42s ease;
+}
+
+/* The cloned product image js/catalog.js flies from the clicked
+   card to the cart icon on "В корзину" — fixed-positioned so it
+   flies over everything regardless of scroll, transform/opacity
+   only so the transition stays compositor-friendly. Removed from the
+   DOM as soon as the flight finishes (see catalog.js). */
+.cart-fly-clone {
+  position: fixed;
+  z-index: 500;
+  margin: 0;
+  pointer-events: none;
+  object-fit: contain;
+  border-radius: 0.5rem;
+  transition: transform 0.65s cubic-bezier(0.34, 0, 0.24, 1), opacity 0.65s ease 0.15s;
+  will-change: transform, opacity;
+}
+
 /* --- account dropdown --- */
 
 .nav-account { position: relative; }
@@ -2228,9 +2258,6 @@ body.nav-open { overflow: hidden; }
 .cart-item-media {
   width: 4.5rem;
   aspect-ratio: 3 / 4;
-  border-radius: 0.6rem;
-  background: rgba(244, 238, 225, 0.05);
-  overflow: hidden;
 }
 
 .cart-item-media img {
