@@ -1823,6 +1823,7 @@ body.nav-open { overflow: hidden; }
   padding: 0.65rem 1.4rem;
   border-radius: 999px;
   border: 1px solid rgba(110, 170, 169, 0.4);
+  background: var(--ink);
   font-family: var(--font-ui);
   font-size: 0.78rem;
   font-weight: 500;
