@@ -192,6 +192,67 @@
     </section>
   </main>
 
+  <!-- Opened instead of adding straight to cart when a "В корзину"
+       button is clicked (see js/catalog.js) — one shared modal,
+       repopulated per click, rather than one per card. Same size-chip
+       markup/classes as product.html's own picker, so the two stay
+       visually identical without duplicating the CSS. -->
+  <div class="size-modal" id="size-modal" hidden>
+    <div class="size-modal-backdrop" id="size-modal-backdrop"></div>
+    <div class="size-modal-panel" role="dialog" aria-modal="true" aria-labelledby="size-modal-name">
+      <button type="button" class="size-modal-close" id="size-modal-close" aria-label="Закрыть">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+
+      <div class="size-modal-product">
+        <img class="size-modal-image" id="size-modal-image" src="" alt="">
+        <div>
+          <p class="size-modal-name" id="size-modal-name"></p>
+          <p class="size-modal-price" id="size-modal-price"></p>
+        </div>
+      </div>
+
+      <span class="product-size-label">Размер</span>
+      <div class="product-size-options" id="size-modal-options" role="radiogroup" aria-label="Выберите размер">
+        <span class="product-size-option">
+          <input type="radio" name="modal-size" id="modal-size-42" value="42" class="sr-only product-size-input">
+          <label for="modal-size-42" class="product-size-chip"><span class="product-size-chip-num">42</span><span class="product-size-chip-letter">S</span></label>
+        </span>
+        <span class="product-size-option">
+          <input type="radio" name="modal-size" id="modal-size-44" value="44" class="sr-only product-size-input">
+          <label for="modal-size-44" class="product-size-chip"><span class="product-size-chip-num">44</span><span class="product-size-chip-letter">S</span></label>
+        </span>
+        <span class="product-size-option">
+          <input type="radio" name="modal-size" id="modal-size-46" value="46" class="sr-only product-size-input">
+          <label for="modal-size-46" class="product-size-chip"><span class="product-size-chip-num">46</span><span class="product-size-chip-letter">M</span></label>
+        </span>
+        <span class="product-size-option">
+          <input type="radio" name="modal-size" id="modal-size-48" value="48" class="sr-only product-size-input">
+          <label for="modal-size-48" class="product-size-chip"><span class="product-size-chip-num">48</span><span class="product-size-chip-letter">M</span></label>
+        </span>
+        <span class="product-size-option">
+          <input type="radio" name="modal-size" id="modal-size-50" value="50" class="sr-only product-size-input">
+          <label for="modal-size-50" class="product-size-chip"><span class="product-size-chip-num">50</span><span class="product-size-chip-letter">L</span></label>
+        </span>
+        <span class="product-size-option">
+          <input type="radio" name="modal-size" id="modal-size-52" value="52" class="sr-only product-size-input">
+          <label for="modal-size-52" class="product-size-chip"><span class="product-size-chip-num">52</span><span class="product-size-chip-letter">L</span></label>
+        </span>
+        <span class="product-size-option">
+          <input type="radio" name="modal-size" id="modal-size-54" value="54" class="sr-only product-size-input">
+          <label for="modal-size-54" class="product-size-chip"><span class="product-size-chip-num">54</span><span class="product-size-chip-letter">XL</span></label>
+        </span>
+        <span class="product-size-option">
+          <input type="radio" name="modal-size" id="modal-size-56" value="56" class="sr-only product-size-input">
+          <label for="modal-size-56" class="product-size-chip"><span class="product-size-chip-num">56</span><span class="product-size-chip-letter">XL</span></label>
+        </span>
+      </div>
+      <p class="product-size-hint" id="size-modal-hint" hidden>Выберите размер перед добавлением в корзину</p>
+
+      <button type="button" class="product-add-to-cart size-modal-confirm" id="size-modal-confirm">Добавить в корзину</button>
+    </div>
+  </div>
+
   <script src="js/nav.js"></script>
   <script src="js/catalog.js"></script>
 </body>
