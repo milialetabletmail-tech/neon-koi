@@ -28,12 +28,54 @@
     });
   }
 
+  // Falls back to the single catalog photo for every product that
+  // doesn't have its own `images` list yet (see products.js) — a
+  // one-thumbnail gallery just doesn't render any thumbs at all.
+  function renderGallery(product) {
+    const img = document.getElementById('product-image');
+    const thumbsEl = document.getElementById('product-thumbs');
+    const images = product.images && product.images.length ? product.images : [product.image];
+
+    img.src = images[0];
+    img.alt = product.alt || product.name;
+
+    thumbsEl.textContent = '';
+    if (images.length < 2) return;
+
+    images.forEach((src, index) => {
+      const thumb = document.createElement('button');
+      thumb.type = 'button';
+      thumb.className = 'product-thumb';
+      thumb.setAttribute('role', 'tab');
+      thumb.setAttribute('aria-selected', index === 0 ? 'true' : 'false');
+      thumb.setAttribute('aria-label', 'Фото ' + (index + 1));
+      thumb.classList.toggle('is-active', index === 0);
+
+      const thumbImg = document.createElement('img');
+      thumbImg.src = src;
+      thumbImg.alt = '';
+      thumbImg.loading = 'lazy';
+      thumb.appendChild(thumbImg);
+
+      thumb.addEventListener('click', () => {
+        img.src = src;
+        thumbsEl.querySelectorAll('.product-thumb').forEach((el) => {
+          el.classList.remove('is-active');
+          el.setAttribute('aria-selected', 'false');
+        });
+        thumb.classList.add('is-active');
+        thumb.setAttribute('aria-selected', 'true');
+      });
+
+      thumbsEl.appendChild(thumb);
+    });
+  }
+
   function render(product) {
     document.title = product.name + ' — LN-Team';
 
     const img = document.getElementById('product-image');
-    img.src = product.image;
-    img.alt = product.alt || product.name;
+    renderGallery(product);
 
     document.getElementById('product-name').textContent = product.name;
     document.getElementById('product-price').textContent = formatPrice(product.price);

@@ -1932,14 +1932,57 @@ body.size-modal-open {
 
 .product-media {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  gap: 1.1rem;
 }
 
-.product-media img {
+/* Direct child only — .product-thumb below has its own <img> nested
+   inside .product-media too, which this must not also stretch to
+   26rem wide. */
+.product-media > img {
   width: 100%;
   max-width: 26rem;
   object-fit: contain;
+}
+
+.product-thumbs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.6rem;
+}
+
+.product-thumbs:empty {
+  display: none;
+}
+
+.product-thumb {
+  width: 3.4rem;
+  aspect-ratio: 3 / 4;
+  flex: none;
+  padding: 0.2rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(244, 238, 225, 0.18);
+  background: transparent;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.product-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.product-thumb:hover {
+  border-color: rgba(244, 238, 225, 0.4);
+}
+
+.product-thumb.is-active {
+  border-color: var(--sage);
+  background: rgba(156, 161, 108, 0.12);
 }
 
 .product-info {

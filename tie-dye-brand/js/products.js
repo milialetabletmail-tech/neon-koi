@@ -13,6 +13,12 @@ window.LNProducts = [
     name: 'Спираль «Синий и золото»',
     price: 4200,
     image: 'assets/products/tee-01-blue-gold.png',
+    images: [
+      'assets/products/tee-01-blue-gold.png',
+      'assets/products/tee-01-blue-gold-back.png',
+      'assets/products/tee-01-blue-gold-mannequin-front.png',
+      'assets/products/tee-01-blue-gold-mannequin-back.png',
+    ],
     alt: 'Тай-дай футболка, синий и золотой',
     colors: [
       { label: 'Белый', hex: '#f2ead9' },
