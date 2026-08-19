@@ -1861,7 +1861,13 @@ body.nav-open { overflow: hidden; }
   color: var(--paper);
 }
 
-.product-material {
+.product-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.product-badge {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
@@ -1875,7 +1881,7 @@ body.nav-open { overflow: hidden; }
   color: var(--paper-dim);
 }
 
-.product-material svg {
+.product-badge svg {
   width: 0.95rem;
   height: 0.95rem;
   flex: none;
@@ -1926,6 +1932,45 @@ body.nav-open { overflow: hidden; }
   color: var(--paper-dim);
 }
 
+.product-size {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.product-size-label {
+  font-family: var(--font-ui);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--paper-dim);
+  opacity: 0.75;
+}
+
+.product-size-value {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--paper);
+}
+
+.product-size-letters {
+  font-weight: 500;
+  color: var(--paper-dim);
+}
+
+.product-size-note {
+  margin: 0;
+  max-width: 26rem;
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
+  line-height: 1.55;
+  color: var(--paper-dim);
+  opacity: 0.85;
+}
+
 /* The one thing this page most needs to say clearly — no two of
    these are actually alike, so the photo is a color/pattern
    reference, not a literal preview. Set apart from the rest of the
@@ -1964,6 +2009,30 @@ body.nav-open { overflow: hidden; }
   color: var(--paper-dim);
 }
 
+.product-care {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.product-care-label {
+  font-family: var(--font-ui);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--paper-dim);
+  opacity: 0.75;
+}
+
+.product-care-value {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: var(--paper-dim);
+}
+
 .product-add-to-cart {
   margin-top: 0.4rem;
   padding: 0.85rem 2rem;
@@ -1988,6 +2057,49 @@ body.nav-open { overflow: hidden; }
   background: var(--sage);
   color: var(--ink-letter);
   opacity: 1;
+}
+
+/* Marketplace-style trust strip — shipping/payment/returns/durability,
+   store-wide policy rather than per-product data, so it's static
+   markup in product.html instead of another field on
+   window.LNProducts. A 2-column grid on all but the narrowest phones:
+   four short lines read as a scannable list this way, one long
+   single column just makes the info column noticeably taller. */
+.product-perks {
+  list-style: none;
+  margin: 1.6rem 0 0;
+  padding: 1.1rem 0 0;
+  border-top: 1px solid rgba(244, 238, 225, 0.14);
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem 1.2rem;
+}
+
+.product-perks li {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.product-perks svg {
+  width: 1.15rem;
+  height: 1.15rem;
+  flex: none;
+  color: var(--sage);
+}
+
+.product-perks span {
+  font-family: var(--font-ui);
+  font-size: 0.76rem;
+  line-height: 1.35;
+  color: var(--paper-dim);
+}
+
+@media (max-width: 420px) {
+  .product-perks {
+    grid-template-columns: 1fr;
+  }
 }
 
 .product-not-found {
