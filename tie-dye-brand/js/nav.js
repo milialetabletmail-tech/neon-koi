@@ -77,16 +77,76 @@
     return items;
   }
 
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Clones `sourceImg`, then animates the clone shrinking/rotating
+  // into `cartEl` (the header cart icon) before removing it and
+  // pulsing `cartEl` — the "fly to cart" payoff on add-to-cart, shared
+  // by js/catalog.js and js/product-page.js. No-op under
+  // prefers-reduced-motion, same as every other motion effect on the
+  // site (see main.js) — callers should skip calling this at all in
+  // that case rather than rely on it silently doing nothing.
+  function flyToCart(sourceImg, cartEl) {
+    if (prefersReducedMotion || !sourceImg || !cartEl) return;
+
+    const cartIcon = cartEl.querySelector('svg') || cartEl;
+    const startRect = sourceImg.getBoundingClientRect();
+    const endRect = cartIcon.getBoundingClientRect();
+
+    const clone = sourceImg.cloneNode(true);
+    clone.className = 'cart-fly-clone';
+    clone.style.left = startRect.left + 'px';
+    clone.style.top = startRect.top + 'px';
+    clone.style.width = startRect.width + 'px';
+    clone.style.height = startRect.height + 'px';
+    document.body.appendChild(clone);
+
+    const dx = (endRect.left + endRect.width / 2) - (startRect.left + startRect.width / 2);
+    const dy = (endRect.top + endRect.height / 2) - (startRect.top + startRect.height / 2);
+    const scale = Math.max(endRect.width / startRect.width, 0.09);
+
+    // Two rAFs, not one — the clone needs one full frame painted at
+    // its start position first, or the browser can coalesce that
+    // with the transform change below and it never visibly "starts"
+    // from the card at all, just pops in already mid-flight.
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        clone.style.transform = 'translate(' + dx + 'px, ' + dy + 'px) scale(' + scale + ') rotate(14deg)';
+        clone.style.opacity = '0.2';
+      });
+    });
+
+    // opacity is the longer of the two transitions (it starts after a
+    // delay — see .cart-fly-clone) so it's the one that actually ends
+    // last; filtering on it avoids removing the clone the instant the
+    // shorter transform transition finishes, mid-fade.
+    clone.addEventListener('transitionend', (evt) => {
+      // Only one of the two transitions actually removes anything —
+      // without this guard the listener (not `once`, since it has to
+      // survive the earlier transform transitionend) would run this
+      // block twice.
+      if (evt.propertyName !== 'opacity') return;
+      clone.remove();
+      cartEl.classList.remove('cart-bump');
+      // Reflow so the class can be re-added immediately by a second
+      // fast add-to-cart click and still restart the animation.
+      void cartEl.offsetWidth;
+      cartEl.classList.add('cart-bump');
+    });
+  }
+
   // Shared cart API for page-specific scripts (js/catalog.js,
-  // js/cart-page.js) — every page loads nav.js already for the header/
-  // burger wiring, so the cart data layer lives here instead of a
-  // separate script tag every page would otherwise need.
+  // js/cart-page.js, js/product-page.js) — every page loads nav.js
+  // already for the header/burger wiring, so the cart data layer
+  // lives here instead of a separate script tag every page would
+  // otherwise need.
   window.LNCart = {
     KEY: CART_KEY,
     getItems: readCart,
     addItem: addToCart,
     setQty: setCartQty,
     removeItem: removeFromCart,
+    flyToCart: flyToCart,
   };
 
   function wireDropdown(toggleId, panelId) {

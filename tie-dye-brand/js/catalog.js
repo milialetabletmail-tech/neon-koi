@@ -1,65 +1,15 @@
 /* ============================================================
-   CATALOG PAGE — wires up the "В корзину" buttons on the two cards
-   that have real product data (data-add-to-cart, see catalog.html).
-   Every other card's CTA stays `disabled` — nothing to add yet.
+   CATALOG PAGE — wires up the "В корзину" buttons on the cards that
+   have real product data (data-add-to-cart, see catalog.html). Every
+   still-photoless card's CTA stays `disabled` — nothing to add yet.
 
-   Clicking one also flies a clone of the product photo from the card
-   to the header cart icon (see .cart-fly-clone / .cart-bump in
-   style.css) — skipped under prefers-reduced-motion, same as every
-   other motion effect on the site (see main.js).
+   Clicking one also flies the product photo to the header cart icon
+   (window.LNCart.flyToCart, defined in nav.js and shared with
+   js/product-page.js).
    ============================================================ */
 
 (function () {
   'use strict';
-
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  function flyToCart(sourceImg, cartEl) {
-    const cartIcon = cartEl.querySelector('svg') || cartEl;
-    const startRect = sourceImg.getBoundingClientRect();
-    const endRect = cartIcon.getBoundingClientRect();
-
-    const clone = sourceImg.cloneNode(true);
-    clone.className = 'cart-fly-clone';
-    clone.style.left = startRect.left + 'px';
-    clone.style.top = startRect.top + 'px';
-    clone.style.width = startRect.width + 'px';
-    clone.style.height = startRect.height + 'px';
-    document.body.appendChild(clone);
-
-    const dx = (endRect.left + endRect.width / 2) - (startRect.left + startRect.width / 2);
-    const dy = (endRect.top + endRect.height / 2) - (startRect.top + startRect.height / 2);
-    const scale = Math.max(endRect.width / startRect.width, 0.09);
-
-    // Two rAFs, not one — the clone needs one full frame painted at
-    // its start position first, or the browser can coalesce that
-    // with the transform change below and it never visibly "starts"
-    // from the card at all, just pops in already mid-flight.
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        clone.style.transform = 'translate(' + dx + 'px, ' + dy + 'px) scale(' + scale + ') rotate(14deg)';
-        clone.style.opacity = '0.2';
-      });
-    });
-
-    // opacity is the longer of the two transitions (it starts after a
-    // delay — see .cart-fly-clone) so it's the one that actually ends
-    // last; filtering on it avoids removing the clone the instant the
-    // shorter transform transition finishes, mid-fade.
-    clone.addEventListener('transitionend', (evt) => {
-      // Only one of the two transitions actually removes anything —
-      // without this guard the listener (not `once`, since it has to
-      // survive the earlier transform transitionend) would run this
-      // block twice.
-      if (evt.propertyName !== 'opacity') return;
-      clone.remove();
-      cartEl.classList.remove('cart-bump');
-      // Reflow so the class can be re-added immediately by a second
-      // fast add-to-cart click and still restart the animation.
-      void cartEl.offsetWidth;
-      cartEl.classList.add('cart-bump');
-    });
-  }
 
   document.addEventListener('DOMContentLoaded', () => {
     const buttons = document.querySelectorAll('[data-add-to-cart]');
@@ -77,10 +27,8 @@
           image: btn.dataset.image,
         });
 
-        if (!prefersReducedMotion && cartLink) {
-          const sourceImg = btn.closest('.catalog-card').querySelector('.catalog-card-media img');
-          if (sourceImg) flyToCart(sourceImg, cartLink);
-        }
+        const sourceImg = btn.closest('.catalog-card').querySelector('.catalog-card-media img');
+        window.LNCart.flyToCart(sourceImg, cartLink);
 
         window.clearTimeout(resetTimer);
         btn.classList.add('is-added');
