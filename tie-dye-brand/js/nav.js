@@ -12,14 +12,22 @@
 
   const CART_KEY = 'ln-team-cart';
 
-  function getCartCount() {
+  function readCart() {
     try {
       const raw = JSON.parse(localStorage.getItem(CART_KEY));
-      if (!Array.isArray(raw)) return 0;
-      return raw.reduce((sum, item) => sum + (Number(item && item.qty) || 0), 0);
+      return Array.isArray(raw) ? raw : [];
     } catch (err) {
-      return 0;
+      return [];
     }
+  }
+
+  function writeCart(items) {
+    localStorage.setItem(CART_KEY, JSON.stringify(items));
+    renderCartCount();
+  }
+
+  function getCartCount() {
+    return readCart().reduce((sum, item) => sum + (Number(item && item.qty) || 0), 0);
   }
 
   function renderCartCount() {
@@ -29,6 +37,57 @@
     badge.textContent = String(count);
     badge.hidden = count === 0;
   }
+
+  // Adds one unit of `product` ({id, name, price, image}) — bumps qty
+  // if it's already in the cart rather than adding a duplicate line.
+  function addToCart(product) {
+    const items = readCart();
+    const existing = items.find((item) => item.id === product.id);
+    if (existing) {
+      existing.qty = (Number(existing.qty) || 0) + 1;
+    } else {
+      items.push({
+        id: product.id,
+        name: product.name,
+        price: Number(product.price) || 0,
+        image: product.image,
+        qty: 1,
+      });
+    }
+    writeCart(items);
+    return items;
+  }
+
+  // qty <= 0 removes the line entirely rather than leaving a 0-qty row.
+  function setCartQty(id, qty) {
+    let items = readCart();
+    if (qty <= 0) {
+      items = items.filter((item) => item.id !== id);
+    } else {
+      const existing = items.find((item) => item.id === id);
+      if (existing) existing.qty = qty;
+    }
+    writeCart(items);
+    return items;
+  }
+
+  function removeFromCart(id) {
+    const items = readCart().filter((item) => item.id !== id);
+    writeCart(items);
+    return items;
+  }
+
+  // Shared cart API for page-specific scripts (js/catalog.js,
+  // js/cart-page.js) — every page loads nav.js already for the header/
+  // burger wiring, so the cart data layer lives here instead of a
+  // separate script tag every page would otherwise need.
+  window.LNCart = {
+    KEY: CART_KEY,
+    getItems: readCart,
+    addItem: addToCart,
+    setQty: setCartQty,
+    removeItem: removeFromCart,
+  };
 
   function wireDropdown(toggleId, panelId) {
     const toggle = document.getElementById(toggleId);

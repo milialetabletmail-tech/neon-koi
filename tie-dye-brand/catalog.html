@@ -92,15 +92,24 @@
       </div>
 
       <div class="catalog-grid">
+        <!-- The only two cards with a real photo also get real (if
+             placeholder) name/price so there's something for "В
+             корзину" to actually add — swap these for the real
+             copy/pricing once the brand has them, same as the photo
+             itself. -->
         <article class="catalog-card">
           <div class="catalog-card-media has-photo">
             <img src="assets/products/tee-01-blue-gold.png" alt="Тай-дай футболка, синий и золотой" loading="lazy">
           </div>
           <div class="catalog-card-text">
-            <p class="catalog-card-name">Название скоро</p>
-            <p class="catalog-card-price">Цена скоро</p>
+            <p class="catalog-card-name">Спираль «Синий и золото»</p>
+            <p class="catalog-card-price">4 200 ₽</p>
           </div>
-          <button type="button" class="catalog-card-cta" disabled>Подробнее</button>
+          <button type="button" class="catalog-card-cta" data-add-to-cart
+            data-id="tee-01-blue-gold"
+            data-name="Спираль «Синий и золото»"
+            data-price="4200"
+            data-image="assets/products/tee-01-blue-gold.png">В корзину</button>
         </article>
 
         <article class="catalog-card">
@@ -108,10 +117,14 @@
             <img src="assets/products/tee-02-amber-teal.png" alt="Тай-дай футболка, янтарный и бирюзовый" loading="lazy">
           </div>
           <div class="catalog-card-text">
-            <p class="catalog-card-name">Название скоро</p>
-            <p class="catalog-card-price">Цена скоро</p>
+            <p class="catalog-card-name">Спираль «Янтарь и бирюза»</p>
+            <p class="catalog-card-price">3 900 ₽</p>
           </div>
-          <button type="button" class="catalog-card-cta" disabled>Подробнее</button>
+          <button type="button" class="catalog-card-cta" data-add-to-cart
+            data-id="tee-02-amber-teal"
+            data-name="Спираль «Янтарь и бирюза»"
+            data-price="3900"
+            data-image="assets/products/tee-02-amber-teal.png">В корзину</button>
         </article>
 
         <article class="catalog-card">
@@ -166,5 +179,6 @@
   </main>
 
   <script src="js/nav.js"></script>
+  <script src="js/catalog.js"></script>
 </body>
 </html>

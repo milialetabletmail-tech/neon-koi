@@ -63,14 +63,35 @@
   </div>
 
   <main>
-    <section class="page-stub">
-      <p class="page-stub-eyebrow">Корзина</p>
-      <h1 class="page-stub-title">Ваша корзина пуста</h1>
-      <p class="page-stub-copy">Полноценная корзина с оформлением заказа появится в одном из следующих этапов.</p>
-      <a href="catalog.html" class="page-stub-back">В каталог</a>
+    <section class="cart-page">
+      <div class="cart-page-inner">
+        <p class="cart-eyebrow">Корзина</p>
+        <h1 class="cart-title">Ваша корзина</h1>
+
+        <div class="cart-empty" id="cart-empty" hidden>
+          <p class="cart-empty-copy">Пока пусто — загляните в каталог, там уже есть первые вещи.</p>
+          <a href="catalog.html" class="cart-empty-cta">В каталог</a>
+        </div>
+
+        <ul class="cart-list" id="cart-list" hidden></ul>
+
+        <div class="cart-summary" id="cart-summary" hidden>
+          <div class="cart-summary-row">
+            <span>Товаров</span>
+            <span id="cart-summary-count">0</span>
+          </div>
+          <div class="cart-summary-row cart-summary-row--total">
+            <span>Итого</span>
+            <span id="cart-summary-total">0 ₽</span>
+          </div>
+          <p class="cart-summary-note">Оформление заказа появится на следующем этапе — пока корзина только собирается.</p>
+          <a href="catalog.html" class="cart-summary-continue">Продолжить покупки</a>
+        </div>
+      </div>
     </section>
   </main>
 
   <script src="js/nav.js"></script>
+  <script src="js/cart-page.js"></script>
 </body>
 </html>

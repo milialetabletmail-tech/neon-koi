@@ -1661,6 +1661,29 @@ body.nav-open { overflow: hidden; }
   opacity: 0.7;
 }
 
+/* The two cards with real product data (see data-add-to-cart in
+   catalog.html) get a live, clickable CTA instead of the disabled
+   dim default every other placeholder card still uses. */
+.catalog-card-cta:not(:disabled) {
+  cursor: pointer;
+  opacity: 1;
+  color: var(--paper);
+  border-color: rgba(244, 238, 225, 0.4);
+  transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+}
+
+.catalog-card-cta:not(:disabled):hover,
+.catalog-card-cta:not(:disabled):focus-visible {
+  border-color: var(--sage);
+  background: rgba(156, 161, 108, 0.14);
+}
+
+.catalog-card-cta.is-added {
+  border-color: var(--sage);
+  background: rgba(156, 161, 108, 0.2);
+  color: var(--sage);
+}
+
 /* ------------------------------------------------------------
    ABOUT PAGE (about.html) — brand story: intro, 3 value statements,
    a short process recap linking back to the full breakdown on
@@ -2073,6 +2096,301 @@ body.nav-open { overflow: hidden; }
   display: block;
   width: 1.05rem;
   height: 1.05rem;
+}
+
+/* ------------------------------------------------------------
+   CART PAGE (cart.html) — reads/writes the same localStorage cart
+   js/nav.js already maintains for the header badge (window.LNCart),
+   rendered client-side by js/cart-page.js. Same dimmed ambient-blob
+   backdrop as .catalog-page (not the busier dye-splash photo) — a
+   list of numbers needs the calmer of the two, same reasoning as
+   that page's own comment. No checkout yet: nothing for one to lead
+   to until real ordering exists.
+   ------------------------------------------------------------ */
+
+.cart-page {
+  position: relative;
+  overflow: hidden;
+  min-height: 100vh;
+  padding: clamp(7rem, 12vw, 9rem) 1.5rem clamp(5rem, 10vw, 7rem);
+  background-color: var(--ink);
+  color: var(--paper);
+}
+
+.cart-page::before {
+  content: '';
+  position: absolute;
+  inset: -10%;
+  z-index: 0;
+  background:
+    radial-gradient(circle at 12% 18%, var(--lavender) 0%, transparent 34%),
+    radial-gradient(circle at 88% 12%, var(--teal) 0%, transparent 32%),
+    radial-gradient(circle at 82% 88%, var(--sage) 0%, transparent 36%),
+    radial-gradient(circle at 15% 85%, var(--lavender) 0%, transparent 28%);
+  opacity: 0.28;
+  filter: blur(70px);
+  pointer-events: none;
+}
+
+.cart-page-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 34rem;
+  margin: 0 auto;
+}
+
+.cart-eyebrow {
+  margin: 0 0 0.6rem;
+  text-align: center;
+  font-family: var(--font-ui);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--paper-dim);
+  opacity: 0.75;
+}
+
+.cart-title {
+  margin: 0 0 clamp(2.5rem, 6vw, 3.5rem);
+  text-align: center;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 700;
+  font-size: clamp(1.9rem, 4.6vw, 2.6rem);
+}
+
+.cart-empty {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.cart-empty-copy {
+  margin: 0;
+  max-width: 24rem;
+  font-family: var(--font-ui);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--paper-dim);
+}
+
+.cart-empty-cta {
+  padding: 0.75rem 1.6rem;
+  border-radius: 999px;
+  border: 1px solid rgba(244, 238, 225, 0.25);
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--paper);
+  text-decoration: none;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.cart-empty-cta:hover,
+.cart-empty-cta:focus-visible {
+  border-color: var(--lavender);
+  background: rgba(155, 152, 187, 0.12);
+}
+
+.cart-list {
+  list-style: none;
+  margin: 0 0 2rem;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+/* .cart-empty/.cart-list both set their own `display` unconditionally
+   above, which (same specificity, later in the cascade) would
+   otherwise beat the UA stylesheet's `[hidden] { display: none }` and
+   leave them visible even with the hidden attribute set — see
+   js/cart-page.js, which toggles exactly that attribute to switch
+   between the empty state and the list. */
+.cart-empty[hidden],
+.cart-list[hidden] {
+  display: none;
+}
+
+.cart-item {
+  display: grid;
+  grid-template-columns: 4.5rem 1fr auto auto;
+  align-items: center;
+  gap: 1rem;
+  padding-bottom: 1.1rem;
+  border-bottom: 1px solid rgba(244, 238, 225, 0.12);
+}
+
+.cart-item-media {
+  width: 4.5rem;
+  aspect-ratio: 3 / 4;
+  border-radius: 0.6rem;
+  background: rgba(244, 238, 225, 0.05);
+  overflow: hidden;
+}
+
+.cart-item-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.cart-item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  min-width: 0;
+}
+
+.cart-item-name {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--paper);
+}
+
+.cart-item-price {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
+  color: var(--paper-dim);
+}
+
+.cart-item-qty {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.cart-qty-btn {
+  width: 1.7rem;
+  height: 1.7rem;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid rgba(244, 238, 225, 0.25);
+  background: transparent;
+  color: var(--paper);
+  font-family: var(--font-ui);
+  font-size: 0.95rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.cart-qty-btn:hover,
+.cart-qty-btn:focus-visible {
+  border-color: var(--sage);
+  background: rgba(156, 161, 108, 0.14);
+}
+
+.cart-item-qty-value {
+  min-width: 1.2rem;
+  text-align: center;
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+  color: var(--paper);
+}
+
+.cart-item-remove {
+  width: 1.9rem;
+  height: 1.9rem;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: var(--paper-dim);
+  cursor: pointer;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.cart-item-remove svg {
+  width: 0.85rem;
+  height: 0.85rem;
+}
+
+.cart-item-remove:hover,
+.cart-item-remove:focus-visible {
+  color: var(--paper);
+  background: rgba(244, 238, 225, 0.08);
+}
+
+.cart-summary {
+  padding-top: 0.4rem;
+}
+
+.cart-summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 0.5rem 0;
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+  color: var(--paper-dim);
+}
+
+.cart-summary-row--total {
+  padding-top: 0.9rem;
+  margin-top: 0.4rem;
+  border-top: 1px solid rgba(244, 238, 225, 0.16);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--paper);
+}
+
+.cart-summary-note {
+  margin: 1.2rem 0 1.6rem;
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  line-height: 1.55;
+  color: var(--paper-dim);
+  opacity: 0.7;
+}
+
+.cart-summary-continue {
+  display: block;
+  width: fit-content;
+  margin: 0 auto;
+  padding: 0.75rem 1.6rem;
+  border-radius: 999px;
+  border: 1px solid rgba(244, 238, 225, 0.25);
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--paper);
+  text-decoration: none;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.cart-summary-continue:hover,
+.cart-summary-continue:focus-visible {
+  border-color: var(--lavender);
+  background: rgba(155, 152, 187, 0.12);
+}
+
+@media (max-width: 520px) {
+  .cart-item {
+    grid-template-columns: 3.6rem 1fr auto;
+    grid-template-areas:
+      'media info remove'
+      'media qty remove';
+    row-gap: 0.6rem;
+  }
+  .cart-item-media { grid-area: media; width: 3.6rem; }
+  .cart-item-info { grid-area: info; }
+  .cart-item-qty { grid-area: qty; }
+  .cart-item-remove { grid-area: remove; align-self: start; }
 }
 
 /* ------------------------------------------------------------
