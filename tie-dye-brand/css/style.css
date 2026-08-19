@@ -1948,17 +1948,64 @@ body.nav-open { overflow: hidden; }
   opacity: 0.75;
 }
 
-.product-size-value {
-  margin: 0;
+.product-size-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.product-size-option {
+  display: block;
+}
+
+.product-size-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+  width: 3.1rem;
+  padding: 0.45rem 0 0.4rem;
+  border-radius: 0.6rem;
+  border: 1px solid rgba(244, 238, 225, 0.25);
+  cursor: pointer;
+  transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+}
+
+.product-size-chip-num {
   font-family: var(--font-ui);
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   font-weight: 600;
   color: var(--paper);
 }
 
-.product-size-letters {
-  font-weight: 500;
+.product-size-chip-letter {
+  font-family: var(--font-ui);
+  font-size: 0.6rem;
+  letter-spacing: 0.06em;
   color: var(--paper-dim);
+}
+
+.product-size-chip:hover {
+  border-color: rgba(244, 238, 225, 0.45);
+}
+
+/* The input itself is visually hidden (.sr-only, see product.html)
+   but still focusable/checkable — its <label> is the visible chip, so
+   both mouse and keyboard selection land on the same native radio
+   state instead of needing separate JS to track "which one is picked". */
+.product-size-input:checked + .product-size-chip {
+  border-color: var(--sage);
+  background: rgba(156, 161, 108, 0.16);
+}
+
+.product-size-input:checked + .product-size-chip .product-size-chip-num,
+.product-size-input:checked + .product-size-chip .product-size-chip-letter {
+  color: var(--sage);
+}
+
+.product-size-input:focus-visible + .product-size-chip {
+  outline: 2px solid var(--sage);
+  outline-offset: 2px;
 }
 
 .product-size-note {
