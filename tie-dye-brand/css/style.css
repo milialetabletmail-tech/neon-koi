@@ -2018,6 +2018,34 @@ body.nav-open { overflow: hidden; }
   opacity: 0.85;
 }
 
+.product-size-hint {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #e0645b;
+}
+
+.product-size-hint[hidden] {
+  display: none;
+}
+
+/* Nudges the size row on an add-to-cart attempt with nothing picked
+   (see js/product-page.js) — a quick shake reads as "you missed
+   something here" without needing the hint text alone to catch the
+   eye first. */
+@keyframes product-size-shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(5px); }
+  60% { transform: translateX(-3px); }
+  80% { transform: translateX(2px); }
+}
+
+.product-size-options.is-shaking {
+  animation: product-size-shake 0.4s ease;
+}
+
 /* The one thing this page most needs to say clearly — no two of
    these are actually alike, so the photo is a color/pattern
    reference, not a literal preview. Set apart from the rest of the
@@ -2771,6 +2799,14 @@ body.nav-open { overflow: hidden; }
   font-size: 0.9rem;
   font-weight: 500;
   color: var(--paper);
+}
+
+.cart-item-size {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: 0.74rem;
+  color: var(--paper-dim);
+  opacity: 0.75;
 }
 
 .cart-item-price {

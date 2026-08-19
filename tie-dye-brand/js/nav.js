@@ -38,11 +38,23 @@
     badge.hidden = count === 0;
   }
 
-  // Adds one unit of `product` ({id, name, price, image}) — bumps qty
-  // if it's already in the cart rather than adding a duplicate line.
+  // Same product but a different size is a different line — someone
+  // buying a 44 and a 48 of the same print has two distinct pieces
+  // coming, not "one item, qty 2". size is null (not just absent) for
+  // items added without a size (the catalog grid's quick add has no
+  // size picker at all), so two unsized adds of the same id still
+  // correctly bump one shared line's qty.
+  function sameLine(item, id, size) {
+    return item.id === id && (item.size || null) === (size || null);
+  }
+
+  // Adds one unit of `product` ({id, name, price, image, size?}) —
+  // bumps qty if this exact id+size line is already in the cart
+  // rather than adding a duplicate.
   function addToCart(product) {
     const items = readCart();
-    const existing = items.find((item) => item.id === product.id);
+    const size = product.size || null;
+    const existing = items.find((item) => sameLine(item, product.id, size));
     if (existing) {
       existing.qty = (Number(existing.qty) || 0) + 1;
     } else {
@@ -51,6 +63,7 @@
         name: product.name,
         price: Number(product.price) || 0,
         image: product.image,
+        size: size,
         qty: 1,
       });
     }
@@ -59,20 +72,20 @@
   }
 
   // qty <= 0 removes the line entirely rather than leaving a 0-qty row.
-  function setCartQty(id, qty) {
+  function setCartQty(id, size, qty) {
     let items = readCart();
     if (qty <= 0) {
-      items = items.filter((item) => item.id !== id);
+      items = items.filter((item) => !sameLine(item, id, size));
     } else {
-      const existing = items.find((item) => item.id === id);
+      const existing = items.find((item) => sameLine(item, id, size));
       if (existing) existing.qty = qty;
     }
     writeCart(items);
     return items;
   }
 
-  function removeFromCart(id) {
-    const items = readCart().filter((item) => item.id !== id);
+  function removeFromCart(id, size) {
+    const items = readCart().filter((item) => !sameLine(item, id, size));
     writeCart(items);
     return items;
   }

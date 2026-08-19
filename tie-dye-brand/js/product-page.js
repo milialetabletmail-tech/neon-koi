@@ -46,13 +46,31 @@
     const label = addBtn.textContent;
     let resetTimer = null;
     const cartLink = document.getElementById('cart-link');
+    const sizeOptions = document.getElementById('product-size-options');
+    const sizeHint = document.getElementById('product-size-hint');
 
     addBtn.addEventListener('click', () => {
+      const sizeInput = document.querySelector('input[name="size"]:checked');
+
+      if (!sizeInput) {
+        sizeHint.hidden = false;
+        sizeOptions.classList.remove('is-shaking');
+        // Reflow so a second click without picking a size still
+        // restarts the shake instead of it being a no-op (the class
+        // is already there from the first miss).
+        void sizeOptions.offsetWidth;
+        sizeOptions.classList.add('is-shaking');
+        return;
+      }
+
+      sizeHint.hidden = true;
+
       window.LNCart.addItem({
         id: product.id,
         name: product.name,
         price: product.price,
         image: product.image,
+        size: sizeInput.value,
       });
 
       window.LNCart.flyToCart(img, cartLink);

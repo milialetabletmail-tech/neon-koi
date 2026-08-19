@@ -15,10 +15,12 @@
     const li = document.createElement('li');
     li.className = 'cart-item';
     li.dataset.id = item.id;
+    li.dataset.size = item.size || '';
     li.innerHTML =
       '<div class="cart-item-media"><img src="' + item.image + '" alt="" loading="lazy"></div>' +
       '<div class="cart-item-info">' +
         '<p class="cart-item-name">' + item.name + '</p>' +
+        (item.size ? '<p class="cart-item-size">Размер: ' + item.size + '</p>' : '') +
         '<p class="cart-item-price">' + formatPrice(item.price) + '</p>' +
       '</div>' +
       '<div class="cart-item-qty">' +
@@ -73,17 +75,18 @@
       const row = evt.target.closest('.cart-item');
       if (!row) return;
       const id = row.dataset.id;
-      const item = window.LNCart.getItems().find((entry) => entry.id === id);
+      const size = row.dataset.size || null;
+      const item = window.LNCart.getItems().find((entry) => entry.id === id && (entry.size || null) === size);
       if (!item) return;
 
       if (evt.target.closest('[data-action="increase"]')) {
-        window.LNCart.setQty(id, item.qty + 1);
+        window.LNCart.setQty(id, size, item.qty + 1);
         render();
       } else if (evt.target.closest('[data-action="decrease"]')) {
-        window.LNCart.setQty(id, item.qty - 1);
+        window.LNCart.setQty(id, size, item.qty - 1);
         render();
       } else if (evt.target.closest('.cart-item-remove')) {
-        window.LNCart.removeItem(id);
+        window.LNCart.removeItem(id, size);
         render();
       }
     });
