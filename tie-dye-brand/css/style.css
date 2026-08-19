@@ -1053,9 +1053,17 @@ body.nav-open { overflow: hidden; }
     left: 0;
     right: 0;
     bottom: -0.6rem;
-    height: 2.2rem;
-    background: linear-gradient(to bottom, transparent 0%, var(--ink) 65%, var(--ink) 100%);
-    filter: blur(10px);
+    /* Tall and heavily blurred so the fade itself has room to be
+       gradual — a short, hard-stopped gradient still read as a seam
+       even blurred, since the blur had almost no distance to work
+       with before hitting the gradient's own transparent/ink stops.
+       Stretching further up into the still-sharp splash photo (rather
+       than starting right at the old edge) means the blur is already
+       softening real photo pixels before the ink tone ever shows,
+       instead of the two meeting at one clean line. */
+    height: 5rem;
+    background: linear-gradient(to bottom, transparent 0%, var(--ink) 92%);
+    filter: blur(22px);
     pointer-events: none;
   }
 
