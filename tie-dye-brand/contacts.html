@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Контакты — LN-Team</title>
-<meta name="description" content="LN-Team: свяжитесь с нами. Страница контактов скоро появится.">
+<meta name="description" content="LN-Team: свяжитесь с нами. Форма связи уже готова, каналы появятся, когда мы откроемся.">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -63,11 +63,42 @@
   </div>
 
   <main>
-    <section class="page-stub">
-      <p class="page-stub-eyebrow">Контакты</p>
-      <h1 class="page-stub-title">Скоро на связи</h1>
-      <p class="page-stub-copy">Форма связи, адрес мастерской и соцсети появятся в следующем этапе.</p>
-      <a href="index.html" class="page-stub-back">На главную</a>
+    <section class="contacts-page dye-ambient">
+      <div class="contacts-card">
+        <p class="contacts-eyebrow">Контакты</p>
+        <h1 class="contacts-title">Скоро на связи</h1>
+        <p class="contacts-lead">Каналы связи появятся, когда мы откроемся официально. А форма уже готова принимать сообщения.</p>
+
+        <form class="contacts-form">
+          <label class="contacts-field"><span>Имя</span><input type="text" name="name" placeholder="Как к вам обращаться"></label>
+          <label class="contacts-field"><span>Email</span><input type="email" name="email" placeholder="you@example.com"></label>
+          <label class="contacts-field"><span>Сообщение</span><textarea name="message" rows="3" placeholder="Пара слов о том, с чем вы к нам"></textarea></label>
+          <button type="submit" class="contacts-submit">Отправить</button>
+        </form>
+
+        <ul class="contacts-channels">
+          <li>
+            <span class="contacts-channel" aria-label="Email — скоро">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 6 10 7 10-7"/></svg>
+            </span>
+          </li>
+          <li>
+            <span class="contacts-channel" aria-label="Телефон — скоро">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            </span>
+          </li>
+          <li>
+            <span class="contacts-channel" aria-label="Instagram — скоро">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </span>
+          </li>
+          <li>
+            <span class="contacts-channel" aria-label="Telegram — скоро">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </span>
+          </li>
+        </ul>
+      </div>
     </section>
   </main>
 
