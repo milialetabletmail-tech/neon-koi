@@ -42,14 +42,23 @@
       });
     });
 
-    clone.addEventListener('transitionend', () => {
+    // opacity is the longer of the two transitions (it starts after a
+    // delay — see .cart-fly-clone) so it's the one that actually ends
+    // last; filtering on it avoids removing the clone the instant the
+    // shorter transform transition finishes, mid-fade.
+    clone.addEventListener('transitionend', (evt) => {
+      // Only one of the two transitions actually removes anything —
+      // without this guard the listener (not `once`, since it has to
+      // survive the earlier transform transitionend) would run this
+      // block twice.
+      if (evt.propertyName !== 'opacity') return;
       clone.remove();
       cartEl.classList.remove('cart-bump');
       // Reflow so the class can be re-added immediately by a second
       // fast add-to-cart click and still restart the animation.
       void cartEl.offsetWidth;
       cartEl.classList.add('cart-bump');
-    }, { once: true });
+    });
   }
 
   document.addEventListener('DOMContentLoaded', () => {
