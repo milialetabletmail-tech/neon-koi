@@ -1014,8 +1014,17 @@ body.nav-open { overflow: hidden; }
        finishes fading out at 50% - 24vw, not the dead center; anything
        bottom-aligned all the way to 50% overlapped the canvas's fully-
        opaque, later-in-DOM pixels and got painted over/hidden behind
-       the garment instead of sitting above it. */
-    bottom: calc(50% + 24vw);
+       the garment instead of sitting above it.
+
+       Pushed a further 6vw past that (matching the canvas mask's own
+       pre-fade stop, 50% - 24vw - 6vw — see .dye-canvas below) so the
+       card's box ends where the canvas is still ≤0.1 alpha, not right
+       where it hits full opacity: at the old boundary the canvas's own
+       ramp from 0.1 to 1 alpha happened directly over the card's last
+       ~6vw, so its hard-edged splash photo and the video were both
+       visible at once, reading as a muddy double-exposure right at the
+       seam rather than a clean handoff. */
+    bottom: calc(50% + 30vw);
     padding: 0 1.5rem 1rem;
     opacity: 0;
     transition: opacity 0.8s ease;
@@ -1027,6 +1036,27 @@ body.nav-open { overflow: hidden; }
 
   .hero-featured-teaser.is-revealed {
     opacity: 1;
+  }
+
+  /* Softens the splash photo's hard bottom edge into the flat --ink
+     it's sitting on, instead of the image just stopping dead — a
+     blurred ink-colored fade drawn over the seam rather than an actual
+     mask on the image itself, so the card's own content (photo/text,
+     bottom-aligned within the box, see .hero-featured-teaser-media/
+     -text) is well clear of it and never gets blurred along with it.
+     Centered on the card's own bottom edge (extends slightly past it
+     into the small margin still ahead of any real canvas opacity) so
+     it reads as a soft vignette, not a second hard line of its own. */
+  .hero-featured-teaser::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -0.6rem;
+    height: 2.2rem;
+    background: linear-gradient(to bottom, transparent 0%, var(--ink) 65%, var(--ink) 100%);
+    filter: blur(10px);
+    pointer-events: none;
   }
 
   .hero-featured-teaser-media {
