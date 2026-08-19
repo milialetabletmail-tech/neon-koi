@@ -2387,8 +2387,51 @@ body.size-modal-open {
   .product-info {
     align-items: center;
   }
-  .product-media img {
+  .product-media > img {
     max-width: 20rem;
+  }
+
+  /* Same .product-thumb buttons as desktop (see js/product-page.js —
+     one set of markup, no separate mobile-only elements), just
+     redrawn as plain dots instead of little photos: a thumbnail strip
+     this narrow reads as fiddly to tap accurately, where a dot only
+     has to communicate "which photo, out of how many" and doesn't
+     need to be a recognizable picture to do that. */
+  .product-thumbs {
+    gap: 0.5rem;
+  }
+
+  .product-thumb {
+    width: 1.4rem;
+    aspect-ratio: 1;
+    padding: 0;
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .product-thumb img {
+    display: none;
+  }
+
+  /* The button itself stays a full 1.4rem square tap target (see
+     above) — this is just the small dot drawn inside it, so tapping
+     doesn't shrink down to a fiddly 8px hitbox along with the dot's
+     own visual size. */
+  .product-thumb::before {
+    content: '';
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: rgba(244, 238, 225, 0.28);
+    transition: background-color 0.2s ease;
+  }
+
+  .product-thumb.is-active::before {
+    background: var(--sage);
   }
 }
 
