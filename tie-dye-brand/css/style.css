@@ -3984,7 +3984,15 @@ body.size-modal-open {
   display: none;
 }
 
-.collection-preview-card {
+/* a.collection-preview-card:visited (not just the bare class) is
+   needed to actually win: the browser's own a:visited rule matches
+   both the "a" type and the ":visited" pseudo-class, which together
+   out-specificity a plain one-class selector — without the extra
+   type+pseudo-class here, a previously-visited card would keep the
+   UA stylesheet's default purple regardless of the color: inherit
+   below. */
+.collection-preview-card,
+a.collection-preview-card:visited {
   display: flex;
   flex-direction: column;
   align-items: center;
