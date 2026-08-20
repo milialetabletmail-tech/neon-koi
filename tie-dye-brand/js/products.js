@@ -10,7 +10,7 @@
 window.LNProducts = [
   {
     id: 'tee-01-blue-gold',
-    name: 'Спираль «Синий и золото»',
+    name: '«Малахит»',
     price: 4200,
     technique: 'cold',
     image: 'assets/products/tee-01-blue-gold.png',
@@ -31,7 +31,7 @@ window.LNProducts = [
   },
   {
     id: 'tee-02-amber-teal',
-    name: 'Спираль «Янтарь и бирюза»',
+    name: '«Лето»',
     price: 3900,
     technique: 'warm',
     image: 'assets/products/tee-02-amber-teal.png',
@@ -51,7 +51,7 @@ window.LNProducts = [
   },
   {
     id: 'tee-03-berry-navy',
-    name: 'Спираль «Слива и индиго»',
+    name: '«Медуза»',
     price: 4400,
     technique: 'cold',
     image: 'assets/products/tee-03-berry-navy.png',
@@ -72,7 +72,7 @@ window.LNProducts = [
   },
   {
     id: 'tee-04-sky-blue',
-    name: 'Спираль «Лазурь»',
+    name: '«Лазурь»',
     price: 3700,
     technique: 'warm',
     image: 'assets/products/tee-04-sky-blue.png',
