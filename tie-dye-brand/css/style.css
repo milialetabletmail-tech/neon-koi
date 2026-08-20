@@ -1682,12 +1682,20 @@ body.nav-open { overflow: hidden; }
   gap: 0.25rem;
 }
 
+/* min-height reserves room for 2 lines whether a given name actually
+   wraps that far or not ("Спираль «Лазурь»" fits on one, others
+   don't) — without it, cards with a one-line name left their "В
+   корзину" button sitting noticeably higher than cards next to it
+   whose name wrapped to two, since nothing here forced the name
+   block itself to a consistent height. */
 .catalog-card-name {
   margin: 0;
   font-family: var(--font-ui);
   font-size: 0.85rem;
   font-weight: 500;
   letter-spacing: 0.02em;
+  line-height: 1.3;
+  min-height: 2.6em;
   color: var(--paper);
 }
 
