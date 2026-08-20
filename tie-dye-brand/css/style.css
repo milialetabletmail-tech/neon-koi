@@ -2065,10 +2065,15 @@ body.size-modal-open {
    to whichever slide it lands on) instead of a single <img> whose src
    got swapped. Hides its own scrollbar since .product-thumbs below is
    the visible "how many / which one" affordance. */
+.product-carousel-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 26rem;
+}
+
 .product-carousel {
   display: flex;
   width: 100%;
-  max-width: 26rem;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
@@ -2078,6 +2083,50 @@ body.size-modal-open {
 .product-carousel::-webkit-scrollbar {
   display: none;
 }
+
+/* Prev/next controls layered over the carousel — an explicit,
+   discoverable way to flip photos alongside the native swipe/drag
+   gesture, mainly for desktop where there's no touch scrubbing.
+   Hidden via [hidden] (set from product-page.js) for single-image
+   products, where there's nothing to page through. */
+.product-carousel-arrow {
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(244, 238, 225, 0.18);
+  background: rgba(42, 38, 37, 0.55);
+  color: var(--paper);
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: background-color 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
+  transform: translateY(-50%);
+}
+
+.product-carousel-arrow[hidden] {
+  display: none;
+}
+
+.product-carousel-arrow svg {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.product-carousel-arrow:hover,
+.product-carousel-arrow:focus-visible {
+  background: rgba(42, 38, 37, 0.8);
+  border-color: rgba(244, 238, 225, 0.4);
+}
+
+.product-carousel-arrow--prev { left: 0.6rem; }
+.product-carousel-arrow--next { right: 0.6rem; }
 
 /* Every slide gets the same fixed frame regardless of its own photo's
    native proportions — landscape flat-lays and tall mannequin shots
@@ -2540,6 +2589,27 @@ body.size-modal-open {
   background: rgba(155, 152, 187, 0.12);
 }
 
+/* Desktop only: top-align the two columns instead of centering them
+   against each other — with a taller info column, center-alignment
+   pushed the gallery's top edge well below the header logo. Starting
+   both at the top of the row instead lines the image up with the
+   LN-Team wordmark at a glance. The gallery also grows and shifts
+   toward the info column, closing the gap that left it stranded near
+   the empty left edge. */
+@media (min-width: 761px) {
+  .product-layout {
+    align-items: start;
+  }
+
+  .product-media {
+    align-items: flex-end;
+  }
+
+  .product-carousel-wrap {
+    max-width: 32rem;
+  }
+}
+
 @media (max-width: 760px) {
   .product-layout {
     grid-template-columns: 1fr;
@@ -2548,8 +2618,9 @@ body.size-modal-open {
   .product-info {
     align-items: center;
   }
-  .product-carousel {
+  .product-carousel-wrap {
     max-width: 20rem;
+    margin: 0 auto;
   }
 
   /* Same .product-thumb buttons as desktop (see js/product-page.js —

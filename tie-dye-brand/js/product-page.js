@@ -44,11 +44,15 @@
   function renderGallery(product) {
     const track = document.getElementById('product-carousel');
     const thumbsEl = document.getElementById('product-thumbs');
+    const prevBtn = document.getElementById('product-carousel-prev');
+    const nextBtn = document.getElementById('product-carousel-next');
     const images = product.images && product.images.length ? product.images : [product.image];
     const alt = product.alt || product.name;
 
     track.textContent = '';
     thumbsEl.textContent = '';
+    prevBtn.hidden = true;
+    nextBtn.hidden = true;
 
     const slideImgs = images.map((src) => {
       const slide = document.createElement('div');
@@ -109,6 +113,17 @@
       }
 
       track.addEventListener('scroll', updateActiveFromScroll, { passive: true });
+
+      prevBtn.hidden = false;
+      nextBtn.hidden = false;
+
+      function goTo(index) {
+        const clamped = Math.max(0, Math.min(images.length - 1, index));
+        track.scrollTo({ left: slides[clamped].offsetLeft, behavior: 'smooth' });
+      }
+
+      prevBtn.addEventListener('click', () => goTo(activeIndex - 1));
+      nextBtn.addEventListener('click', () => goTo(activeIndex + 1));
     }
 
     return { getActiveImg: () => slideImgs[activeIndex] };
