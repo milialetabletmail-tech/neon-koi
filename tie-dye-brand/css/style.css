@@ -1530,10 +1530,10 @@ body.nav-open { overflow: hidden; }
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: 2rem;
-  margin: 0 auto clamp(3rem, 7vw, 4rem);
+  gap: 1.6rem 2rem;
+  margin: 0 auto clamp(2rem, 5vw, 2.5rem);
   padding-bottom: clamp(1.5rem, 4vw, 2rem);
-  max-width: 40rem;
+  max-width: 58rem;
   border-bottom: 1px solid rgba(244, 238, 225, 0.12);
 }
 
@@ -1555,26 +1555,38 @@ body.nav-open { overflow: hidden; }
 
 .catalog-filter-swatches {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.5rem;
 }
 
-/* Same 3 dye accents used everywhere else on the site (nav underlines,
-   the hero's radial glow, .process-connector) — reusing them here
-   means these swatches already show real brand colors instead of
-   generic gray placeholders, even though clicking them does nothing
-   yet. */
+/* Built at runtime from the union of every product's own colors (see
+   js/catalog-filters.js) rather than a fixed set of brand accents —
+   real dye colors vary per product, so the swatches shown here are
+   whatever's actually out there to filter by. */
 .catalog-filter-swatch {
   width: 1.3rem;
   height: 1.3rem;
   padding: 0;
   border-radius: 50%;
   border: 1px solid rgba(244, 238, 225, 0.35);
-  opacity: 0.6;
+  cursor: pointer;
+  transition: border-color 0.2s ease, transform 0.15s ease;
 }
 
-.catalog-filter-swatch[data-accent="lavender"] { background: var(--lavender); }
-.catalog-filter-swatch[data-accent="teal"] { background: var(--teal); }
-.catalog-filter-swatch[data-accent="sage"] { background: var(--sage); }
+.catalog-filter-swatch:hover {
+  border-color: rgba(244, 238, 225, 0.6);
+}
+
+.catalog-filter-swatch.is-active {
+  border-color: var(--paper);
+  transform: scale(1.15);
+}
+
+.catalog-filter-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
 
 .catalog-filter-pill {
   padding: 0.5rem 1.2rem;
@@ -1586,7 +1598,101 @@ body.nav-open { overflow: hidden; }
   font-weight: 500;
   letter-spacing: 0.04em;
   color: var(--paper-dim);
+  cursor: pointer;
+  transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+}
+
+.catalog-filter-pill:hover {
+  border-color: rgba(244, 238, 225, 0.45);
+}
+
+.catalog-filter-pill.is-active {
+  border-color: var(--sage);
+  background: rgba(156, 161, 108, 0.16);
+  color: var(--paper);
+}
+
+.catalog-filter-pill--size {
+  padding: 0.5rem 0.7rem;
+  min-width: 2.4rem;
+  text-align: center;
+}
+
+.catalog-filter-price {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.catalog-filter-price-input {
+  width: 4.2rem;
+  padding: 0.5rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid rgba(244, 238, 225, 0.25);
+  background: transparent;
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  color: var(--paper);
+  -moz-appearance: textfield;
+}
+
+.catalog-filter-price-input::-webkit-outer-spin-button,
+.catalog-filter-price-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.catalog-filter-price-input::placeholder {
+  color: rgba(244, 238, 225, 0.4);
+}
+
+.catalog-filter-price-input:focus {
+  outline: none;
+  border-color: var(--sage);
+}
+
+.catalog-filter-price-sep,
+.catalog-filter-price-currency {
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  color: var(--paper-dim);
   opacity: 0.7;
+}
+
+.catalog-filter-reset {
+  padding: 0.5rem 1.1rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background: transparent;
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--paper-dim);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  cursor: pointer;
+}
+
+.catalog-filter-reset:hover {
+  color: var(--paper);
+}
+
+.catalog-filter-reset[hidden] {
+  display: none;
+}
+
+.catalog-empty {
+  max-width: 30rem;
+  margin: 0 auto clamp(2.5rem, 6vw, 3.5rem);
+  text-align: center;
+  font-family: var(--font-ui);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--paper-dim);
+}
+
+.catalog-empty[hidden] {
+  display: none;
 }
 
 .catalog-grid {
@@ -1610,6 +1716,15 @@ body.nav-open { overflow: hidden; }
   align-items: center;
   gap: 0.35rem;
   text-align: center;
+}
+
+/* Same fix as .cart-empty/.cart-list: display:flex above has the same
+   specificity as the UA stylesheet's [hidden] { display: none } and
+   comes later in the cascade, so without this override
+   js/catalog-filters.js setting the hidden attribute on a filtered-out
+   card wouldn't actually hide it. */
+.catalog-card[hidden] {
+  display: none;
 }
 
 /* Wraps the photo + name/price of a real product (has-photo cards

@@ -12,6 +12,7 @@ window.LNProducts = [
     id: 'tee-01-blue-gold',
     name: 'Спираль «Синий и золото»',
     price: 4200,
+    technique: 'cold',
     image: 'assets/products/tee-01-blue-gold.png',
     images: [
       'assets/products/tee-01-blue-gold.png',
@@ -32,6 +33,7 @@ window.LNProducts = [
     id: 'tee-02-amber-teal',
     name: 'Спираль «Янтарь и бирюза»',
     price: 3900,
+    technique: 'warm',
     image: 'assets/products/tee-02-amber-teal.png',
     alt: 'Тай-дай футболка, янтарный и бирюзовый',
     colors: [
@@ -45,6 +47,7 @@ window.LNProducts = [
     id: 'tee-03-berry-navy',
     name: 'Спираль «Слива и индиго»',
     price: 4400,
+    technique: 'cold',
     image: 'assets/products/tee-03-berry-navy.png',
     alt: 'Тай-дай футболка, сливовый и индиго',
     colors: [
@@ -59,6 +62,7 @@ window.LNProducts = [
     id: 'tee-04-sky-blue',
     name: 'Спираль «Лазурь»',
     price: 3700,
+    technique: 'warm',
     image: 'assets/products/tee-04-sky-blue.png',
     alt: 'Тай-дай футболка, небесно-голубой',
     colors: [

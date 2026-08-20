@@ -70,26 +70,45 @@
         <p class="catalog-lead">LN-Team — каждая вещь окрашена вручную и существует в единственном экземпляре. Ниже — то, что скоро появится в продаже.</p>
       </div>
 
-      <!-- Filters aren't wired up yet — there's nothing to filter
-           until real products exist — so every control here is
-           disabled. Kept visible (not just a "скоро" label) so the
-           layout this'll slot into is already right once they go
-           live. -->
-      <div class="catalog-filters" aria-label="Фильтры (появятся вместе с товарами)">
+      <!-- Filter values (colors/technique/size/price) are all read off
+           window.LNProducts (js/products.js) at runtime by
+           js/catalog-filters.js — the still-photoless "Фото скоро"
+           cards have no matching product, so they're hidden whenever
+           any filter is active (nothing to actually match), same as
+           a real out-of-stock item would be. -->
+      <div class="catalog-filters" id="catalog-filters" aria-label="Фильтры">
         <div class="catalog-filter-group">
           <span class="catalog-filter-label">Цвет</span>
-          <div class="catalog-filter-swatches">
-            <button type="button" class="catalog-filter-swatch" data-accent="lavender" disabled aria-label="Лавандовый"></button>
-            <button type="button" class="catalog-filter-swatch" data-accent="teal" disabled aria-label="Бирюзовый"></button>
-            <button type="button" class="catalog-filter-swatch" data-accent="sage" disabled aria-label="Оливковый"></button>
+          <div class="catalog-filter-swatches" id="filter-colors"></div>
+        </div>
+
+        <div class="catalog-filter-group">
+          <span class="catalog-filter-label">Техника</span>
+          <div class="catalog-filter-pills" id="filter-technique">
+            <button type="button" class="catalog-filter-pill" data-technique="warm">Тёплая</button>
+            <button type="button" class="catalog-filter-pill" data-technique="cold">Холодная</button>
           </div>
         </div>
 
         <div class="catalog-filter-group">
-          <span class="catalog-filter-label">Цена</span>
-          <button type="button" class="catalog-filter-pill" disabled>Скоро</button>
+          <span class="catalog-filter-label">Размер</span>
+          <div class="catalog-filter-pills catalog-filter-pills--sizes" id="filter-sizes"></div>
         </div>
+
+        <div class="catalog-filter-group">
+          <span class="catalog-filter-label">Цена</span>
+          <div class="catalog-filter-price">
+            <input type="number" class="catalog-filter-price-input" id="filter-price-min" placeholder="от" inputmode="numeric" min="0">
+            <span class="catalog-filter-price-sep">—</span>
+            <input type="number" class="catalog-filter-price-input" id="filter-price-max" placeholder="до" inputmode="numeric" min="0">
+            <span class="catalog-filter-price-currency">₽</span>
+          </div>
+        </div>
+
+        <button type="button" class="catalog-filter-reset" id="filter-reset" hidden>Сбросить фильтры</button>
       </div>
+
+      <p class="catalog-empty" id="catalog-empty" hidden>По этим фильтрам ничего не нашлось — попробуйте убрать один из них.</p>
 
       <div class="catalog-grid">
         <!-- The only two cards with a real photo also get real (if
@@ -254,6 +273,8 @@
   </div>
 
   <script src="js/nav.js"></script>
+  <script src="js/products.js"></script>
   <script src="js/catalog.js"></script>
+  <script src="js/catalog-filters.js"></script>
 </body>
 </html>

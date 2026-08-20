@@ -114,6 +114,20 @@
     return { getActiveImg: () => slideImgs[activeIndex] };
   }
 
+  // Warm/cold are the two broad tie-dye approaches the brand works
+  // in (see about.html's process recap) — the exact method within
+  // either one stays the trade secret it always was, this just says
+  // which of the two a given piece used.
+  function renderTechniqueBadge(product) {
+    if (!product.technique) return;
+    const badge = document.createElement('span');
+    badge.className = 'product-badge';
+    badge.innerHTML = product.technique === 'warm'
+      ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22c4 0 7-3 7-7 0-3-2-5-3-7-.5 2-2 3-2 5a3 3 0 0 1-6 0c0-3 2-5 2-8-3 2-5 6-5 10 0 4 3 7 7 7z"/></svg>Тёплое окрашивание'
+      : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v20M4.2 7l15.6 10M4.2 17l15.6-10"/></svg>Холодное окрашивание';
+    document.getElementById('product-badges').appendChild(badge);
+  }
+
   function render(product) {
     document.title = product.name + ' — LN-Team';
 
@@ -123,6 +137,7 @@
     document.getElementById('product-price').textContent = formatPrice(product.price);
     document.getElementById('product-description').textContent = product.description;
     renderColors(product);
+    renderTechniqueBadge(product);
 
     document.getElementById('product-layout').hidden = false;
 
