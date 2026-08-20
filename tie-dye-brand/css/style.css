@@ -2439,7 +2439,8 @@ body.size-modal-open {
     gap: 0.5rem;
   }
 
-  .product-thumb {
+  .product-thumb,
+  .product-thumb.is-active {
     width: 1.4rem;
     aspect-ratio: 1;
     padding: 0;
