@@ -3968,7 +3968,7 @@ body.size-modal-open {
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
   scrollbar-width: none;
-  /* padding-top has to clear how far .is-active's scale(1.32) grows
+  /* padding-top has to clear how far .is-active's scale(1.5) grows
      above the row's own unscaled top — with transform-origin: center
      bottom (see .collection-preview-card) the bottom edge stays put
      and 100% of the growth goes upward, so the active card's real top
@@ -3977,7 +3977,7 @@ body.size-modal-open {
      height gets clipped by this element's own overflow (see the
      comment on overflow-x below) — confirmed by testing: the shirt's
      collar/shoulders were getting cut off at the top before this. */
-  padding: 4rem 0.1rem 0.25rem;
+  padding: 6rem 0.1rem 0.25rem;
 }
 
 .collection-preview-grid::-webkit-scrollbar {
@@ -3989,6 +3989,8 @@ body.size-modal-open {
   flex-direction: column;
   align-items: center;
   gap: 0.4rem;
+  color: inherit;
+  text-decoration: none;
   flex: 0 0 78vw;
   max-width: 19rem;
   scroll-snap-align: start;
@@ -4016,7 +4018,7 @@ body.size-modal-open {
 }
 
 .collection-preview-card.is-active {
-  transform: scale(1.32);
+  transform: scale(1.5);
 }
 
 /* Cards snap to the track's center, with side padding on the track

@@ -486,6 +486,16 @@
       updateArrowState();
       updateActiveCard();
     }, { passive: true });
+
+    // Starts centered on the middle card rather than the first one —
+    // with an odd number of cards that's the natural "selected by
+    // default" item, not whichever one happens to load first in the
+    // scroll container.
+    const initialCard = cards[Math.floor((cards.length - 1) / 2)];
+    if (initialCard) {
+      track.scrollLeft = initialCard.offsetLeft + initialCard.offsetWidth / 2 - track.clientWidth / 2;
+    }
+
     updateArrowState();
     updateActiveCard();
   }
