@@ -35,6 +35,12 @@ window.LNProducts = [
     price: 3900,
     technique: 'warm',
     image: 'assets/products/tee-02-amber-teal.png',
+    images: [
+      'assets/products/tee-02-amber-teal.png',
+      'assets/products/tee-02-amber-teal-back.png',
+      'assets/products/tee-02-amber-teal-mannequin-front.png',
+      'assets/products/tee-02-amber-teal-mannequin-back.png',
+    ],
     alt: 'Тай-дай футболка, янтарный и бирюзовый',
     colors: [
       { label: 'Белый', hex: '#f2ead9' },
@@ -49,6 +55,12 @@ window.LNProducts = [
     price: 4400,
     technique: 'cold',
     image: 'assets/products/tee-03-berry-navy.png',
+    images: [
+      'assets/products/tee-03-berry-navy.png',
+      'assets/products/tee-03-berry-navy-back.png',
+      'assets/products/tee-03-berry-navy-mannequin-front.png',
+      'assets/products/tee-03-berry-navy-mannequin-back.png',
+    ],
     alt: 'Тай-дай футболка, сливовый и индиго',
     colors: [
       { label: 'Белый', hex: '#f2ead9' },
@@ -64,6 +76,12 @@ window.LNProducts = [
     price: 3700,
     technique: 'warm',
     image: 'assets/products/tee-04-sky-blue.png',
+    images: [
+      'assets/products/tee-04-sky-blue.png',
+      'assets/products/tee-04-sky-blue-back.png',
+      'assets/products/tee-04-sky-blue-mannequin-front.png',
+      'assets/products/tee-04-sky-blue-mannequin-back.png',
+    ],
     alt: 'Тай-дай футболка, небесно-голубой',
     colors: [
       { label: 'Белый', hex: '#f2ead9' },

@@ -2060,6 +2060,21 @@ body.size-modal-open {
   gap: 1.1rem;
 }
 
+/* Carousel + thumbs share this one box so the thumb strip always
+   centers under the photo, even where .product-media shifts the
+   whole gallery off-center (see the desktop rule below) — centering
+   each piece separately against .product-media's own (wider) track
+   would leave the thumbs hugging their own right edge instead of the
+   image's. */
+.product-gallery {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.1rem;
+  width: 100%;
+  max-width: 26rem;
+}
+
 /* A real scroll-snap carousel (native drag/swipe, no JS needed for
    the gesture itself — js/product-page.js only syncs the thumbs/dots
    to whichever slide it lands on) instead of a single <img> whose src
@@ -2068,7 +2083,6 @@ body.size-modal-open {
 .product-carousel-wrap {
   position: relative;
   width: 100%;
-  max-width: 26rem;
 }
 
 .product-carousel {
@@ -2605,7 +2619,7 @@ body.size-modal-open {
     align-items: flex-end;
   }
 
-  .product-carousel-wrap {
+  .product-gallery {
     max-width: 32rem;
   }
 }
@@ -2618,9 +2632,8 @@ body.size-modal-open {
   .product-info {
     align-items: center;
   }
-  .product-carousel-wrap {
+  .product-gallery {
     max-width: 20rem;
-    margin: 0 auto;
   }
 
   /* Arrows are a desktop-only addition (no touch swipe there) — on
