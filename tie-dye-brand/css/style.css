@@ -1937,12 +1937,41 @@ body.size-modal-open {
   gap: 1.1rem;
 }
 
-/* Direct child only — .product-thumb below has its own <img> nested
-   inside .product-media too, which this must not also stretch to
-   26rem wide. */
-.product-media > img {
+/* A real scroll-snap carousel (native drag/swipe, no JS needed for
+   the gesture itself — js/product-page.js only syncs the thumbs/dots
+   to whichever slide it lands on) instead of a single <img> whose src
+   got swapped. Hides its own scrollbar since .product-thumbs below is
+   the visible "how many / which one" affordance. */
+.product-carousel {
+  display: flex;
   width: 100%;
   max-width: 26rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.product-carousel::-webkit-scrollbar {
+  display: none;
+}
+
+/* Every slide gets the same fixed frame regardless of its own photo's
+   native proportions — landscape flat-lays and tall mannequin shots
+   alike — so the gallery reads as one consistent size, not a layout
+   that jumps taller/shorter/wider as you flip through it. */
+.product-slide {
+  flex: 0 0 100%;
+  aspect-ratio: 4 / 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  scroll-snap-align: center;
+}
+
+.product-slide img {
+  width: 100%;
+  height: 100%;
   object-fit: contain;
 }
 
@@ -1958,6 +1987,10 @@ body.size-modal-open {
 }
 
 .product-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
   width: 3.4rem;
   aspect-ratio: 3 / 4;
   flex: none;
@@ -1983,6 +2016,11 @@ body.size-modal-open {
 .product-thumb.is-active {
   border-color: var(--sage);
   background: rgba(156, 161, 108, 0.12);
+}
+
+.product-thumb:focus-visible {
+  outline: 2px solid var(--sage);
+  outline-offset: 2px;
 }
 
 .product-info {
@@ -2387,7 +2425,7 @@ body.size-modal-open {
   .product-info {
     align-items: center;
   }
-  .product-media > img {
+  .product-carousel {
     max-width: 20rem;
   }
 
