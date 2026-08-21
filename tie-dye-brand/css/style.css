@@ -3779,6 +3779,103 @@ body.size-table-open {
   color: var(--sage);
 }
 
+/* The single oferta checkbox that stays on the main summary, asked
+   before "Перейти к оформлению" rather than inside the checkout
+   modal with the rest of the form. */
+.cart-consents--pre {
+  margin-top: 1rem;
+}
+
+/* ------------------------------------------------------------
+   CHECKOUT MODAL (cart.html) — opened by "Перейти к оформлению" once
+   the oferta checkbox above is confirmed; holds the contact/delivery
+   fields and the other two consents. Same backdrop/panel look as
+   .size-modal (catalog.html/product.html), under its own class names
+   since it isn't tied to that size-picking flow.
+   ------------------------------------------------------------ */
+
+.checkout-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.checkout-modal[hidden] {
+  display: none;
+}
+
+.checkout-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(13, 12, 15, 0.72);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.checkout-modal-panel {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 26rem;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 2rem 1.75rem 1.75rem;
+  border-radius: 1.1rem;
+  border: 1px solid rgba(244, 238, 225, 0.14);
+  background: var(--ink);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.45);
+}
+
+.checkout-modal-close {
+  position: absolute;
+  top: 0.9rem;
+  right: 0.9rem;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: var(--paper-dim);
+  cursor: pointer;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.checkout-modal-close svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.checkout-modal-close:hover,
+.checkout-modal-close:focus-visible {
+  color: var(--paper);
+  background: rgba(244, 238, 225, 0.08);
+}
+
+.checkout-modal-title {
+  margin: 0 0 1.4rem;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 600;
+  font-size: 1.2rem;
+  color: var(--paper);
+  text-align: center;
+}
+
+.checkout-modal .cart-checkout-fields {
+  margin-top: 0;
+}
+
+body.checkout-modal-open {
+  overflow: hidden;
+}
+
 .cart-summary-submit {
   display: block;
   width: 100%;

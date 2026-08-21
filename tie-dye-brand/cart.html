@@ -91,42 +91,15 @@
             <span id="cart-summary-total">0 ₽</span>
           </div>
 
-          <form class="cart-checkout" id="cart-checkout-form" novalidate>
-            <div class="cart-checkout-fields">
-              <label class="cart-field"><span>Ваше имя</span><input type="text" name="name" required placeholder="Как к вам обращаться"><span class="cart-field-error" id="error-name"></span></label>
-              <label class="cart-field"><span>Почта</span><input type="email" name="email" required placeholder="ваша@почта.ру"><span class="cart-field-error" id="error-email"></span></label>
-              <label class="cart-field">
-                <span>Способ доставки</span>
-                <select name="delivery-method" required>
-                  <option value="" disabled selected>Выберите способ</option>
-                  <option value="cdek">СДЭК</option>
-                  <option value="pochta">Почта России</option>
-                </select>
-                <span class="cart-field-error" id="error-delivery-method"></span>
-              </label>
-              <label class="cart-field"><span>Адрес пункта выдачи или отделения</span><textarea name="address" rows="2" required placeholder="Город, адрес пункта выдачи СДЭК или отделения Почты России"></textarea><span class="cart-field-error" id="error-address"></span></label>
-            </div>
+          <div class="cart-consents cart-consents--pre">
+            <label class="cart-consent">
+              <input type="checkbox" id="consent-offer">
+              <span>Я ознакомлен(а) и принимаю условия <a href="offer.html" class="cart-consent-link">Публичной оферты</a> (Договора подряда на индивидуальное изготовление).</span>
+            </label>
+            <span class="cart-field-error" id="error-consent-offer"></span>
+          </div>
 
-            <div class="cart-consents">
-              <label class="cart-consent">
-                <input type="checkbox" name="consent-contact" required>
-                <span>Я даю согласие на обработку Имени и Электронной почты для идентификации заказа и связи со мной в соответствии с Правилами обработки контактов.</span>
-              </label>
-              <span class="cart-field-error" id="error-consent-contact"></span>
-              <label class="cart-consent">
-                <input type="checkbox" name="consent-delivery" required>
-                <span>Я даю согласие на сбор и передачу адреса пункта выдачи транспортным компаниям на условиях Порядка организации доставки.</span>
-              </label>
-              <span class="cart-field-error" id="error-consent-delivery"></span>
-              <label class="cart-consent">
-                <input type="checkbox" name="consent-offer" required>
-                <span>Я ознакомлен(а) и принимаю условия <a href="offer.html" class="cart-consent-link">Публичной оферты</a> (Договора подряда на индивидуальное изготовление).</span>
-              </label>
-              <span class="cart-field-error" id="error-consent-offer"></span>
-            </div>
-
-            <button type="submit" class="cart-summary-submit" id="cart-submit">Отправить заказ в лабораторию</button>
-          </form>
+          <button type="button" class="cart-summary-submit" id="cart-checkout-open">Перейти к оформлению</button>
           <a href="catalog.html" class="cart-summary-continue">Продолжить покупки</a>
         </div>
 
@@ -138,6 +111,48 @@
       </div>
     </section>
   </main>
+
+  <div class="checkout-modal" id="checkout-modal" hidden>
+    <div class="checkout-modal-backdrop" id="checkout-modal-backdrop"></div>
+    <div class="checkout-modal-panel" role="dialog" aria-modal="true" aria-labelledby="checkout-modal-title">
+      <button type="button" class="checkout-modal-close" id="checkout-modal-close" aria-label="Закрыть">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+      <p class="checkout-modal-title" id="checkout-modal-title">Оформление заказа</p>
+
+      <form class="cart-checkout" id="cart-checkout-form" novalidate>
+        <div class="cart-checkout-fields">
+          <label class="cart-field"><span>Ваше имя</span><input type="text" name="name" required placeholder="Как к вам обращаться"><span class="cart-field-error" id="error-name"></span></label>
+          <label class="cart-field"><span>Почта</span><input type="email" name="email" required placeholder="ваша@почта.ру"><span class="cart-field-error" id="error-email"></span></label>
+          <label class="cart-field">
+            <span>Способ доставки</span>
+            <select name="delivery-method" required>
+              <option value="" disabled selected>Выберите способ</option>
+              <option value="cdek">СДЭК</option>
+              <option value="pochta">Почта России</option>
+            </select>
+            <span class="cart-field-error" id="error-delivery-method"></span>
+          </label>
+          <label class="cart-field"><span>Адрес пункта выдачи или отделения</span><textarea name="address" rows="2" required placeholder="Город, адрес пункта выдачи СДЭК или отделения Почты России"></textarea><span class="cart-field-error" id="error-address"></span></label>
+        </div>
+
+        <div class="cart-consents">
+          <label class="cart-consent">
+            <input type="checkbox" name="consent-contact" required>
+            <span>Я даю согласие на обработку Имени и Электронной почты для идентификации заказа и связи со мной в соответствии с Правилами обработки контактов.</span>
+          </label>
+          <span class="cart-field-error" id="error-consent-contact"></span>
+          <label class="cart-consent">
+            <input type="checkbox" name="consent-delivery" required>
+            <span>Я даю согласие на сбор и передачу адреса пункта выдачи транспортным компаниям на условиях Порядка организации доставки.</span>
+          </label>
+          <span class="cart-field-error" id="error-consent-delivery"></span>
+        </div>
+
+        <button type="submit" class="cart-summary-submit" id="cart-submit">Отправить заказ в лабораторию</button>
+      </form>
+    </div>
+  </div>
 
   <script src="js/nav.js"></script>
   <script src="js/cart-page.js"></script>

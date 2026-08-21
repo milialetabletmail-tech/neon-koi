@@ -127,10 +127,12 @@
       { name: 'address', errorId: 'error-address', validate: (v) => (v.trim() ? '' : 'Укажите адрес пункта выдачи или отделения') },
     ];
 
+    // consent-offer is asked up front on the main summary (see
+    // "Перейти к оформлению" below) rather than inside the modal form
+    // with these two, so it isn't part of the form's own elements.
     const CONSENT_VALIDATORS = [
       { name: 'consent-contact', errorId: 'error-consent-contact', message: 'Нужно подтвердить согласие на обработку контактов' },
       { name: 'consent-delivery', errorId: 'error-consent-delivery', message: 'Нужно подтвердить согласие на передачу адреса' },
-      { name: 'consent-offer', errorId: 'error-consent-offer', message: 'Нужно подтвердить, что вы принимаете условия оферты' },
     ];
 
     function setFieldError(input, errorId, message) {
@@ -152,6 +154,55 @@
       const errorMsg = input.checked ? '' : message;
       setFieldError(input, errorId, errorMsg);
       return errorMsg ? input : null;
+    }
+
+    // The oferta checkbox gates opening the checkout modal at all —
+    // it isn't inside cart-checkout-form, so it gets its own tiny
+    // validator rather than reusing validateConsent(form, ...).
+    const offerConsentInput = document.getElementById('consent-offer');
+    function validateOfferConsent() {
+      const message = offerConsentInput.checked ? '' : 'Нужно подтвердить, что вы принимаете условия оферты';
+      setFieldError(offerConsentInput, 'error-consent-offer', message);
+      return message ? offerConsentInput : null;
+    }
+    if (offerConsentInput) {
+      offerConsentInput.addEventListener('change', validateOfferConsent);
+    }
+
+    // Checkout modal — opened once the oferta checkbox above is
+    // confirmed, holds the rest of the contact/delivery form.
+    const checkoutModal = document.getElementById('checkout-modal');
+    const checkoutOpenBtn = document.getElementById('cart-checkout-open');
+    const checkoutCloseBtn = document.getElementById('checkout-modal-close');
+    const checkoutBackdrop = document.getElementById('checkout-modal-backdrop');
+
+    function openCheckoutModal() {
+      checkoutModal.hidden = false;
+      document.body.classList.add('checkout-modal-open');
+      const firstField = checkoutModal.querySelector('input[name="name"]');
+      if (firstField) firstField.focus();
+    }
+
+    function closeCheckoutModal() {
+      checkoutModal.hidden = true;
+      document.body.classList.remove('checkout-modal-open');
+    }
+
+    if (checkoutOpenBtn && checkoutModal) {
+      checkoutOpenBtn.addEventListener('click', () => {
+        const invalid = validateOfferConsent();
+        if (invalid) {
+          invalid.focus();
+          return;
+        }
+        openCheckoutModal();
+      });
+
+      checkoutBackdrop.addEventListener('click', closeCheckoutModal);
+      checkoutCloseBtn.addEventListener('click', closeCheckoutModal);
+      document.addEventListener('keydown', (evt) => {
+        if (evt.key === 'Escape' && !checkoutModal.hidden) closeCheckoutModal();
+      });
     }
 
     // A <form> (rather than a bare button) mainly so Enter-to-submit
@@ -196,6 +247,11 @@
         checkoutForm.reset();
         checkoutForm.querySelectorAll('.cart-field-error').forEach((el) => { el.textContent = ''; });
         checkoutForm.querySelectorAll('.has-error').forEach((el) => el.classList.remove('has-error'));
+        closeCheckoutModal();
+        if (offerConsentInput) {
+          offerConsentInput.checked = false;
+          setFieldError(offerConsentInput, 'error-consent-offer', '');
+        }
 
         document.getElementById('cart-empty').hidden = true;
         document.getElementById('cart-list').hidden = true;
