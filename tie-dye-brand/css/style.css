@@ -3817,7 +3817,14 @@ body.size-table-open {
 }
 
 .order-track-line-fill {
+  width: 3px;
   background: linear-gradient(var(--sage), var(--lavender), var(--teal));
+  filter: saturate(2.1) brightness(1.35);
+  box-shadow:
+    0 0 6px 1px rgba(156, 161, 108, 0.8),
+    0 0 6px 1px rgba(155, 152, 187, 0.8),
+    0 0 6px 1px rgba(110, 170, 169, 0.8),
+    0 0 16px rgba(155, 152, 187, 0.45);
   transition: height 0.5s ease;
 }
 
@@ -3981,6 +3988,7 @@ body.size-table-open {
   }
 
   .order-track-line-fill {
+    height: 3px;
     transition: width 0.5s ease;
   }
 
