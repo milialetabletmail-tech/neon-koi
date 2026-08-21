@@ -2334,7 +2334,8 @@ body.size-table-open {
 .product-info {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
+  text-align: center;
   gap: 0.9rem;
 }
 
@@ -2752,19 +2753,12 @@ body.size-table-open {
   .product-gallery {
     max-width: 32rem;
   }
-
-  .product-badges {
-    justify-content: flex-start;
-  }
 }
 
 @media (max-width: 760px) {
   .product-layout {
     grid-template-columns: 1fr;
     text-align: center;
-  }
-  .product-info {
-    align-items: center;
   }
   .product-gallery {
     max-width: 20rem;
