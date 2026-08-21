@@ -108,18 +108,94 @@
       if (evt.key === window.LNCart.KEY) render();
     });
 
-    // A <form> (rather than a bare button) so the browser's own HTML5
-    // validation enforces the required contact/delivery fields and
-    // consent checkboxes before the order goes through.
+    // The form carries novalidate — browser-native "Please fill out
+    // this field" tooltips are in whatever language the OS is set to
+    // and can't be restyled, so validation and error copy are done by
+    // hand here instead, in Russian and matching the site's look.
+    const FIELD_VALIDATORS = [
+      { name: 'name', errorId: 'error-name', validate: (v) => (v.trim() ? '' : 'Пожалуйста, укажите ваше имя') },
+      {
+        name: 'email',
+        errorId: 'error-email',
+        validate: (v) => {
+          if (!v.trim()) return 'Пожалуйста, укажите почту';
+          if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim())) return 'Проверьте адрес почты — он выглядит некорректно';
+          return '';
+        },
+      },
+      { name: 'delivery-method', errorId: 'error-delivery-method', validate: (v) => (v ? '' : 'Выберите способ доставки') },
+      { name: 'address', errorId: 'error-address', validate: (v) => (v.trim() ? '' : 'Укажите адрес пункта выдачи или отделения') },
+    ];
+
+    const CONSENT_VALIDATORS = [
+      { name: 'consent-contact', errorId: 'error-consent-contact', message: 'Нужно подтвердить согласие на обработку контактов' },
+      { name: 'consent-delivery', errorId: 'error-consent-delivery', message: 'Нужно подтвердить согласие на передачу адреса' },
+      { name: 'consent-offer', errorId: 'error-consent-offer', message: 'Нужно подтвердить, что вы принимаете условия оферты' },
+    ];
+
+    function setFieldError(input, errorId, message) {
+      const errorEl = document.getElementById(errorId);
+      const wrapper = input.closest('.cart-field') || input.closest('.cart-consent');
+      if (errorEl) errorEl.textContent = message;
+      if (wrapper) wrapper.classList.toggle('has-error', Boolean(message));
+    }
+
+    function validateField({ name, errorId, validate }, form) {
+      const input = form.elements[name];
+      const message = validate(input.value);
+      setFieldError(input, errorId, message);
+      return message ? input : null;
+    }
+
+    function validateConsent({ name, errorId, message }, form) {
+      const input = form.elements[name];
+      const errorMsg = input.checked ? '' : message;
+      setFieldError(input, errorId, errorMsg);
+      return errorMsg ? input : null;
+    }
+
+    // A <form> (rather than a bare button) mainly so Enter-to-submit
+    // still works from any field; the actual pass/fail check is the
+    // custom validation above, not the browser's built-in one.
     const checkoutForm = document.getElementById('cart-checkout-form');
     if (checkoutForm) {
+      checkoutForm.addEventListener('input', (evt) => {
+        const field = FIELD_VALIDATORS.find((f) => f.name === evt.target.name);
+        if (field) validateField(field, checkoutForm);
+      });
+
+      checkoutForm.addEventListener('change', (evt) => {
+        const field = FIELD_VALIDATORS.find((f) => f.name === evt.target.name);
+        if (field) validateField(field, checkoutForm);
+        const consent = CONSENT_VALIDATORS.find((c) => c.name === evt.target.name);
+        if (consent) validateConsent(consent, checkoutForm);
+      });
+
       checkoutForm.addEventListener('submit', (evt) => {
         evt.preventDefault();
+
+        let firstInvalid = null;
+        FIELD_VALIDATORS.forEach((field) => {
+          const invalid = validateField(field, checkoutForm);
+          if (invalid && !firstInvalid) firstInvalid = invalid;
+        });
+        CONSENT_VALIDATORS.forEach((consent) => {
+          const invalid = validateConsent(consent, checkoutForm);
+          if (invalid && !firstInvalid) firstInvalid = invalid;
+        });
+
+        if (firstInvalid) {
+          firstInvalid.focus();
+          return;
+        }
+
         const items = window.LNCart.getItems();
         if (!items.length) return;
         window.LNOrder.create(items);
         window.LNCart.clear();
         checkoutForm.reset();
+        checkoutForm.querySelectorAll('.cart-field-error').forEach((el) => { el.textContent = ''; });
+        checkoutForm.querySelectorAll('.has-error').forEach((el) => el.classList.remove('has-error'));
 
         document.getElementById('cart-empty').hidden = true;
         document.getElementById('cart-list').hidden = true;

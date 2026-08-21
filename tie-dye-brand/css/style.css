@@ -3706,6 +3706,36 @@ body.size-table-open {
   border-color: var(--sage);
 }
 
+.cart-field-error {
+  display: none;
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  line-height: 1.4;
+  color: #e0645b;
+}
+
+.cart-field-error:not(:empty) {
+  display: block;
+}
+
+/* Beats the label's ".cart-field span" uppercase/letter-spacing
+   styling, which would otherwise leak onto this sibling span too. */
+.cart-field span.cart-field-error {
+  font-weight: 400;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.cart-field.has-error input,
+.cart-field.has-error select,
+.cart-field.has-error textarea {
+  border-color: #e0645b;
+}
+
+.cart-consent.has-error span {
+  color: #e0645b;
+}
+
 .cart-consents {
   display: flex;
   flex-direction: column;
