@@ -3138,8 +3138,30 @@ body.size-table-open {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  margin-bottom: 2rem;
+  margin-bottom: 0.9rem;
   text-align: left;
+}
+
+.contacts-consent {
+  margin: 0 0 2rem;
+  text-align: left;
+  font-family: var(--font-ui);
+  font-size: 0.74rem;
+  line-height: 1.5;
+  color: var(--paper-dim);
+  opacity: 0.8;
+}
+
+.contacts-consent-link {
+  color: var(--paper);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 0.2s ease;
+}
+
+.contacts-consent-link:hover,
+.contacts-consent-link:focus-visible {
+  color: var(--sage);
 }
 
 .contacts-field {
@@ -3229,6 +3251,89 @@ body.size-table-open {
   display: block;
   width: 1.05rem;
   height: 1.05rem;
+}
+
+/* ------------------------------------------------------------
+   LEGAL PAGES (privacy.html, …) — same flat-ink + gradient-blob
+   backdrop as .cart-page/.order-page, holding a single narrow column
+   of prose. Placeholder copy only for now (see privacy.html); real
+   policy text gets dropped into .legal-copy later without needing any
+   markup changes here.
+   ------------------------------------------------------------ */
+
+.legal-page {
+  position: relative;
+  overflow: hidden;
+  min-height: 100vh;
+  padding: clamp(7rem, 12vw, 9rem) 1.5rem clamp(5rem, 10vw, 7rem);
+  background-color: var(--ink);
+  color: var(--paper);
+}
+
+.legal-page::before {
+  content: '';
+  position: absolute;
+  inset: -10%;
+  z-index: 0;
+  background:
+    radial-gradient(circle at 12% 18%, var(--lavender) 0%, transparent 34%),
+    radial-gradient(circle at 88% 12%, var(--teal) 0%, transparent 32%),
+    radial-gradient(circle at 82% 88%, var(--sage) 0%, transparent 36%),
+    radial-gradient(circle at 15% 85%, var(--lavender) 0%, transparent 28%);
+  opacity: 0.28;
+  filter: blur(70px);
+  pointer-events: none;
+}
+
+.legal-page-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 34rem;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.legal-eyebrow {
+  margin: 0 0 0.6rem;
+  font-family: var(--font-ui);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--paper-dim);
+  opacity: 0.75;
+}
+
+.legal-title {
+  margin: 0 0 1.4rem;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 700;
+  font-size: clamp(1.9rem, 4.6vw, 2.6rem);
+}
+
+.legal-copy {
+  margin: 0 auto 2.2rem;
+  max-width: 26rem;
+  font-family: var(--font-ui);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--paper-dim);
+}
+
+.legal-back {
+  font-family: var(--font-ui);
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--paper);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 0.2s ease;
+}
+
+.legal-back:hover,
+.legal-back:focus-visible {
+  color: var(--sage);
 }
 
 /* ------------------------------------------------------------
