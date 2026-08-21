@@ -5,10 +5,10 @@
    derived from elapsed time since the order's submittedAt rather than
    stored separately, so a reload mid-wait still lands on the right
    step; a 1s ticker just re-derives and re-renders as time passes.
-   "Отменить заказ" (see js/nav.js's LNOrder.reset) restarts
-   submittedAt at now — there's no real fulfillment backend yet to
-   cancel against, so for now it's a way to replay the sequence
-   without waiting out the real 20s-per-stage delay.
+   "Отменить заказ" (see js/nav.js's LNOrder.clear) wipes the order
+   record entirely and drops the page back to its empty state — there's
+   no real fulfillment backend yet to cancel against, so this is just
+   the reset button for testing the flow again from scratch.
    ============================================================ */
 
 (function () {
@@ -165,9 +165,10 @@
 
     const cancelBtn = document.getElementById('order-cancel');
     cancelBtn.addEventListener('click', () => {
-      window.LNOrder.reset();
-      lastIndex = -1;
-      applyStage(0);
+      window.LNOrder.clear();
+      window.clearInterval(ticker);
+      contentEl.hidden = true;
+      emptyEl.hidden = false;
     });
 
     window.addEventListener('beforeunload', () => window.clearInterval(ticker));

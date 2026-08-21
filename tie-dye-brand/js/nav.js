@@ -96,7 +96,7 @@
 
   // ------------------------------------------------------------
   // ORDER TRACKING — a separate localStorage record from the cart,
-  // created once (cart.html's submit button) and then read/reset by
+  // created once (cart.html's submit button) and then read/cleared by
   // order.html. Just {items, submittedAt}: order-page.js derives the
   // current stage from how much time has passed since submittedAt
   // rather than storing a stage index, so the tracker keeps advancing
@@ -120,17 +120,12 @@
     return order;
   }
 
-  // "Отменить заказ" — for now this just restarts the progress timer
-  // (submittedAt = now) rather than deleting the order, since the
-  // brand has no real fulfillment backend yet to actually cancel
-  // anything against; it exists so the stage sequence can be replayed
-  // for testing without waiting out real time.
-  function resetOrder() {
-    const order = readOrder();
-    if (!order) return null;
-    order.submittedAt = Date.now();
-    localStorage.setItem(ORDER_KEY, JSON.stringify(order));
-    return order;
+  // "Отменить заказ" — the brand has no real fulfillment backend yet
+  // to actually cancel anything against, so for now this just wipes
+  // the local order record entirely: order.html goes back to its
+  // empty state, as if nothing had been submitted.
+  function clearOrder() {
+    localStorage.removeItem(ORDER_KEY);
   }
 
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -210,7 +205,7 @@
     KEY: ORDER_KEY,
     get: readOrder,
     create: createOrder,
-    reset: resetOrder,
+    clear: clearOrder,
   };
 
   function wireDropdown(toggleId, panelId) {
