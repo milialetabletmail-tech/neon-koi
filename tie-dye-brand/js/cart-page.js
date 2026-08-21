@@ -108,13 +108,18 @@
       if (evt.key === window.LNCart.KEY) render();
     });
 
-    const submitBtn = document.getElementById('cart-submit');
-    if (submitBtn) {
-      submitBtn.addEventListener('click', () => {
+    // A <form> (rather than a bare button) so the browser's own HTML5
+    // validation enforces the required contact/delivery fields and
+    // consent checkboxes before the order goes through.
+    const checkoutForm = document.getElementById('cart-checkout-form');
+    if (checkoutForm) {
+      checkoutForm.addEventListener('submit', (evt) => {
+        evt.preventDefault();
         const items = window.LNCart.getItems();
         if (!items.length) return;
         window.LNOrder.create(items);
         window.LNCart.clear();
+        checkoutForm.reset();
 
         document.getElementById('cart-empty').hidden = true;
         document.getElementById('cart-list').hidden = true;
