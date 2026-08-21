@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Корзина — LN-Team</title>
-<meta name="description" content="LN-Team: ваша корзина.">
+<title>Ваш заказ — LN-Team</title>
+<meta name="description" content="LN-Team: ваш заказ.">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -35,7 +35,7 @@
         </div>
       </div>
 
-      <a href="cart.html" class="icon-btn" id="cart-link" aria-label="Корзина" aria-current="page">
+      <a href="cart.html" class="icon-btn" id="cart-link" aria-label="Ваш заказ" aria-current="page">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
         <span class="cart-count" id="cart-count" hidden>0</span>
       </a>
@@ -57,7 +57,7 @@
       <a href="contacts.html" class="nav-overlay-link" data-accent="sage">Контакты</a>
     </nav>
     <div class="nav-overlay-secondary">
-      <a href="cart.html" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span>Корзина</span></a>
+      <a href="cart.html" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span>Ваш заказ</span></a>
       <a href="account.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5"/><circle cx="12" cy="7" r="3.5"/></svg><span>Личный кабинет</span></a>
     </div>
   </div>
@@ -65,8 +65,8 @@
   <main>
     <section class="cart-page">
       <div class="cart-page-inner">
-        <p class="cart-eyebrow">Корзина</p>
-        <h1 class="cart-title">Ваша корзина</h1>
+        <p class="cart-eyebrow">Ваш заказ</p>
+        <h1 class="cart-title">Выбранные модели</h1>
 
         <div class="cart-empty" id="cart-empty" hidden>
           <p class="cart-empty-copy">Пока пусто — загляните в каталог, там уже есть первые вещи.</p>
@@ -77,15 +77,20 @@
 
         <div class="cart-summary" id="cart-summary" hidden>
           <div class="cart-summary-row">
-            <span>Товаров</span>
+            <span>Всего позиций</span>
             <span id="cart-summary-count">0</span>
           </div>
           <div class="cart-summary-row cart-summary-row--total">
             <span>Итого</span>
             <span id="cart-summary-total">0 ₽</span>
           </div>
-          <p class="cart-summary-note">Оформление заказа появится на следующем этапе — пока корзина только собирается.</p>
+          <button type="button" class="cart-summary-submit" id="cart-submit">Отправить заказ в лабораторию</button>
           <a href="catalog.html" class="cart-summary-continue">Продолжить покупки</a>
+        </div>
+
+        <div class="cart-success" id="cart-success" hidden>
+          <p class="cart-success-copy">Заказ отправлен в лабораторию! Мы свяжемся с вами, чтобы уточнить детали окрашивания.</p>
+          <a href="catalog.html" class="cart-empty-cta">В каталог</a>
         </div>
       </div>
     </section>

@@ -1,7 +1,10 @@
 /* ============================================================
    CART PAGE — renders js/nav.js's localStorage cart (window.LNCart)
-   as an editable list: qty +/-, remove, running total. No checkout
-   yet — there's nowhere for an order to go until that exists.
+   as an editable list: qty +/-, remove, running total, and a submit
+   button that clears the cart and swaps in a confirmation panel.
+   Still no real backend — "Отправить заказ в лабораторию" doesn't
+   reach a server yet, it just closes out the local order the same
+   way a real submit would from the shopper's point of view.
    ============================================================ */
 
 (function () {
@@ -38,7 +41,10 @@
     const emptyEl = document.getElementById('cart-empty');
     const listEl = document.getElementById('cart-list');
     const summaryEl = document.getElementById('cart-summary');
+    const successEl = document.getElementById('cart-success');
     if (!emptyEl || !listEl || !summaryEl) return;
+
+    successEl.hidden = true;
 
     const items = window.LNCart.getItems();
 
@@ -96,5 +102,17 @@
     window.addEventListener('storage', (evt) => {
       if (evt.key === window.LNCart.KEY) render();
     });
+
+    const submitBtn = document.getElementById('cart-submit');
+    if (submitBtn) {
+      submitBtn.addEventListener('click', () => {
+        window.LNCart.clear();
+
+        document.getElementById('cart-empty').hidden = true;
+        document.getElementById('cart-list').hidden = true;
+        document.getElementById('cart-summary').hidden = true;
+        document.getElementById('cart-success').hidden = false;
+      });
+    }
   });
 })();

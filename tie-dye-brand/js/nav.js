@@ -90,6 +90,10 @@
     return items;
   }
 
+  function clearCart() {
+    writeCart([]);
+  }
+
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // Clones `sourceImg`, then animates the clone shrinking/rotating
@@ -159,6 +163,7 @@
     addItem: addToCart,
     setQty: setCartQty,
     removeItem: removeFromCart,
+    clear: clearCart,
     flyToCart: flyToCart,
   };
 
