@@ -5350,9 +5350,16 @@ a.collection-preview-card:visited {
   opacity: 0.55;
 }
 
+.footer-legal-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.4rem 1rem;
+  margin-bottom: 0.9rem;
+}
+
 .footer-legal-link {
-  display: inline-block;
-  margin: 0 0 0.9rem;
   font-family: var(--font-ui);
   font-size: 0.75rem;
   color: var(--paper-dim);
