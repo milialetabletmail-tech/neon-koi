@@ -5128,6 +5128,24 @@ a.collection-preview-card:visited {
   opacity: 0.55;
 }
 
+.footer-legal-link {
+  display: inline-block;
+  margin: 0 0 0.9rem;
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  color: var(--paper-dim);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  opacity: 0.7;
+  transition: color 0.2s ease, opacity 0.2s ease;
+}
+
+.footer-legal-link:hover,
+.footer-legal-link:focus-visible {
+  color: var(--teal);
+  opacity: 1;
+}
+
 /* ------------------------------------------------------------
    REDUCED MOTION FALLBACK
    ------------------------------------------------------------ */
