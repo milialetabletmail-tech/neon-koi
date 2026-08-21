@@ -3708,7 +3708,7 @@ body.size-table-open {
 }
 
 .order-track-line-fill {
-  background: linear-gradient(var(--sage), var(--lavender));
+  background: linear-gradient(var(--sage), var(--lavender), var(--teal));
   transition: height 0.5s ease;
 }
 
@@ -3791,8 +3791,8 @@ body.size-table-open {
 }
 
 .order-step.is-done .order-step-dot {
-  border-color: var(--sage);
-  background: var(--sage);
+  border-color: var(--paper);
+  background: var(--paper);
 }
 
 .order-step.is-done .order-step-label {
