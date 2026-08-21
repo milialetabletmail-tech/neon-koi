@@ -1,6 +1,7 @@
 /* ============================================================
    ORDER TRACKING PAGE — reads window.LNOrder (js/nav.js) and renders
-   its 12-stage progress as a vertical dotted track with the actual
+   its 12-stage progress as a dotted track (vertical on mobile,
+   horizontal on desktop — see isTrackHorizontal) with the actual
    ordered shirt's photo sliding from dot to dot. The current stage is
    derived from elapsed time since the order's submittedAt rather than
    stored separately, so a reload mid-wait still lands on the right
@@ -50,13 +51,26 @@
     return product && product.colors && product.colors.length ? product.colors : null;
   }
 
+  // On desktop the track lays out horizontally with labels alternating
+  // above/below the line (js just fills whichever of the two label
+  // spans applies; CSS grid-places them regardless of DOM order so the
+  // dot stays vertically centered no matter which label has text). On
+  // mobile both spans sit in a plain flex row and the empty one
+  // collapses via :empty, so only the populated label shows.
   function renderSteps(stepsEl) {
-    stepsEl.innerHTML = STAGES.map((label) =>
-      '<li class="order-step">' +
+    stepsEl.innerHTML = STAGES.map((label, i) => {
+      const top = i % 2 === 1 ? label : '';
+      const bottom = i % 2 === 1 ? '' : label;
+      return '<li class="order-step">' +
+        '<span class="order-step-label order-step-label--top">' + top + '</span>' +
         '<span class="order-step-rail"><span class="order-step-dot"></span></span>' +
-        '<span class="order-step-label">' + label + '</span>' +
-      '</li>'
-    ).join('');
+        '<span class="order-step-label order-step-label--bottom">' + bottom + '</span>' +
+      '</li>';
+    }).join('');
+  }
+
+  function isTrackHorizontal() {
+    return window.matchMedia('(min-width: 769px)').matches;
   }
 
   function measure(trackEl) {
@@ -127,7 +141,13 @@
       shirtEl.style.top = center.y + 'px';
       lineFillEl.style.left = dotCenters[0].x + 'px';
       lineFillEl.style.top = dotCenters[0].y + 'px';
-      lineFillEl.style.height = Math.max(0, center.y - dotCenters[0].y) + 'px';
+      if (isTrackHorizontal()) {
+        lineFillEl.style.width = Math.max(0, center.x - dotCenters[0].x) + 'px';
+        lineFillEl.style.height = '';
+      } else {
+        lineFillEl.style.height = Math.max(0, center.y - dotCenters[0].y) + 'px';
+        lineFillEl.style.width = '';
+      }
 
       shirtEl.classList.toggle('is-ready', index === STAGES.length - 1);
       currentLabelEl.textContent = 'Сейчас: ' + STAGES[index];
@@ -140,26 +160,31 @@
       if (index !== lastIndex) applyStage(index);
     }
 
-    // Full-height rail line only needs the first/last dot positions —
+    // Full-length rail line only needs the first/last dot positions —
     // set once, it doesn't move as the stage advances (only the fill
-    // and the shirt do).
+    // and the shirt do). Runs along x on the desktop horizontal track,
+    // along y on the mobile vertical one.
     const lineEl = document.getElementById('order-track') && trackEl.querySelector('.order-track-line');
-    if (lineEl) {
+    function positionLine() {
+      if (!lineEl) return;
       lineEl.style.left = dotCenters[0].x + 'px';
       lineEl.style.top = dotCenters[0].y + 'px';
-      lineEl.style.height = (dotCenters[dotCenters.length - 1].y - dotCenters[0].y) + 'px';
+      if (isTrackHorizontal()) {
+        lineEl.style.width = (dotCenters[dotCenters.length - 1].x - dotCenters[0].x) + 'px';
+        lineEl.style.height = '';
+      } else {
+        lineEl.style.height = (dotCenters[dotCenters.length - 1].y - dotCenters[0].y) + 'px';
+        lineEl.style.width = '';
+      }
     }
+    positionLine();
 
     applyStage(getStageIndex(order));
     const ticker = window.setInterval(tick, 1000);
 
     window.addEventListener('resize', () => {
       dotCenters = measure(trackEl);
-      if (lineEl) {
-        lineEl.style.left = dotCenters[0].x + 'px';
-        lineEl.style.top = dotCenters[0].y + 'px';
-        lineEl.style.height = (dotCenters[dotCenters.length - 1].y - dotCenters[0].y) + 'px';
-      }
+      positionLine();
       applyStage(lastIndex === -1 ? getStageIndex(order) : lastIndex);
     });
 
