@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>О бренде — LN-Team</title>
-<meta name="description" content="LN-Team: скручиваем и красим вручную, по одной вещи за раз. История бренда скоро появится здесь.">
+<title>Мой заказ — LN-Team</title>
+<meta name="description" content="LN-Team: статус вашего окрашивания.">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,9 +20,9 @@
     <nav class="nav-links" aria-label="Основная навигация">
       <a href="index.html" class="nav-link" data-accent="sage">Главная</a>
       <a href="catalog.html" class="nav-link" data-accent="lavender">Каталог</a>
-      <a href="about.html" class="nav-link" data-accent="teal" aria-current="page">О бренде</a>
+      <a href="about.html" class="nav-link" data-accent="teal">О бренде</a>
       <a href="contacts.html" class="nav-link" data-accent="sage">Контакты</a>
-      <a href="order.html" class="nav-link" data-accent="lavender">Мой заказ</a>
+      <a href="order.html" class="nav-link" data-accent="lavender" aria-current="page">Мой заказ</a>
     </nav>
 
     <div class="nav-icons">
@@ -54,9 +54,9 @@
     <nav class="nav-overlay-links" aria-label="Полное меню">
       <a href="index.html" class="nav-overlay-link" data-accent="sage">Главная</a>
       <a href="catalog.html" class="nav-overlay-link" data-accent="lavender">Каталог</a>
-      <a href="about.html" class="nav-overlay-link" data-accent="teal" aria-current="page">О бренде</a>
+      <a href="about.html" class="nav-overlay-link" data-accent="teal">О бренде</a>
       <a href="contacts.html" class="nav-overlay-link" data-accent="sage">Контакты</a>
-      <a href="order.html" class="nav-overlay-link" data-accent="lavender">Мой заказ</a>
+      <a href="order.html" class="nav-overlay-link" data-accent="lavender" aria-current="page">Мой заказ</a>
     </nav>
     <div class="nav-overlay-secondary">
       <a href="cart.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span>Ваш заказ</span></a>
@@ -65,43 +65,44 @@
   </div>
 
   <main>
-    <section class="about-page dye-ambient">
-      <div class="about-intro">
-        <p class="about-eyebrow">О бренде</p>
-        <h1 class="about-title">LN-Team — лаборатория, а не конвейер</h1>
-        <p class="about-lead">Мы скручиваем и красим тай-дай вручную, индивидуально под каждый заказ — без цехов, без двух одинаковых вещей. Вот как это устроено.</p>
-      </div>
+    <section class="order-page">
+      <div class="order-page-inner">
+        <p class="order-eyebrow">Мой заказ</p>
+        <h1 class="order-title">Статус окрашивания</h1>
 
-      <div class="about-values">
-        <article class="about-value" data-accent="lavender">
-          <p class="about-value-heading">Ручная работа</p>
-          <p class="about-value-copy">От первого узла до последней капли краски — каждую вещь скручиваем и красим сами, без цехов и конвейеров.</p>
-        </article>
+        <div class="order-empty" id="order-empty" hidden>
+          <p class="order-empty-copy">Активных заказов пока нет — отправьте окрашивание из корзины, и здесь появится статус.</p>
+          <a href="catalog.html" class="cart-empty-cta">В каталог</a>
+        </div>
 
-        <article class="about-value" data-accent="teal">
-          <p class="about-value-heading">Индивидуальный заказ</p>
-          <p class="about-value-copy">Каждую футболку окрашиваем отдельно под конкретного человека. Повторить рисунок один в один невозможно: следующая вещь получится уже другой.</p>
-        </article>
+        <div class="order-content" id="order-content" hidden>
+          <div class="order-item" id="order-item">
+            <img class="order-item-image" id="order-item-image" src="" alt="">
+            <div class="order-item-text">
+              <p class="order-item-name" id="order-item-name"></p>
+              <p class="order-item-meta" id="order-item-meta"></p>
+            </div>
+          </div>
 
-        <article class="about-value" data-accent="sage">
-          <p class="about-value-heading">Непредсказуемость</p>
-          <p class="about-value-copy">Тай-дай невозможно просчитать до конца — узор рождается сам, пока краска расходится по ткани. Мы не боремся с этим, а строим на этом весь бренд.</p>
-        </article>
-      </div>
+          <p class="order-stage-current" id="order-stage-current"></p>
 
-      <div class="about-process-recap">
-        <p class="about-process-recap-eyebrow">Процесс</p>
-        <p class="about-process-recap-copy">Работаем в двух техниках — тёплое и холодное окрашивание, а точную технологию держим в секрете: скручиваем вручную, красим по фирменной методике — и ждём, пока рисунок проявится сам.</p>
-        <a href="index.html#process" class="about-process-recap-link">Смотреть весь процесс</a>
-      </div>
+          <div class="order-track" id="order-track">
+            <div class="order-track-line" aria-hidden="true"></div>
+            <div class="order-track-line-fill" id="order-track-fill" aria-hidden="true"></div>
+            <div class="order-track-shirt" id="order-track-shirt" aria-hidden="true">
+              <img id="order-track-shirt-img" src="" alt="">
+            </div>
+            <ol class="order-steps" id="order-steps"></ol>
+          </div>
 
-      <div class="about-cta">
-        <p class="about-cta-copy">Готовы посмотреть, что получится?</p>
-        <a href="catalog.html" class="about-cta-button">Смотреть каталог</a>
+          <button type="button" class="order-cancel" id="order-cancel">Отменить заказ</button>
+        </div>
       </div>
     </section>
   </main>
 
   <script src="js/nav.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/order-page.js"></script>
 </body>
 </html>

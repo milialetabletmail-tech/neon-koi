@@ -106,6 +106,9 @@
     const submitBtn = document.getElementById('cart-submit');
     if (submitBtn) {
       submitBtn.addEventListener('click', () => {
+        const items = window.LNCart.getItems();
+        if (!items.length) return;
+        window.LNOrder.create(items);
         window.LNCart.clear();
 
         document.getElementById('cart-empty').hidden = true;

@@ -94,6 +94,45 @@
     writeCart([]);
   }
 
+  // ------------------------------------------------------------
+  // ORDER TRACKING — a separate localStorage record from the cart,
+  // created once (cart.html's submit button) and then read/reset by
+  // order.html. Just {items, submittedAt}: order-page.js derives the
+  // current stage from how much time has passed since submittedAt
+  // rather than storing a stage index, so the tracker keeps advancing
+  // correctly across reloads/tab closes without its own timer state
+  // to get out of sync.
+  // ------------------------------------------------------------
+  const ORDER_KEY = 'ln-team-order';
+
+  function readOrder() {
+    try {
+      const raw = JSON.parse(localStorage.getItem(ORDER_KEY));
+      return raw && Array.isArray(raw.items) && raw.items.length ? raw : null;
+    } catch (err) {
+      return null;
+    }
+  }
+
+  function createOrder(items) {
+    const order = { items: items, submittedAt: Date.now() };
+    localStorage.setItem(ORDER_KEY, JSON.stringify(order));
+    return order;
+  }
+
+  // "Отменить заказ" — for now this just restarts the progress timer
+  // (submittedAt = now) rather than deleting the order, since the
+  // brand has no real fulfillment backend yet to actually cancel
+  // anything against; it exists so the stage sequence can be replayed
+  // for testing without waiting out real time.
+  function resetOrder() {
+    const order = readOrder();
+    if (!order) return null;
+    order.submittedAt = Date.now();
+    localStorage.setItem(ORDER_KEY, JSON.stringify(order));
+    return order;
+  }
+
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // Clones `sourceImg`, then animates the clone shrinking/rotating
@@ -165,6 +204,13 @@
     removeItem: removeFromCart,
     clear: clearCart,
     flyToCart: flyToCart,
+  };
+
+  window.LNOrder = {
+    KEY: ORDER_KEY,
+    get: readOrder,
+    create: createOrder,
+    reset: resetOrder,
   };
 
   function wireDropdown(toggleId, panelId) {
