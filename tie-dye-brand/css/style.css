@@ -1983,7 +1983,6 @@ body.size-modal-open {
    ------------------------------------------------------------ */
 
 .product-size-table-toggle {
-  align-self: flex-start;
   padding: 0;
   border: none;
   background: none;
@@ -2394,6 +2393,7 @@ body.size-table-open {
 .product-colors {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 0.6rem;
 }
 
@@ -2413,6 +2413,7 @@ body.size-table-open {
   padding: 0;
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 1rem 1.2rem;
 }
 
@@ -2439,6 +2440,7 @@ body.size-table-open {
 .product-size {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 0.35rem;
 }
 
@@ -2455,6 +2457,7 @@ body.size-table-open {
 .product-size-options {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 0.55rem;
 }
 
@@ -2520,6 +2523,7 @@ body.size-table-open {
   line-height: 1.55;
   color: var(--paper-dim);
   opacity: 0.85;
+  text-align: center;
 }
 
 .product-size-hint {
@@ -2528,6 +2532,7 @@ body.size-table-open {
   font-size: 0.78rem;
   font-weight: 500;
   color: #e0645b;
+  text-align: center;
 }
 
 .product-size-hint[hidden] {
