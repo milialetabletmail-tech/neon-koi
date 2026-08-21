@@ -16,7 +16,7 @@
 (function () {
   'use strict';
 
-  const ALL_SIZES = ['42', '44', '46', '48', '50', '52', '54', '56'];
+  const ALL_SIZES = ['S', 'M', 'L', 'XL', 'XXL'];
 
   document.addEventListener('DOMContentLoaded', () => {
     const products = window.LNProducts || [];

@@ -234,41 +234,62 @@
       <span class="product-size-label">Размер</span>
       <div class="product-size-options" id="size-modal-options" role="radiogroup" aria-label="Выберите размер">
         <span class="product-size-option">
-          <input type="radio" name="modal-size" id="modal-size-42" value="42" class="sr-only product-size-input">
-          <label for="modal-size-42" class="product-size-chip"><span class="product-size-chip-num">42</span><span class="product-size-chip-letter">S</span></label>
+          <input type="radio" name="modal-size" id="modal-size-s" value="S" class="sr-only product-size-input">
+          <label for="modal-size-s" class="product-size-chip"><span class="product-size-chip-num">S</span><span class="product-size-chip-letter">44-46</span></label>
         </span>
         <span class="product-size-option">
-          <input type="radio" name="modal-size" id="modal-size-44" value="44" class="sr-only product-size-input">
-          <label for="modal-size-44" class="product-size-chip"><span class="product-size-chip-num">44</span><span class="product-size-chip-letter">S</span></label>
+          <input type="radio" name="modal-size" id="modal-size-m" value="M" class="sr-only product-size-input">
+          <label for="modal-size-m" class="product-size-chip"><span class="product-size-chip-num">M</span><span class="product-size-chip-letter">46-48</span></label>
         </span>
         <span class="product-size-option">
-          <input type="radio" name="modal-size" id="modal-size-46" value="46" class="sr-only product-size-input">
-          <label for="modal-size-46" class="product-size-chip"><span class="product-size-chip-num">46</span><span class="product-size-chip-letter">M</span></label>
+          <input type="radio" name="modal-size" id="modal-size-l" value="L" class="sr-only product-size-input">
+          <label for="modal-size-l" class="product-size-chip"><span class="product-size-chip-num">L</span><span class="product-size-chip-letter">48-50</span></label>
         </span>
         <span class="product-size-option">
-          <input type="radio" name="modal-size" id="modal-size-48" value="48" class="sr-only product-size-input">
-          <label for="modal-size-48" class="product-size-chip"><span class="product-size-chip-num">48</span><span class="product-size-chip-letter">M</span></label>
+          <input type="radio" name="modal-size" id="modal-size-xl" value="XL" class="sr-only product-size-input">
+          <label for="modal-size-xl" class="product-size-chip"><span class="product-size-chip-num">XL</span><span class="product-size-chip-letter">50-52</span></label>
         </span>
         <span class="product-size-option">
-          <input type="radio" name="modal-size" id="modal-size-50" value="50" class="sr-only product-size-input">
-          <label for="modal-size-50" class="product-size-chip"><span class="product-size-chip-num">50</span><span class="product-size-chip-letter">L</span></label>
-        </span>
-        <span class="product-size-option">
-          <input type="radio" name="modal-size" id="modal-size-52" value="52" class="sr-only product-size-input">
-          <label for="modal-size-52" class="product-size-chip"><span class="product-size-chip-num">52</span><span class="product-size-chip-letter">L</span></label>
-        </span>
-        <span class="product-size-option">
-          <input type="radio" name="modal-size" id="modal-size-54" value="54" class="sr-only product-size-input">
-          <label for="modal-size-54" class="product-size-chip"><span class="product-size-chip-num">54</span><span class="product-size-chip-letter">XL</span></label>
-        </span>
-        <span class="product-size-option">
-          <input type="radio" name="modal-size" id="modal-size-56" value="56" class="sr-only product-size-input">
-          <label for="modal-size-56" class="product-size-chip"><span class="product-size-chip-num">56</span><span class="product-size-chip-letter">XL</span></label>
+          <input type="radio" name="modal-size" id="modal-size-xxl" value="XXL" class="sr-only product-size-input">
+          <label for="modal-size-xxl" class="product-size-chip"><span class="product-size-chip-num">XXL</span><span class="product-size-chip-letter">52-54</span></label>
         </span>
       </div>
+      <button type="button" class="product-size-table-toggle" data-size-table-toggle>Таблица размеров</button>
       <p class="product-size-hint" id="size-modal-hint" hidden>Выберите размер перед заказом окрашивания</p>
 
       <button type="button" class="product-add-to-cart size-modal-confirm" id="size-modal-confirm">Заказать окрашивание</button>
+    </div>
+  </div>
+
+  <!-- Same measurements for every product (one cut, oversize fit) —
+       a single static table rather than per-product data. -->
+  <div class="size-table-modal" id="size-table-modal" hidden>
+    <div class="size-table-backdrop" id="size-table-backdrop"></div>
+    <div class="size-table-panel" role="dialog" aria-modal="true" aria-labelledby="size-table-title">
+      <button type="button" class="size-modal-close" id="size-table-close" aria-label="Закрыть">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+      <p class="size-table-title" id="size-table-title">Таблица размеров, см</p>
+      <div class="size-table-scroll">
+        <table class="size-table">
+          <thead>
+            <tr>
+              <th>Размер</th>
+              <th>A<span>Длина изделия</span></th>
+              <th>B<span>Ширина изделия</span></th>
+              <th>C<span>Ширина плеча</span></th>
+              <th>D<span>Длина рукава</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>S</td><td>70</td><td>63</td><td>20</td><td>19</td></tr>
+            <tr><td>M</td><td>72</td><td>65</td><td>20</td><td>20</td></tr>
+            <tr><td>L</td><td>74</td><td>67</td><td>20</td><td>21</td></tr>
+            <tr><td>XL</td><td>76</td><td>69</td><td>20</td><td>22</td></tr>
+            <tr><td>XXL</td><td>78</td><td>71</td><td>20</td><td>23</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 
@@ -276,5 +297,6 @@
   <script src="js/products.js"></script>
   <script src="js/catalog.js"></script>
   <script src="js/catalog-filters.js"></script>
+  <script src="js/size-table.js"></script>
 </body>
 </html>

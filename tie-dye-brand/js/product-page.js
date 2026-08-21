@@ -138,7 +138,7 @@
     const badge = document.createElement('span');
     badge.className = 'product-badge';
     badge.innerHTML = product.technique === 'warm'
-      ? '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.5 1.6c.4 2.8-.6 4.6-2 6.2-1.5 1.7-3.3 3.5-3.3 6.6a5.3 5.3 0 0 0 3.9 5.1c-.6-1-.9-2-.7-3.1.2-1.3 1.1-2.2 1.9-3.1.4 1 .9 1.7 1.6 2.3.9.9 1.4 1.7 1.3 2.9a3.9 3.9 0 0 0 3.3-4c0-2.7-1.6-4-2.7-5.6-.4 1-.9 1.7-1.6 2-.5-3.4-.6-6.4-1.7-9.3z"/></svg>Тёплое окрашивание'
+      ? '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M12.96 2.29a.75.75 0 0 0-1.07-.14 9.74 9.74 0 0 0-3.54 6.18 7.55 7.55 0 0 1-1.7-1.72.75.75 0 0 0-1.15-.08A9 9 0 1 0 15.68 4.53a7.46 7.46 0 0 1-2.72-2.24ZM15.75 14.25a3.75 3.75 0 1 1-7.31-1.17c.63.46 1.35.81 2.13 1a6 6 0 0 1 1.93-3.55 3.75 3.75 0 0 1 3.25 3.72Z"/></svg>Тёплое окрашивание'
       : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v20M4.2 7l15.6 10M4.2 17l15.6-10"/></svg>Холодное окрашивание';
     document.getElementById('product-badges').appendChild(badge);
   }
