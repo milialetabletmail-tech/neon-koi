@@ -1939,8 +1939,10 @@ body.nav-open { overflow: hidden; }
 
 .size-modal-product {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  gap: 0.6rem;
+  text-align: center;
 }
 
 .size-modal-image {
@@ -2452,6 +2454,7 @@ body.size-table-open {
   text-transform: uppercase;
   color: var(--paper-dim);
   opacity: 0.75;
+  text-align: center;
 }
 
 .product-size-options {
