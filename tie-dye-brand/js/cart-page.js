@@ -123,6 +123,15 @@
           return '';
         },
       },
+      {
+        name: 'phone',
+        errorId: 'error-phone',
+        validate: (v) => {
+          if (!v.trim()) return 'Пожалуйста, укажите номер телефона';
+          if (v.replace(/\D/g, '').length < 10) return 'Проверьте номер телефона — похоже, не хватает цифр';
+          return '';
+        },
+      },
       { name: 'delivery-method', errorId: 'error-delivery-method', validate: (v) => (v ? '' : 'Выберите способ доставки') },
       { name: 'address', errorId: 'error-address', validate: (v) => (v.trim() ? '' : 'Укажите адрес пункта выдачи или отделения') },
     ];
