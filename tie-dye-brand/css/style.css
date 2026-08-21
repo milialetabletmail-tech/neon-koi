@@ -3257,9 +3257,11 @@ body.size-table-open {
 /* ------------------------------------------------------------
    LEGAL PAGES (privacy.html, …) — same flat-ink + gradient-blob
    backdrop as .cart-page/.order-page, holding a single narrow column
-   of prose. Placeholder copy only for now (see privacy.html); real
-   policy text gets dropped into .legal-copy later without needing any
-   markup changes here.
+   of prose: a centered eyebrow/title/back-link (.legal-copy is the
+   short centered placeholder variant) around a left-aligned document
+   body (.legal-body, with h2/p/ul/strong styling for the actual
+   policy text). privacy.html still carries [ФИО]/[ИНН]/[email]/[дата]
+   placeholders until the real business details are filled in.
    ------------------------------------------------------------ */
 
 .legal-page {
@@ -3289,7 +3291,7 @@ body.size-table-open {
 .legal-page-inner {
   position: relative;
   z-index: 1;
-  max-width: 34rem;
+  max-width: 38rem;
   margin: 0 auto;
   text-align: center;
 }
@@ -3335,6 +3337,62 @@ body.size-table-open {
 .legal-back:hover,
 .legal-back:focus-visible {
   color: var(--sage);
+}
+
+/* Document body — left-aligned prose, unlike the centered eyebrow/
+   title/back-link around it, since a wall of centered legal text is
+   hard to read. Placeholders like [ФИО]/[ИНН] just render as plain
+   text until the real values are dropped in. */
+.legal-body {
+  margin: 0 0 2.4rem;
+  text-align: left;
+}
+
+.legal-body h2 {
+  margin: 2rem 0 0.8rem;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 600;
+  font-size: 1.15rem;
+  color: var(--paper);
+}
+
+.legal-body h2:first-child {
+  margin-top: 0;
+}
+
+.legal-body p {
+  margin: 0 0 0.9rem;
+  font-family: var(--font-ui);
+  font-size: 0.9rem;
+  line-height: 1.65;
+  color: var(--paper-dim);
+}
+
+.legal-body ul {
+  margin: 0 0 0.9rem;
+  padding-left: 1.2rem;
+  font-family: var(--font-ui);
+  font-size: 0.9rem;
+  line-height: 1.65;
+  color: var(--paper-dim);
+}
+
+.legal-body li {
+  margin-bottom: 0.35rem;
+}
+
+.legal-body strong {
+  color: var(--paper);
+  font-weight: 600;
+}
+
+.legal-meta {
+  margin: 1.8rem 0 0;
+  font-size: 0.78rem;
+  font-style: italic;
+  color: var(--paper-dim);
+  opacity: 0.65;
 }
 
 /* ------------------------------------------------------------
