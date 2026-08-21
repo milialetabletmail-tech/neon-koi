@@ -113,7 +113,7 @@
     // and can't be restyled, so validation and error copy are done by
     // hand here instead, in Russian and matching the site's look.
     const FIELD_VALIDATORS = [
-      { name: 'name', errorId: 'error-name', validate: (v) => (v.trim() ? '' : 'Пожалуйста, укажите ваше имя') },
+      { name: 'name', errorId: 'error-name', validate: (v) => (v.trim() ? '' : 'Пожалуйста, укажите ваше ФИО') },
       {
         name: 'email',
         errorId: 'error-email',
