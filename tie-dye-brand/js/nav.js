@@ -128,6 +128,101 @@
     localStorage.removeItem(ORDER_KEY);
   }
 
+  // ------------------------------------------------------------
+  // ACCOUNT — same "no real backend" localStorage mock as the cart
+  // and order tracker above: one record holding an email/password
+  // pair (set at registration) plus a loggedIn flag, so logging out
+  // and back in doesn't lose the "registered" state. The password is
+  // stored in plain text — fine for a visual mock with no server
+  // behind it, but this is not how real auth would ever be built.
+  // ------------------------------------------------------------
+  const ACCOUNT_KEY = 'ln-team-account';
+
+  function readAccount() {
+    try {
+      const raw = JSON.parse(localStorage.getItem(ACCOUNT_KEY));
+      return raw && raw.email ? raw : null;
+    } catch (err) {
+      return null;
+    }
+  }
+
+  function writeAccount(account) {
+    localStorage.setItem(ACCOUNT_KEY, JSON.stringify(account));
+    renderAccountDropdown();
+  }
+
+  function registerAccount(email, password) {
+    const account = { email: email, password: password, registeredAt: Date.now(), loggedIn: true };
+    writeAccount(account);
+    return account;
+  }
+
+  // Mock login: the only account that can exist locally is whichever
+  // one was last registered on this browser, so "wrong credentials"
+  // just means the entered email/password don't match that record.
+  function loginAccount(email, password) {
+    const account = readAccount();
+    if (!account || account.email !== email || account.password !== password) return null;
+    account.loggedIn = true;
+    writeAccount(account);
+    return account;
+  }
+
+  function logoutAccount() {
+    const account = readAccount();
+    if (!account) return;
+    account.loggedIn = false;
+    writeAccount(account);
+  }
+
+  function isLoggedIn() {
+    const account = readAccount();
+    return Boolean(account && account.loggedIn);
+  }
+
+  // Swaps the header's account dropdown between the guest links
+  // (Войти/Регистрация) and the logged-in ones (Личный кабинет/
+  // Выйти) — runs on every page via nav.js, so the header reflects
+  // login state everywhere without each page's own markup needing to
+  // know about it.
+  function renderAccountDropdown() {
+    const dropdown = document.getElementById('account-dropdown');
+    if (!dropdown) return;
+
+    if (isLoggedIn()) {
+      dropdown.innerHTML =
+        '<a href="account.html" data-accent="teal">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5"/><circle cx="12" cy="7" r="3.5"/></svg>' +
+          '<span>Личный кабинет</span>' +
+        '</a>' +
+        '<button type="button" class="account-dropdown-logout" data-accent="sage">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 7 15 12 10 17"/><line x1="15" y1="12" x2="3" y2="12"/></svg>' +
+          '<span>Выйти</span>' +
+        '</button>';
+
+      const logoutBtn = dropdown.querySelector('.account-dropdown-logout');
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', () => {
+          logoutAccount();
+          if (document.body.dataset.page === 'account') {
+            window.location.reload();
+          }
+        });
+      }
+    } else {
+      dropdown.innerHTML =
+        '<a href="account.html" data-accent="teal">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>' +
+          '<span>Войти</span>' +
+        '</a>' +
+        '<a href="account.html" data-accent="sage">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>' +
+          '<span>Регистрация</span>' +
+        '</a>';
+    }
+  }
+
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // Clones `sourceImg`, then animates the clone shrinking/rotating
@@ -208,6 +303,15 @@
     clear: clearOrder,
   };
 
+  window.LNAccount = {
+    KEY: ACCOUNT_KEY,
+    get: readAccount,
+    register: registerAccount,
+    login: loginAccount,
+    logout: logoutAccount,
+    isLoggedIn: isLoggedIn,
+  };
+
   function wireDropdown(toggleId, panelId) {
     const toggle = document.getElementById(toggleId);
     const panel = document.getElementById(panelId);
@@ -263,6 +367,7 @@
 
   document.addEventListener('DOMContentLoaded', () => {
     renderCartCount();
+    renderAccountDropdown();
     wireDropdown('account-toggle', 'account-dropdown');
     wireOverlayMenu();
 
@@ -273,5 +378,11 @@
     if (header && !document.querySelector('.colorburst')) {
       header.classList.add('nav-solid');
     }
+  });
+
+  // Keeps this tab's header in sync if the account changes in
+  // another tab (mirrors the cart's own storage listener elsewhere).
+  window.addEventListener('storage', (evt) => {
+    if (evt.key === ACCOUNT_KEY) renderAccountDropdown();
   });
 })();

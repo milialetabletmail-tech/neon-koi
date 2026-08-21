@@ -12,7 +12,7 @@
 
 <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body data-page="account">
 
   <header class="site-header nav-solid" id="site-header">
     <a href="index.html" class="wordmark" aria-label="LN-Team — на главную"><span class="sr-only">LN-Team</span></a>
@@ -65,11 +65,48 @@
   </div>
 
   <main>
-    <section class="page-stub">
-      <p class="page-stub-eyebrow">Личный кабинет</p>
-      <h1 class="page-stub-title">Вход и регистрация — скоро</h1>
-      <p class="page-stub-copy">Здесь появятся вход, регистрация, история заказов и профиль. Пока страница в разработке.</p>
-      <a href="index.html" class="page-stub-back">На главную</a>
+    <section class="account-page dye-ambient">
+      <div class="account-card">
+
+        <div id="account-guest">
+          <p class="account-eyebrow">Личный кабинет</p>
+          <h1 class="account-title" id="account-guest-title">Рады видеть снова</h1>
+
+          <div class="account-tabs" role="tablist" aria-label="Вход или регистрация">
+            <button type="button" class="account-tab is-active" id="tab-login" role="tab" aria-selected="true" aria-controls="login-form">Войти</button>
+            <button type="button" class="account-tab" id="tab-register" role="tab" aria-selected="false" aria-controls="register-form">Регистрация</button>
+          </div>
+
+          <form class="account-form" id="login-form" novalidate>
+            <label class="account-field"><span>Почта</span><input type="email" name="email" required placeholder="ваша@почта.ру"><span class="account-field-error" id="login-error-email"></span></label>
+            <label class="account-field"><span>Пароль</span><input type="password" name="password" required placeholder="Введите пароль"><span class="account-field-error" id="login-error-password"></span></label>
+            <p class="account-form-error" id="login-error-general"></p>
+            <button type="submit" class="account-submit">Войти</button>
+          </form>
+
+          <form class="account-form" id="register-form" novalidate hidden>
+            <label class="account-field"><span>Почта</span><input type="email" name="email" required placeholder="ваша@почта.ру"><span class="account-field-error" id="register-error-email"></span></label>
+            <label class="account-field"><span>Пароль</span><input type="password" name="password" required placeholder="Придумайте пароль"><span class="account-field-error" id="register-error-password"></span></label>
+            <label class="account-consent">
+              <input type="checkbox" name="consent" required>
+              <span>Даю согласие на обработку персональных данных в соответствии с <a href="privacy.html" class="account-consent-link">Политикой конфиденциальности</a>.</span>
+            </label>
+            <span class="account-field-error" id="register-error-consent"></span>
+            <button type="submit" class="account-submit">Зарегистрироваться</button>
+          </form>
+        </div>
+
+        <div id="account-dashboard" hidden>
+          <p class="account-eyebrow">Личный кабинет</p>
+          <h1 class="account-title">С возвращением!</h1>
+          <p class="account-email" id="dashboard-email"></p>
+
+          <div class="account-orders" id="account-orders"></div>
+
+          <button type="button" class="account-logout" id="dashboard-logout">Выйти</button>
+        </div>
+
+      </div>
     </section>
   </main>
 
@@ -114,5 +151,6 @@
   </footer>
 
   <script src="js/nav.js"></script>
+  <script src="js/account-page.js"></script>
 </body>
 </html>
