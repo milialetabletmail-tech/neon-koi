@@ -3964,7 +3964,7 @@ body.size-table-open {
    below the line so 12 stages still fit without crowding. */
 @media (min-width: 769px) {
   .order-page-inner {
-    max-width: 48rem;
+    max-width: 58rem;
   }
 
   .order-item {
@@ -3991,8 +3991,8 @@ body.size-table-open {
 
   .order-step {
     display: grid;
-    grid-template-rows: minmax(2.6rem, auto) auto minmax(2.6rem, auto);
-    row-gap: 0.5rem;
+    grid-template-rows: minmax(2.6rem, auto) 3.2rem minmax(2.6rem, auto);
+    row-gap: 1rem;
     justify-items: center;
     flex: 1 1 0;
     min-height: 0;
@@ -4004,6 +4004,11 @@ body.size-table-open {
     align-self: end;
   }
 
+  /* Fixed at 2.9rem (vs. the shirt's own 2.5rem) so the sliding shirt
+     photo — centered on the dot, positioned absolutely by
+     js/order-page.js, so it doesn't itself take up grid space — stays
+     inside this row's band instead of bleeding into the label rows
+     above/below. */
   .order-step-rail {
     grid-row: 2;
     width: 100%;
