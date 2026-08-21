@@ -3939,6 +3939,16 @@ body.size-table-open {
   object-fit: contain;
 }
 
+/* Unlike the transparent cutouts above, this photo keeps its own
+   (dark) background rather than being a floating cutout — a visible
+   rounded frame reads as an intentional photo card instead of a
+   stray rectangle sitting on .process's flat --ink. */
+.process-step-media.has-photo-framed img {
+  border-radius: 0.75rem;
+  object-fit: cover;
+  aspect-ratio: 4 / 3;
+}
+
 .process-step-number {
   margin: 0;
   font-family: var(--font-ui);
