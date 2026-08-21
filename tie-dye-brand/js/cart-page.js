@@ -10,6 +10,10 @@
 (function () {
   'use strict';
 
+  // Fixed nationwide delivery fee (see offer.html §5.2) — added on top
+  // of the items' total, not per item.
+  const DELIVERY_FEE = 500;
+
   function formatPrice(amount) {
     return amount.toLocaleString('ru-RU') + ' ₽';
   }
@@ -70,7 +74,8 @@
     });
 
     document.getElementById('cart-summary-count').textContent = String(count);
-    document.getElementById('cart-summary-total').textContent = formatPrice(total);
+    document.getElementById('cart-summary-delivery').textContent = formatPrice(DELIVERY_FEE);
+    document.getElementById('cart-summary-total').textContent = formatPrice(total + DELIVERY_FEE);
   }
 
   document.addEventListener('DOMContentLoaded', () => {
