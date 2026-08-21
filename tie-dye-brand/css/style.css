@@ -1939,10 +1939,9 @@ body.nav-open { overflow: hidden; }
 
 .size-modal-product {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 0.6rem;
-  text-align: center;
+  justify-content: center;
+  gap: 1rem;
 }
 
 .size-modal-image {
