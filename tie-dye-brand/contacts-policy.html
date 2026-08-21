@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Правила обработки контактов — LN-Team</title>
+<meta name="description" content="LN-Team: правила обработки Имени и Email при оформлении заказа.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,500;1,9..144,800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header class="site-header nav-solid" id="site-header">
+    <a href="index.html" class="wordmark" aria-label="LN-Team — на главную"><span class="sr-only">LN-Team</span></a>
+
+    <nav class="nav-links" aria-label="Основная навигация">
+      <a href="index.html" class="nav-link" data-accent="sage">Главная</a>
+      <a href="catalog.html" class="nav-link" data-accent="lavender">Каталог</a>
+      <a href="about.html" class="nav-link" data-accent="teal">О бренде</a>
+      <a href="contacts.html" class="nav-link" data-accent="sage">Контакты</a>
+      <a href="order.html" class="nav-link" data-accent="lavender">Отследить заказ</a>
+    </nav>
+
+    <div class="nav-icons">
+      <div class="nav-account">
+        <button type="button" class="icon-btn" id="account-toggle" aria-haspopup="true" aria-expanded="false" aria-controls="account-dropdown" aria-label="Аккаунт">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5"/><circle cx="12" cy="7" r="3.5"/></svg>
+        </button>
+        <div class="account-dropdown" id="account-dropdown" hidden>
+          <a href="account.html" data-accent="teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg><span>Войти</span></a>
+          <a href="account.html" data-accent="sage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg><span>Регистрация</span></a>
+        </div>
+      </div>
+
+      <a href="cart.html" class="icon-btn" id="cart-link" aria-label="Ваш заказ">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <span class="cart-count" id="cart-count" hidden>0</span>
+      </a>
+
+      <button type="button" class="icon-btn burger-btn" id="burger-toggle" aria-haspopup="true" aria-expanded="false" aria-controls="nav-overlay" aria-label="Меню">
+        <span class="burger-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+      </button>
+    </div>
+  </header>
+
+  <div class="nav-overlay" id="nav-overlay" hidden>
+    <button type="button" class="icon-btn nav-overlay-close" id="nav-overlay-close" aria-label="Закрыть меню">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <nav class="nav-overlay-links" aria-label="Полное меню">
+      <a href="index.html" class="nav-overlay-link" data-accent="sage">Главная</a>
+      <a href="catalog.html" class="nav-overlay-link" data-accent="lavender">Каталог</a>
+      <a href="about.html" class="nav-overlay-link" data-accent="teal">О бренде</a>
+      <a href="contacts.html" class="nav-overlay-link" data-accent="sage">Контакты</a>
+      <a href="order.html" class="nav-overlay-link" data-accent="lavender">Отследить заказ</a>
+    </nav>
+    <div class="nav-overlay-secondary">
+      <a href="cart.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span>Ваш заказ</span></a>
+      <a href="account.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5"/><circle cx="12" cy="7" r="3.5"/></svg><span>Личный кабинет</span></a>
+    </div>
+  </div>
+
+  <main>
+    <section class="legal-page">
+      <div class="legal-page-inner">
+        <p class="legal-eyebrow">Документы</p>
+        <h1 class="legal-title">Правила обработки контактов</h1>
+
+        <div class="legal-body">
+          <p>Настоящие Правила обработки контактов (далее — «Правила») определяют порядок и условия обработки Имени и адреса электронной почты пользователей сайта LN-Team в соответствии с Федеральным законом от 27.07.2006 № 152-ФЗ «О персональных данных».</p>
+
+          <h2>1. Термины</h2>
+          <p><strong>Оператор</strong> — <strong>[ФИО Исполнителя]</strong>, физическое лицо, применяющее специальный налоговый режим «Налог на профессиональный доход» (самозанятый), ИНН <strong>[ИНН]</strong>.</p>
+          <p><strong>Пользователь</strong> — физическое лицо, оформляющее заказ на сайте LN-Team (далее — «Сайт») и предоставляющее свои контактные данные при оформлении.</p>
+          <p><strong>Контактные данные</strong> — Имя и адрес электронной почты Пользователя, указанные им при оформлении заказа.</p>
+
+          <h2>2. Состав обрабатываемых данных</h2>
+          <p>Настоящие Правила регулируют обработку исключительно двух параметров:</p>
+          <ul>
+            <li><strong>Имя</strong> пользователя;</li>
+            <li><strong>Адрес электронной почты (Email)</strong>.</li>
+          </ul>
+          <p>В рамках настоящего документа Оператор не собирает и не обрабатывает номера телефонов, адреса доставки, файлы cookie или иные данные — их обработка регулируется отдельными документами Сайта.</p>
+
+          <h2>3. Цели обработки</h2>
+          <p>Контактные данные обрабатываются исключительно для следующих целей:</p>
+          <ul>
+            <li><strong>Идентификация заказа</strong> Пользователя на Сайте;</li>
+            <li><strong>Оперативная связь с Пользователем</strong> — в случае возникновения технических неполадок на Сайте или форс-мажорных задержек при изготовлении заказа;</li>
+            <li><strong>Направление официального уведомления об отказе</strong> в выполнении заказа, если его реализация невозможна (например, отсутствие на складе бланка нужной модели).</li>
+          </ul>
+          <p>Обработка Контактных данных в иных целях, включая рекламные и маркетинговые рассылки, настоящими Правилами не допускается.</p>
+
+          <h2>4. Способ обработки</h2>
+          <p>4.1. Обработка Контактных данных осуществляется исключительно неавтоматизированным способом — вручную Оператором.</p>
+          <p>4.2. Контактные данные не используются для рекламных, маркетинговых, спам- или иных массовых рассылок.</p>
+          <p>4.3. Контактные данные не передаются третьим лицам, за исключением случаев, прямо предусмотренных законодательством РФ.</p>
+
+          <h2>5. Хранение данных</h2>
+          <p>5.1. Контактные данные физически размещаются на защищённом сервере, расположенном на территории Российской Федерации.</p>
+          <p>5.2. Оператор принимает необходимые организационные и технические меры для защиты Контактных данных от неправомерного доступа, уничтожения, изменения, блокирования, копирования и распространения.</p>
+
+          <h2>6. Сроки обработки и уничтожение данных</h2>
+          <p>6.1. Срок обработки Контактных данных равен времени, необходимому для идентификации Пользователя и выполнения обязательств Оператора по заказу (целей, указанных в разделе 3).</p>
+          <p>6.2. По достижении целей обработки либо по завершении заказа Контактные данные безвозвратно уничтожаются.</p>
+
+          <h2>7. Права Пользователя</h2>
+          <p>Пользователь вправе в любой момент:</p>
+          <ul>
+            <li>запросить информацию о том, какие его Контактные данные обрабатываются;</li>
+            <li>потребовать уточнения, исправления или досрочного удаления своих Контактных данных;</li>
+            <li>отозвать согласие на обработку Контактных данных, направив соответствующий запрос Оператору.</li>
+          </ul>
+
+          <h2>8. Реквизиты Оператора</h2>
+          <p><strong>[ФИО Исполнителя]</strong><br>
+          Самозанятый (плательщик налога на профессиональный доход)<br>
+          ИНН: <strong>[ИНН]</strong><br>
+          Электронная почта для обращений: <strong>[email]</strong></p>
+
+          <p class="legal-meta">Дата публикации: [дата]</p>
+        </div>
+
+        <a href="cart.html" class="legal-back">← Назад к оформлению заказа</a>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/nav.js"></script>
+</body>
+</html>
