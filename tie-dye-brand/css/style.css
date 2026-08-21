@@ -3660,6 +3660,36 @@ body.size-table-open {
   color: var(--paper-dim);
 }
 
+/* Filled, same visual weight as .cart-summary-submit — the one action
+   worth following through on right after ordering, so it reads as the
+   primary CTA rather than the muted outline .cart-empty-cta shares
+   with the empty-cart state. */
+.cart-success-track {
+  display: block;
+  width: fit-content;
+  margin: 0 auto;
+  padding: 0.8rem 1.8rem;
+  border-radius: 999px;
+  border: 1px solid var(--lavender);
+  background: var(--lavender);
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: var(--ink);
+  text-decoration: none;
+  transition: opacity 0.2s ease, transform 0.15s ease;
+}
+
+.cart-success-track:hover,
+.cart-success-track:focus-visible {
+  opacity: 0.9;
+}
+
+.cart-success-track:active {
+  transform: scale(0.98);
+}
+
 @media (max-width: 520px) {
   .cart-item {
     grid-template-columns: 3.6rem 1fr auto;
