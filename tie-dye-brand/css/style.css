@@ -3732,10 +3732,6 @@ body.size-table-open {
   border-color: #e0645b;
 }
 
-.cart-consent.has-error span {
-  color: #e0645b;
-}
-
 .cart-consents {
   display: flex;
   flex-direction: column;
