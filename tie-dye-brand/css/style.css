@@ -2752,6 +2752,10 @@ body.size-table-open {
   .product-gallery {
     max-width: 32rem;
   }
+
+  .product-badges {
+    justify-content: flex-start;
+  }
 }
 
 @media (max-width: 760px) {
