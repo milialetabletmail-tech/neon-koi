@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Порядок организации доставки — LN-Team</title>
+<meta name="description" content="LN-Team: порядок передачи адресных данных транспортным компаниям для доставки заказа.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,500;1,9..144,800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header class="site-header nav-solid" id="site-header">
+    <a href="index.html" class="wordmark" aria-label="LN-Team — на главную"><span class="sr-only">LN-Team</span></a>
+
+    <nav class="nav-links" aria-label="Основная навигация">
+      <a href="index.html" class="nav-link" data-accent="sage">Главная</a>
+      <a href="catalog.html" class="nav-link" data-accent="lavender">Каталог</a>
+      <a href="about.html" class="nav-link" data-accent="teal">О бренде</a>
+      <a href="contacts.html" class="nav-link" data-accent="sage">Контакты</a>
+      <a href="order.html" class="nav-link" data-accent="lavender">Отследить заказ</a>
+    </nav>
+
+    <div class="nav-icons">
+      <div class="nav-account">
+        <button type="button" class="icon-btn" id="account-toggle" aria-haspopup="true" aria-expanded="false" aria-controls="account-dropdown" aria-label="Аккаунт">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5"/><circle cx="12" cy="7" r="3.5"/></svg>
+        </button>
+        <div class="account-dropdown" id="account-dropdown" hidden>
+          <a href="account.html" data-accent="teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg><span>Войти</span></a>
+          <a href="account.html" data-accent="sage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg><span>Регистрация</span></a>
+        </div>
+      </div>
+
+      <a href="cart.html" class="icon-btn" id="cart-link" aria-label="Ваш заказ">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <span class="cart-count" id="cart-count" hidden>0</span>
+      </a>
+
+      <button type="button" class="icon-btn burger-btn" id="burger-toggle" aria-haspopup="true" aria-expanded="false" aria-controls="nav-overlay" aria-label="Меню">
+        <span class="burger-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+      </button>
+    </div>
+  </header>
+
+  <div class="nav-overlay" id="nav-overlay" hidden>
+    <button type="button" class="icon-btn nav-overlay-close" id="nav-overlay-close" aria-label="Закрыть меню">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <nav class="nav-overlay-links" aria-label="Полное меню">
+      <a href="index.html" class="nav-overlay-link" data-accent="sage">Главная</a>
+      <a href="catalog.html" class="nav-overlay-link" data-accent="lavender">Каталог</a>
+      <a href="about.html" class="nav-overlay-link" data-accent="teal">О бренде</a>
+      <a href="contacts.html" class="nav-overlay-link" data-accent="sage">Контакты</a>
+      <a href="order.html" class="nav-overlay-link" data-accent="lavender">Отследить заказ</a>
+    </nav>
+    <div class="nav-overlay-secondary">
+      <a href="cart.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span>Ваш заказ</span></a>
+      <a href="account.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5"/><circle cx="12" cy="7" r="3.5"/></svg><span>Личный кабинет</span></a>
+    </div>
+  </div>
+
+  <main>
+    <section class="legal-page">
+      <div class="legal-page-inner">
+        <p class="legal-eyebrow">Документы</p>
+        <h1 class="legal-title">Порядок организации доставки</h1>
+
+        <div class="legal-body">
+          <p>Настоящий Порядок организации доставки (далее — «Порядок») определяет условия сбора и передачи адресных данных, ФИО и номера телефона Заказчика транспортным компаниям для целей физической доставки заказа, в соответствии с Федеральным законом от 27.07.2006 № 152-ФЗ «О персональных данных».</p>
+
+          <h2>1. Термины</h2>
+          <p><strong>Оператор</strong> — <strong>[ФИО Исполнителя]</strong>, физическое лицо, применяющее специальный налоговый режим «Налог на профессиональный доход» (самозанятый), ИНН <strong>[ИНН]</strong>.</p>
+          <p><strong>Заказчик</strong> — физическое лицо, оформляющее заказ на сайте LN-Team (далее — «Сайт») и указывающее данные, необходимые для доставки.</p>
+          <p><strong>Операторы доставки</strong> — транспортные компании, указанные в разделе 4 настоящего Порядка, осуществляющие физическую доставку заказа Заказчику.</p>
+
+          <h2>2. Состав обрабатываемых данных для логистики</h2>
+          <p>Настоящий Порядок регулирует сбор и передачу транспортным компаниям исключительно следующих параметров Заказчика:</p>
+          <ul>
+            <li><strong>Фамилия, Имя и Отчество (ФИО)</strong> получателя — для верификации личности при выдаче отправления по паспорту;</li>
+            <li><strong>Номер мобильного телефона</strong> — для направления СМС-уведомлений о прибытии посылки и кодов быстрого получения;</li>
+            <li><strong>Адресные данные</strong> (город, адрес пункта выдачи ООО «СДЭК» или индекс почтового отделения АО «Почта России») — для физической маршрутизации отправления.</li>
+          </ul>
+          <p>Иные данные Заказчика (Email, содержимое переписки и т. п.) в рамках настоящего Порядка транспортным компаниям не передаются.</p>
+
+          <h2>3. Цель сбора и передачи данных</h2>
+          <p>Указанные в разделе 2 данные передаются Операторам доставки исключительно для:</p>
+          <ul>
+            <li>организации физической логистики отправления;</li>
+            <li>оформления транспортных накладных и сопроводительных документов;</li>
+            <li>пересылки индивидуального заказа (одежды) в адрес выбранного пункта выдачи или отделения связи;</li>
+            <li>выдачи заказа Заказчику и верификации получателя.</li>
+          </ul>
+          <p>Обработка данных в иных целях, включая рекламные рассылки или передачу колл-центрам и сторонним сервисам, не допускается.</p>
+
+          <h2>4. Перечень транспортных компаний (Операторов доставки)</h2>
+          <p>Данные, указанные в разделе 2, могут передаваться исключительно следующим Операторам доставки, действующим на территории Российской Федерации:</p>
+          <ul>
+            <li><strong>ООО «СДЭК-Глобал»</strong> (служба доставки СДЭК);</li>
+            <li><strong>АО «Почта России»</strong>.</li>
+          </ul>
+          <p>Передача данных иным сторонним компаниям, рекламным сервисам, колл-центрам или иным третьим лицам, не указанным в настоящем разделе, не осуществляется.</p>
+
+          <h2>5. Способ и безопасность передачи данных</h2>
+          <p>5.1. Передача данных Операторам доставки осуществляется по защищённым каналам связи (в том числе с использованием шифрования при электронном взаимодействии с системами Операторов доставки).</p>
+          <p>5.2. Оператор принимает необходимые организационные и технические меры для предотвращения несанкционированного доступа к данным Заказчика на этапе их подготовки к передаче.</p>
+          <p>5.3. Дальнейшая обработка данных Операторами доставки осуществляется в соответствии с их собственными правилами обработки персональных данных, действующими как самостоятельные операторы персональных данных.</p>
+
+          <h2>6. Сроки обработки и уничтожение данных</h2>
+          <p>6.1. Срок обработки и хранения данных, указанных в разделе 2, на стороне Сайта равен времени, необходимому для физической транспортировки отправления Заказчику.</p>
+          <p>6.2. С момента перехода заказа в финальный статус «Доставлен / Получен» данные, указанные в разделе 2, безвозвратно уничтожаются на стороне Сайта.</p>
+
+          <h2>7. Права Заказчика</h2>
+          <p>Заказчик вправе в любой момент:</p>
+          <ul>
+            <li>получить информацию о том, какому Оператору доставки и в каком объёме переданы его данные;</li>
+            <li>отозвать согласие на передачу данных транспортным компаниям, направив соответствующий запрос Оператору (с учётом того, что отзыв согласия до момента получения заказа делает его дальнейшую доставку невозможной);</li>
+            <li>обратиться непосредственно к выбранному Оператору доставки по вопросам обработки данных в рамках его собственной деятельности.</li>
+          </ul>
+
+          <h2>8. Реквизиты Оператора</h2>
+          <p><strong>[ФИО Исполнителя]</strong><br>
+          Самозанятый (плательщик налога на профессиональный доход)<br>
+          ИНН: <strong>[ИНН]</strong><br>
+          Электронная почта для обращений: <strong>[email]</strong></p>
+
+          <p class="legal-meta">Дата публикации: [дата]</p>
+        </div>
+
+        <a href="cart.html" class="legal-back">← Назад к оформлению заказа</a>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/nav.js"></script>
+</body>
+</html>
