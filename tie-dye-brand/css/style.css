@@ -4083,6 +4083,86 @@ body.checkout-modal-open {
   color: var(--paper-dim);
 }
 
+/* Shown instead of the status track whenever more than one shirt is
+   tracked (see js/order-page.js's route()) — one tile per shirt,
+   photo + current stage, tapping one opens its own track. */
+.order-grid[hidden] {
+  display: none;
+}
+
+.order-grid-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr));
+  gap: 1rem;
+}
+
+.order-grid-tile {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.1rem 0.8rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(244, 238, 225, 0.14);
+  background: rgba(244, 238, 225, 0.04);
+  color: inherit;
+  cursor: pointer;
+  text-align: center;
+  transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.15s ease;
+}
+
+.order-grid-tile:hover,
+.order-grid-tile:focus-visible {
+  border-color: rgba(244, 238, 225, 0.3);
+  background: rgba(244, 238, 225, 0.08);
+  transform: translateY(-2px);
+}
+
+.order-grid-image {
+  width: 4.5rem;
+  aspect-ratio: 3 / 4;
+  object-fit: contain;
+}
+
+.order-grid-name {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--paper);
+}
+
+.order-grid-stage {
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  color: var(--sage);
+}
+
+.order-back-link {
+  display: inline-block;
+  margin: 0 0 1.4rem;
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--paper-dim);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 0.2s ease;
+}
+
+.order-back-link[hidden] {
+  display: none;
+}
+
+.order-back-link:hover,
+.order-back-link:focus-visible {
+  color: var(--paper);
+}
+
 .order-item {
   display: flex;
   align-items: center;

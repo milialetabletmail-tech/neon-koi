@@ -96,35 +96,101 @@
 
   // ------------------------------------------------------------
   // ORDER TRACKING — a separate localStorage record from the cart,
-  // created once (cart.html's submit button) and then read/cleared by
-  // order.html. Just {items, submittedAt}: order-page.js derives the
-  // current stage from how much time has passed since submittedAt
-  // rather than storing a stage index, so the tracker keeps advancing
-  // correctly across reloads/tab closes without its own timer state
-  // to get out of sync.
+  // holding every shirt currently being tracked as its own entry
+  // (not one record per checkout): submitting a 2-shirt order, or
+  // several orders back to back, all just append more entries here,
+  // each with its own submittedAt and trackId. order-page.js derives
+  // each entry's stage from how much time has passed since its own
+  // submittedAt rather than storing a stage index, so the tracker
+  // keeps advancing correctly across reloads/tab closes without its
+  // own timer state to get out of sync.
+  //
+  // Older sessions may still have the previous single-order shape
+  // ({items, submittedAt}) saved — migrateLegacyOrder() flattens that
+  // into the new array shape the first time it's read, so an
+  // in-progress demo order isn't silently lost by this change.
   // ------------------------------------------------------------
   const ORDER_KEY = 'ln-team-order';
 
-  function readOrder() {
+  function migrateLegacyOrder(raw) {
+    if (!raw || Array.isArray(raw) || !Array.isArray(raw.items)) return null;
+    const submittedAt = raw.submittedAt || Date.now();
+    const tracked = [];
+    raw.items.forEach((item, i) => {
+      const qty = Math.max(1, Number(item.qty) || 1);
+      for (let q = 0; q < qty; q++) {
+        tracked.push({
+          trackId: submittedAt + '-' + i + '-' + q,
+          id: item.id,
+          name: item.name,
+          price: item.price,
+          image: item.image,
+          size: item.size,
+          submittedAt: submittedAt,
+        });
+      }
+    });
+    return tracked;
+  }
+
+  function readTrackedItems() {
+    let raw;
     try {
-      const raw = JSON.parse(localStorage.getItem(ORDER_KEY));
-      return raw && Array.isArray(raw.items) && raw.items.length ? raw : null;
+      raw = JSON.parse(localStorage.getItem(ORDER_KEY));
     } catch (err) {
-      return null;
+      return [];
     }
+    if (Array.isArray(raw)) return raw;
+    const migrated = migrateLegacyOrder(raw);
+    if (migrated) {
+      localStorage.setItem(ORDER_KEY, JSON.stringify(migrated));
+      return migrated;
+    }
+    return [];
   }
 
+  function writeTrackedItems(tracked) {
+    localStorage.setItem(ORDER_KEY, JSON.stringify(tracked));
+  }
+
+  function getTrackedItem(trackId) {
+    return readTrackedItems().find((entry) => entry.trackId === trackId) || null;
+  }
+
+  // Each cart item's qty becomes that many separate tracked entries —
+  // "заказал две одинаковых футболки" tracks as two independently
+  // progressing shirts, not one line with a qty badge.
   function createOrder(items) {
-    const order = { items: items, submittedAt: Date.now() };
-    localStorage.setItem(ORDER_KEY, JSON.stringify(order));
-    return order;
+    const submittedAt = Date.now();
+    const tracked = readTrackedItems();
+    items.forEach((item, i) => {
+      const qty = Math.max(1, Number(item.qty) || 1);
+      for (let q = 0; q < qty; q++) {
+        tracked.push({
+          trackId: submittedAt + '-' + i + '-' + q + '-' + Math.random().toString(36).slice(2, 7),
+          id: item.id,
+          name: item.name,
+          price: item.price,
+          image: item.image,
+          size: item.size,
+          submittedAt: submittedAt,
+        });
+      }
+    });
+    writeTrackedItems(tracked);
+    return tracked;
   }
 
-  // "Отменить заказ" — the brand has no real fulfillment backend yet
-  // to actually cancel anything against, so for now this just wipes
-  // the local order record entirely: order.html goes back to its
-  // empty state, as if nothing had been submitted.
-  function clearOrder() {
+  // "Отменить заказ" on a single tracked shirt — the brand has no real
+  // fulfillment backend yet to actually cancel anything against, so
+  // this just drops that one entry from local storage.
+  function cancelTrackedItem(trackId) {
+    const tracked = readTrackedItems().filter((entry) => entry.trackId !== trackId);
+    writeTrackedItems(tracked);
+    return tracked;
+  }
+
+  function clearAllTrackedItems() {
     localStorage.removeItem(ORDER_KEY);
   }
 
@@ -298,9 +364,11 @@
 
   window.LNOrder = {
     KEY: ORDER_KEY,
-    get: readOrder,
+    getAll: readTrackedItems,
+    getById: getTrackedItem,
     create: createOrder,
-    clear: clearOrder,
+    cancelItem: cancelTrackedItem,
+    clear: clearAllTrackedItems,
   };
 
   window.LNAccount = {

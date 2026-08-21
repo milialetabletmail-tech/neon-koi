@@ -56,15 +56,17 @@
       document.getElementById('dashboard-email').textContent = account ? account.email : '';
 
       const ordersEl = document.getElementById('account-orders');
-      const order = window.LNOrder.get();
+      const tracked = window.LNOrder.getAll();
 
-      if (!order) {
+      if (!tracked.length) {
         ordersEl.innerHTML = '<p class="account-orders-empty">У вас пока нет заказов — загляните в <a href="catalog.html" class="account-order-link">каталог</a>, чтобы выбрать первую вещь.</p>';
         return;
       }
 
-      const item = order.items[0];
-      const otherCount = order.items.length - 1;
+      // Most recently submitted shirt as the teaser — the full grid
+      // (or single-shirt track) lives on order.html itself.
+      const item = tracked.slice().sort((a, b) => b.submittedAt - a.submittedAt)[0];
+      const otherCount = tracked.length - 1;
       ordersEl.innerHTML =
         '<div class="account-order-card">' +
           '<img class="account-order-image" src="' + item.image + '" alt="' + item.name + '">' +
@@ -73,7 +75,7 @@
             '<p class="account-order-meta">' +
               (item.size ? 'Размер ' + item.size + ' · ' : '') +
               formatPrice(item.price) +
-              (otherCount > 0 ? ' · ещё ' + otherCount + ' в заказе' : '') +
+              (otherCount > 0 ? ' · ещё ' + otherCount + ' в отслеживании' : '') +
             '</p>' +
             '<a href="order.html" class="account-order-link">Отследить заказ →</a>' +
           '</div>' +
