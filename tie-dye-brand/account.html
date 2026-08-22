@@ -85,14 +85,43 @@
           </form>
 
           <form class="account-form" id="register-form" novalidate hidden>
-            <label class="account-field"><span>Почта</span><input type="email" name="email" required placeholder="ваша@почта.ру"><span class="account-field-error" id="register-error-email"></span></label>
-            <label class="account-field"><span>Пароль</span><input type="password" name="password" required placeholder="Придумайте пароль"><span class="account-field-error" id="register-error-password"></span></label>
-            <label class="account-consent">
-              <input type="checkbox" name="consent" required>
-              <span>Я даю согласие на сбор и обработку адреса Электронной почты для создания аккаунта и авторизации на Сайте в соответствии с <a href="account-policy.html" class="account-consent-link">Правилами создания учётной записи</a>.</span>
-            </label>
-            <span class="account-field-error" id="register-error-consent"></span>
-            <button type="submit" class="account-submit">Зарегистрироваться</button>
+            <div id="register-step-email">
+              <label class="account-field"><span>Почта</span><input type="email" name="email" required placeholder="ваша@почта.ру"><span class="account-field-error" id="register-error-email"></span></label>
+              <label class="account-consent">
+                <input type="checkbox" name="consent" required>
+                <span>Я даю согласие на сбор и обработку адреса Электронной почты для создания аккаунта и авторизации на Сайте в соответствии с <a href="account-policy.html" class="account-consent-link">Правилами создания учётной записи</a>.</span>
+              </label>
+              <span class="account-field-error" id="register-error-consent"></span>
+              <button type="submit" class="account-submit">Далее</button>
+            </div>
+
+            <div id="register-step-password" hidden>
+              <button type="button" class="account-step-back" id="register-back">← Изменить почту</button>
+
+              <label class="account-field">
+                <span>Пароль</span>
+                <span class="account-password-field">
+                  <input type="password" name="password" required placeholder="Придумайте пароль">
+                  <button type="button" class="account-password-toggle" aria-label="Показать пароль">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/><line class="eye-slash" x1="3" y1="21" x2="21" y2="3"/></svg>
+                  </button>
+                </span>
+                <span class="account-field-error" id="register-error-password"></span>
+              </label>
+
+              <label class="account-field">
+                <span>Повторите пароль</span>
+                <span class="account-password-field">
+                  <input type="password" name="password2" required placeholder="Введите пароль ещё раз">
+                  <button type="button" class="account-password-toggle" aria-label="Показать пароль">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/><line class="eye-slash" x1="3" y1="21" x2="21" y2="3"/></svg>
+                  </button>
+                </span>
+                <span class="account-field-error" id="register-error-password2"></span>
+              </label>
+
+              <button type="submit" class="account-submit">Зарегистрироваться</button>
+            </div>
           </form>
         </div>
 
