@@ -4094,9 +4094,14 @@ body.checkout-modal-open {
   list-style: none;
   margin: 0;
   padding: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 1rem;
+}
+
+.order-grid-cell {
+  width: 10rem;
 }
 
 .order-grid-tile {
@@ -4167,6 +4172,7 @@ body.checkout-modal-open {
 .order-item {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 1rem;
   padding-bottom: 1.4rem;
   margin-bottom: 1.8rem;
