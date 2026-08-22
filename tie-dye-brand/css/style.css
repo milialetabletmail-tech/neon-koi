@@ -4131,6 +4131,11 @@ body.checkout-modal-open {
 }
 
 .order-grid-name {
+  /* The shirt photos themselves carry a fair bit of transparent
+     padding (folded-flat product shots, not edge-to-edge crops), so
+     a plain 0 gap still reads as a visible gap — this pulls the label
+     up into that built-in whitespace instead. */
+  margin-top: -1.1rem;
   font-family: var(--font-display);
   font-style: italic;
   font-weight: 600;
