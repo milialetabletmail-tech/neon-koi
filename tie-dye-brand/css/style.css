@@ -149,19 +149,32 @@ img { max-width: 100%; display: block; }
   opacity: 0;
 }
 
-/* Rolled-tee product shot (background removed, cropped to the rosette)
-   spinning under the wordmark while the frame sequence loads — gives
-   the long preload something alive to look at instead of a static
-   logo. Continuous rotation is skipped under reduced-motion; the shirt
-   still fades in as a static image (see runPreloader in main.js,
-   which fades .preloader-mark and .preloader-spinner together). */
+/* Rolled-tee product shot (background removed, cropped to the rosette),
+   recolored to match the wordmark via a luminance mask — same
+   technique as .preloader-mark, just mask-mode: luminance instead of
+   the default alpha mask, so the fold shading comes through as
+   varying opacity of --paper instead of a flat silhouette. Spins
+   under the wordmark while the frame sequence loads; continuous
+   rotation is skipped under reduced-motion, the shirt still fades in
+   as a static shape (see runPreloader in main.js, which fades
+   .preloader-mark and .preloader-spinner together). */
 #preloader .preloader-spinner {
   position: relative;
   z-index: 1;
   width: clamp(2rem, 4.5vw, 2.75rem);
   aspect-ratio: 1;
-  object-fit: contain;
   opacity: 0;
+  background: var(--paper);
+  -webkit-mask-image: url('../assets/preloader/shirt-spiral.png');
+  mask-image: url('../assets/preloader/shirt-spiral.png');
+  -webkit-mask-mode: luminance;
+  mask-mode: luminance;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-position: center;
+  mask-position: center;
 }
 
 @media (prefers-reduced-motion: no-preference) {
