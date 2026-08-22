@@ -74,6 +74,8 @@
     const preloader = document.getElementById('preloader');
     const wipe = preloader.querySelector('.preloader-wipe');
     const mark = preloader.querySelector('.preloader-mark');
+    const spinner = preloader.querySelector('.preloader-spinner');
+    const fadeTargets = [mark, spinner];
 
     const MIN_VISIBLE_MS = 900;
     const shownAt = performance.now();
@@ -86,7 +88,7 @@
           onComplete();
         },
       });
-      tl.to(mark, { opacity: 0, duration: 0.25, ease: 'power1.in' }, 0)
+      tl.to(fadeTargets, { opacity: 0, duration: 0.25, ease: 'power1.in' }, 0)
         .to(wipe, { clipPath: 'circle(150% at 50% 50%)', duration: 0.7, ease: 'power4.inOut' }, 0)
         .to(preloader, { opacity: 0, duration: 0.3, ease: 'power1.in' }, '-=0.15');
     }
@@ -102,14 +104,14 @@
 
     if (prefersReducedMotion) {
       gsap.set(wipe, { clipPath: 'circle(150% at 50% 50%)' });
-      gsap.set(mark, { opacity: 1 });
+      gsap.set(fadeTargets, { opacity: 1 });
       window.addEventListener('load', release, { once: true });
       if (document.readyState === 'complete') release();
       return;
     }
 
     gsap.set(wipe, { clipPath: 'circle(0% at 50% 50%)' });
-    gsap.to(mark, { opacity: 1, duration: 0.4, ease: 'power1.out' });
+    gsap.to(fadeTargets, { opacity: 1, duration: 0.4, ease: 'power1.out' });
 
     window.addEventListener('load', release, { once: true });
     if (document.readyState === 'complete') release();
