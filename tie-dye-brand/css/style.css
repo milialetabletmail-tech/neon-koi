@@ -4136,6 +4136,10 @@ body.checkout-modal-open {
 .order-grid-stage {
   font-family: var(--font-ui);
   font-size: 0.72rem;
+  color: var(--teal);
+}
+
+.order-grid-stage.is-ready {
   color: var(--sage);
 }
 
@@ -4197,8 +4201,14 @@ body.checkout-modal-open {
   font-family: var(--font-ui);
   font-size: 0.9rem;
   font-weight: 600;
-  color: var(--sage);
+  color: var(--teal);
   text-align: center;
+}
+
+/* Only the final "Готов к получению" stage keeps the green — every
+   other stage reads in the brand teal instead. */
+.order-stage-current.is-ready {
+  color: var(--sage);
 }
 
 .order-track {

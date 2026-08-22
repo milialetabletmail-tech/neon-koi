@@ -154,7 +154,9 @@
         lineFillEl.style.width = '';
       }
 
-      shirtEl.classList.toggle('is-ready', index === STAGES.length - 1);
+      const isReady = index === STAGES.length - 1;
+      shirtEl.classList.toggle('is-ready', isReady);
+      currentLabelEl.classList.toggle('is-ready', isReady);
       currentLabelEl.textContent = 'Сейчас: ' + STAGES[index];
 
       lastIndex = index;
@@ -188,12 +190,13 @@
     function renderGrid() {
       const tracked = sortedByNewest(window.LNOrder.getAll());
       gridListEl.innerHTML = tracked.map((item) => {
-        const stage = STAGES[getStageIndex(item)];
+        const index = getStageIndex(item);
+        const stageClass = index === STAGES.length - 1 ? ' is-ready' : '';
         return '<li class="order-grid-cell">' +
           '<button type="button" class="order-grid-tile" data-track-id="' + item.trackId + '">' +
             '<img class="order-grid-image" src="' + item.image + '" alt="' + item.name + '">' +
             '<span class="order-grid-name">' + item.name + '</span>' +
-            '<span class="order-grid-stage">' + stage + '</span>' +
+            '<span class="order-grid-stage' + stageClass + '">' + STAGES[index] + '</span>' +
           '</button>' +
         '</li>';
       }).join('');

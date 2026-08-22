@@ -266,6 +266,12 @@
         document.getElementById('cart-list').hidden = true;
         document.getElementById('cart-summary').hidden = true;
         document.getElementById('cart-success').hidden = false;
+        // The checkout modal can be opened after scrolling well down
+        // the page (long item list, small screen) — land back at the
+        // top so the confirmation and its "Отследить заказ" button
+        // are immediately visible instead of wherever the page
+        // happened to be scrolled to.
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       });
     }
   });
