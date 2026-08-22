@@ -3274,8 +3274,8 @@ body.size-table-open {
    of prose: a centered eyebrow/title/back-link (.legal-copy is the
    short centered placeholder variant) around a left-aligned document
    body (.legal-body, with h2/p/ul/strong styling for the actual
-   policy text). privacy.html still carries [ФИО]/[ИНН]/[email]/[дата]
-   placeholders until the real business details are filled in.
+   policy text). privacy.html still carries a [дата] placeholder until
+   the document's effective date is filled in.
    ------------------------------------------------------------ */
 
 .legal-page {
