@@ -5461,6 +5461,15 @@ a.collection-preview-card:visited {
   opacity: 0.55;
 }
 
+.footer-requisites {
+  margin: 0.35rem 0 0;
+  font-family: var(--font-ui);
+  font-size: 0.7rem;
+  line-height: 1.6;
+  color: var(--paper-dim);
+  opacity: 0.4;
+}
+
 .footer-legal-links {
   display: flex;
   flex-wrap: wrap;
