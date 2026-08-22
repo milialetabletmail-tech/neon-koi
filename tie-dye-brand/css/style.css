@@ -5444,7 +5444,7 @@ a.collection-preview-card:visited {
 }
 
 .footer-contact-line a {
-  color: inherit;
+  color: var(--teal);
   text-decoration: none;
 }
 
