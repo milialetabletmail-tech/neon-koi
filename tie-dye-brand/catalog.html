@@ -113,11 +113,10 @@
       <p class="catalog-empty" id="catalog-empty" hidden>По этим фильтрам ничего не нашлось — попробуйте убрать один из них.</p>
 
       <div class="catalog-grid">
-        <!-- The only two cards with a real photo also get real (if
-             placeholder) name/price so there's something for "В
-             корзину" to actually add — swap these for the real
-             copy/pricing once the brand has them, same as the photo
-             itself. -->
+        <!-- Cards with a real photo (backed by an entry in
+             js/products.js) get real name/price so there's something
+             for "В корзину" to actually add; the remaining "Фото
+             скоро" placeholders below have neither yet. -->
         <article class="catalog-card">
           <a href="product.html?id=tee-01-blue-gold" class="catalog-card-link">
             <div class="catalog-card-media has-photo">
@@ -187,15 +186,20 @@
         </article>
 
         <article class="catalog-card">
-          <div class="catalog-card-media" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
-            <span class="catalog-card-media-label">Фото скоро</span>
-          </div>
-          <div class="catalog-card-text">
-            <p class="catalog-card-name">Название скоро</p>
-            <p class="catalog-card-price">Цена скоро</p>
-          </div>
-          <button type="button" class="catalog-card-cta" disabled>Подробнее</button>
+          <a href="product.html?id=tee-05-raspberry" class="catalog-card-link">
+            <div class="catalog-card-media has-photo">
+              <img src="assets/products/tee-05-raspberry.png" alt="Тай-дай футболка «Малинка», малиновый и бордовый" loading="lazy">
+            </div>
+            <div class="catalog-card-text">
+              <p class="catalog-card-name">«Малинка»</p>
+              <p class="catalog-card-price">4 000 ₽</p>
+            </div>
+          </a>
+          <button type="button" class="catalog-card-cta" data-add-to-cart
+            data-id="tee-05-raspberry"
+            data-name="«Малинка»"
+            data-price="4000"
+            data-image="assets/products/tee-05-raspberry.png">Заказать окрашивание</button>
         </article>
 
         <article class="catalog-card">

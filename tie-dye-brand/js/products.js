@@ -89,4 +89,24 @@ window.LNProducts = [
     ],
     description: 'Скручена и окрашена вручную по фирменной технологии — от первого узла до последней капли краски. Пигмент расходится по ткани сам, поэтому рисунок нельзя повторить: даже мастер не знает заранее, каким получится узор.',
   },
+  {
+    id: 'tee-05-raspberry',
+    name: '«Малинка»',
+    price: 4000,
+    technique: 'warm',
+    image: 'assets/products/tee-05-raspberry.png',
+    images: [
+      'assets/products/tee-05-raspberry.png',
+      'assets/products/tee-05-raspberry-back.png',
+      'assets/products/tee-05-raspberry-mannequin-front.png',
+      'assets/products/tee-05-raspberry-mannequin-back.png',
+    ],
+    alt: 'Тай-дай футболка «Малинка», малиновый и бордовый',
+    colors: [
+      { label: 'Белый', hex: '#f2ead9' },
+      { label: 'Малиновый', hex: '#c8195c' },
+      { label: 'Тёмно-бордовый', hex: '#3e1029' },
+    ],
+    description: 'Скручена и окрашена вручную по фирменной технологии — от первого узла до последней капли краски. Пигмент расходится по ткани сам, поэтому рисунок нельзя повторить: даже мастер не знает заранее, каким получится узор.',
+  },
 ];
