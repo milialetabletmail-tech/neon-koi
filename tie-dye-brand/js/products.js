@@ -101,9 +101,9 @@ window.LNProducts = [
       'assets/products/tee-05-raspberry-mannequin-front.png',
       'assets/products/tee-05-raspberry-mannequin-back.png',
     ],
-    alt: 'Тай-дай футболка «Малинка», малиновый и бордовый',
+    alt: 'Тай-дай футболка «Малинка», малиновый и сливовый',
     colors: [
-      { label: 'Белый', hex: '#f2ead9' },
+      { label: 'Светло-розовый', hex: '#f5c3d7' },
       { label: 'Малиновый', hex: '#c8195c' },
       { label: 'Сливовый', hex: '#4d1533' },
     ],
