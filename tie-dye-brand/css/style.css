@@ -5956,6 +5956,19 @@ a.collection-preview-card:visited {
   background: rgba(224, 100, 91, 0.12);
 }
 
+.account-delete-note {
+  margin: 1.25rem 0 0;
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  text-align: center;
+  color: var(--paper-dim);
+  opacity: 0.6;
+}
+
+.account-delete-note a {
+  color: inherit;
+}
+
 /* ------------------------------------------------------------
    REDUCED MOTION FALLBACK
    ------------------------------------------------------------ */
