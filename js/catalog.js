@@ -48,7 +48,17 @@
       imageEl.src = btn.dataset.image;
       imageEl.alt = '';
       nameEl.textContent = btn.dataset.name;
-      priceEl.textContent = Number(btn.dataset.price).toLocaleString('ru-RU') + ' ₽';
+
+      const salePrice = Number(btn.dataset.price).toLocaleString('ru-RU') + ' ₽';
+      const oldPrice = btn.dataset.oldPrice;
+      priceEl.textContent = '';
+      if (oldPrice) {
+        priceEl.innerHTML = '<span class="price-old">' + Number(oldPrice).toLocaleString('ru-RU') + ' ₽</span>'
+          + '<span class="price-badge">-50%</span>'
+          + '<span class="price-sale">' + salePrice + '</span>';
+      } else {
+        priceEl.textContent = salePrice;
+      }
 
       resetSizeSelection();
 

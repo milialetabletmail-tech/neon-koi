@@ -11,6 +11,17 @@
     return amount.toLocaleString('ru-RU') + ' ₽';
   }
 
+  function renderPrice(product) {
+    const priceEl = document.getElementById('product-price');
+    if (!product.oldPrice) {
+      priceEl.textContent = formatPrice(product.price);
+      return;
+    }
+    priceEl.innerHTML = '<span class="price-old">' + formatPrice(product.oldPrice) + '</span>'
+      + '<span class="price-badge">-50%</span>'
+      + '<span class="price-sale">' + formatPrice(product.price) + '</span>';
+  }
+
   function renderColors(product) {
     const list = document.getElementById('product-colors');
     list.textContent = '';
@@ -149,7 +160,7 @@
     const gallery = renderGallery(product);
 
     document.getElementById('product-name').textContent = product.name;
-    document.getElementById('product-price').textContent = formatPrice(product.price);
+    renderPrice(product);
     document.getElementById('product-description').textContent = product.description;
     renderColors(product);
     renderTechniqueBadge(product);

@@ -1869,10 +1869,38 @@ body.nav-open { overflow: hidden; }
 
 .catalog-card-price {
   margin: 0;
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.35rem;
   font-family: var(--font-ui);
   font-size: 0.75rem;
   color: var(--paper-dim);
   opacity: 0.75;
+}
+
+/* Shared by catalog cards, the size modal and the product page — the
+   original technique price struck through, a discount badge, and the
+   discounted price that's actually charged. */
+.price-old {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+.price-badge {
+  padding: 0.05em 0.5em;
+  border-radius: 999px;
+  background: var(--sage);
+  color: var(--ink-letter);
+  font-size: 0.85em;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.price-sale {
+  font-weight: 700;
+  color: var(--paper);
+  opacity: 1;
 }
 
 .catalog-card-cta {
@@ -2015,6 +2043,10 @@ body.nav-open { overflow: hidden; }
 
 .size-modal-price {
   margin: 0;
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.4rem;
   font-family: var(--font-ui);
   font-size: 0.85rem;
   color: var(--paper-dim);
@@ -2412,6 +2444,11 @@ body.size-table-open {
 
 .product-price {
   margin: 0 0 0.4rem;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.45rem;
   font-family: var(--font-ui);
   font-size: 1.15rem;
   font-weight: 600;

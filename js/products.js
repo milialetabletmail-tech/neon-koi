@@ -11,7 +11,8 @@ window.LNProducts = [
   {
     id: 'tee-01-blue-gold',
     name: '«Малахит»',
-    price: 4200,
+    price: 1850,
+    oldPrice: 3700,
     technique: 'cold',
     image: 'assets/products/tee-01-blue-gold.png',
     images: [
@@ -32,7 +33,8 @@ window.LNProducts = [
   {
     id: 'tee-02-amber-teal',
     name: '«Лето»',
-    price: 3900,
+    price: 1750,
+    oldPrice: 3500,
     technique: 'warm',
     image: 'assets/products/tee-02-amber-teal.png',
     images: [
@@ -52,7 +54,8 @@ window.LNProducts = [
   {
     id: 'tee-03-berry-navy',
     name: '«Медуза»',
-    price: 4400,
+    price: 1850,
+    oldPrice: 3700,
     technique: 'cold',
     image: 'assets/products/tee-03-berry-navy.png',
     images: [
@@ -73,7 +76,8 @@ window.LNProducts = [
   {
     id: 'tee-04-sky-blue',
     name: '«Лазурь»',
-    price: 3700,
+    price: 1750,
+    oldPrice: 3500,
     technique: 'warm',
     image: 'assets/products/tee-04-sky-blue.png',
     images: [
@@ -92,7 +96,8 @@ window.LNProducts = [
   {
     id: 'tee-05-raspberry',
     name: '«Малинка»',
-    price: 4000,
+    price: 1750,
+    oldPrice: 3500,
     technique: 'warm',
     image: 'assets/products/tee-05-raspberry.png',
     images: [
